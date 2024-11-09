@@ -13,6 +13,8 @@ import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
+// 미사용
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
@@ -23,17 +25,12 @@ public class CustomUserDetails implements UserDetails {
     private Collection<GrantedAuthority> authorities;
 
     public static CustomUserDetails createUserDetails(UserEntity userEntity) {
-        List<GrantedAuthority> authorities = userEntity
-                .getRoles()
-                .stream()
-                .map(role->new SimpleGrantedAuthority(role.getName()))
-                .collect(Collectors.toList());
 
         return new CustomUserDetails(
                 userEntity.getId(),
                 userEntity.getEmail(),
                 userEntity.getPassword(),
-                authorities
+                userEntity.getAuthorities()
         );
     }
 

@@ -1,21 +1,28 @@
 package study.back.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import study.back.dto.item.UserItem;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.stream;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class UserEntity {
+public class UserEntity implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
@@ -28,27 +35,8 @@ public class UserEntity {
     private String phoneNumber;
     private boolean googleAuth;
     private String createDate;
-
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_role",
-            joinColumns = @JoinColumn(name="user_id")
-            ,inverseJoinColumns = @JoinColumn(name = "role_id")
-    )
-    private Collection<RoleEntity> roles = new HashSet<>(); // 중복 방지를 위해 set 사용
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="user_coupon",
-            joinColumns = @JoinColumn(name="user_id")
-            ,inverseJoinColumns = @JoinColumn(name = "coupon_id")
-    )
-    private Collection<CouponEntity> coupons = new HashSet<>();
-
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(name="comment_favorite",
-            joinColumns = @JoinColumn(name="user_id")
-            ,inverseJoinColumns = @JoinColumn(name = "comment_id")
-    )
-    private Collection<CommentEntity> favorites = new HashSet<>();
+    @Enumerated(EnumType.STRING)
+    private RoleName role;
 
 
     @Builder
@@ -57,7 +45,8 @@ public class UserEntity {
                                       String nickname,
                                       String address,
                                       String addressDetail,
-                                      String phoneNumber) {
+                                      String phoneNumber,
+                                      RoleName role) {
         Date now = Date.from(Instant.now());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String datetime = simpleDateFormat.format(now);
@@ -71,7 +60,7 @@ public class UserEntity {
         userEntity.phoneNumber = phoneNumber;
         userEntity.googleAuth = false;
         userEntity.createDate = datetime;
-        userEntity.roles.add(new RoleEntity("ROLE_USER"));
+        userEntity.role = role;
         return userEntity;
     }
 
@@ -79,4 +68,43 @@ public class UserEntity {
         return new UserItem(this.email, this.nickname, this.profileImg);
     }
 
+    @Override
+    public Collection<GrantedAuthority> getAuthorities() {
+        List<GrantedAuthority> authorities = new ArrayList<>();
+
+        if(role.name().equals("ROLE_USER")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        }
+
+        if(role.name().equals("ROLE_ADMIN")) {
+            authorities.add(new SimpleGrantedAuthority("ROLE_ADMIN"));
+        }
+
+        return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return UserDetails.super.isAccountNonExpired();
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return UserDetails.super.isAccountNonLocked();
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return UserDetails.super.isCredentialsNonExpired();
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return UserDetails.super.isEnabled();
+    }
 }

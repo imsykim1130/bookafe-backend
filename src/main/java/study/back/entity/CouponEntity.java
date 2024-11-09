@@ -16,7 +16,4 @@ public class CouponEntity {
     private Long id;
     private String name;
     private Integer discountPercent;
-
-    @ManyToMany(mappedBy = "coupons", fetch = FetchType.LAZY)
-    private Collection<UserEntity> users = new HashSet<>();
 }

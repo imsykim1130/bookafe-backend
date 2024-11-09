@@ -1,0 +1,270 @@
+package study.back.service;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestClient;
+import study.back.dto.item.*;
+import study.back.dto.response.*;
+import study.back.entity.BookCartEntity;
+import study.back.entity.BookEntity;
+import study.back.entity.BookFavorite;
+import study.back.entity.UserEntity;
+import study.back.exception.KakaoAuthorizationException;
+import study.back.repository.*;
+
+import java.util.List;
+import java.util.Optional;
+
+@Transactional
+@Service
+@RequiredArgsConstructor
+public class BookService {
+    private final BookRepository bookRepository;
+    private final BookFavoriteRepository bookFavoriteRepository;
+    private final BookCartRepository bookCartRepository;
+    private final UserRepository userRepository;
+
+    @Value("${kakao-authorization}")
+    private String kakaoAuthorization;
+
+
+    // 카카오 api 에서 책 정보 가져오기
+    private OriginBookItem getBookDataFromKakaoApi(String query, String sort, String page, String size, String target) throws KakaoAuthorizationException {
+        OriginBookItem result;
+        RestClient restClient = RestClient.builder()
+                .baseUrl("https://dapi.kakao.com/v3/search/book")
+                .defaultHeader("Authorization", kakaoAuthorization)
+                .build();
+
+        result = restClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .queryParam("query", query)
+                        .queryParam("sort", sort)
+                        .queryParam("page", page)
+                        .queryParam("size", size)
+                        .queryParam("target", target)
+                        .build())
+                .retrieve()
+                .body(OriginBookItem.class);
+        return result;
+    }
+
+    // 책 검색 리스트 가져오기
+    public ResponseEntity<? super GetBookListResponseDto> getBookList(String query,
+                                                                      String sort,
+                                                                      String page,
+                                                                      String size,
+                                                                      String target) {
+        // 카카오 api 를 통해 받은 데이터 형태
+        OriginBookItem result;
+
+        try {
+            // kakao api 에서 책 정보 받기
+            result = getBookDataFromKakaoApi(query, sort, page, size, target);
+
+        }
+        catch (Exception e) {
+            // 서버 에러
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        // 가져온 데이터 db 에 저장하기
+        List<BookEntity> bookEntityList = result.getDocuments()
+                .stream()
+                .map(bookItem -> BookEntity.toEntity(bookItem))
+                .toList();
+
+        // 검색 성공
+        List<BookPrev> bookPrevList = bookEntityList
+                .stream()
+                .map(BookPrev::createBookPrev)
+                .toList();
+        return GetBookListResponseDto.success(result.getMeta(), bookPrevList);
+    }
+
+    // 책 정보 가져오기
+    // db, 카카오 api 에 모두 찾는 책 정보가 없으면 null 반환
+    // db 에 데이터가 없으면 카카오 api 에서 정보를 찾은 뒤 db 에 넣어준다
+    private BookEntity getBookIfExistOrElseNull(String isbn) {
+        BookEntity book = null;
+        Optional<BookEntity> bookOptional = bookRepository.findById(isbn);
+        if (bookOptional.isPresent()) {
+            book = bookOptional.get();
+        }
+
+        if(book == null) {
+            OriginBookItem bookDataFromKakaoApi = getBookDataFromKakaoApi(isbn.split(" ")[0], "accuracy", null, null, "isbn");
+            List<BookItem> bookItemList = bookDataFromKakaoApi.getDocuments();
+            if(!bookItemList.isEmpty()) {
+                BookItem bookItem = bookItemList.getFirst();
+                book = BookEntity.toEntity(bookItem);
+                bookRepository.save(book);
+            }
+        }
+        return book;
+    }
+
+
+    // 책 상세 정보 가져오기
+    public ResponseEntity<? super GetBookDetailResponseDto> getBookDetail (String isbn) {
+        BookDetail bookDetail = null;
+        
+        try {
+            // 책 유무 확인
+            BookEntity book = getBookIfExistOrElseNull(isbn);
+
+            if(book != null) {
+                bookDetail = BookDetail.createBookDetail(book);
+            }
+            // 두 경우 다 책을 찾을 수 없을 때
+            if(bookDetail == null) {
+                return GetBookDetailResponseDto.notFoundBook();
+            }
+        } catch (Exception e) {
+            // 서버 에러
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        // 책 정보 찾기 성공
+        return GetBookDetailResponseDto.success(bookDetail);
+    }
+
+    // 책에 좋아요 누르기
+    public ResponseEntity<ResponseDto> putFavoriteToBook(String isbn, UserEntity user) {
+        System.out.println("---- 책 좋아요 누르기");
+        try {
+            // 책 찾기
+            Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
+
+            // 책 찾기 실패
+            if(bookOpt.isEmpty()) {
+                return ResponseDto.notFoundBook();
+            }
+            BookEntity book = bookOpt.get();
+
+            // 좋아요 누르기 / 취소하기
+            // 좋아요 상태 확인하기
+            Optional<BookFavorite> bookFavoriteOptional = bookFavoriteRepository.findByUserAndBook(user, book);
+
+            if(bookFavoriteOptional.isEmpty()) {
+                // 좋아요 누르기
+                BookFavorite bookFavorite = BookFavorite.createBookFavorite(user, book);
+                bookFavoriteRepository.save(bookFavorite);
+            } else {
+                // 좋아요 취소하기
+                bookFavoriteRepository.delete(bookFavoriteOptional.get());
+            }
+
+        } catch (Exception e) {
+            // 서버 에러
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        return ResponseDto.success("좋아요 누르기 성공");
+    }
+
+    // 좋아요 누른 책 리스트 가져오기
+    public ResponseEntity<? super GetFavoriteBookListResponseDto> getFavoriteBookList(UserEntity user) {
+        System.out.println("좋아요 책 리스트 가져오기");
+        List<BookPrev> bookPrevList = null;
+        try {
+            bookPrevList = bookRepository.findFavoriteBookListByUser(user)
+                    .stream()
+                    .map(bookEntity -> BookPrev.createBookPrev(bookEntity))
+                    .toList();
+        } catch (Exception e) {
+            // 서버 오류
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+
+        return GetFavoriteBookListResponseDto.success(bookPrevList);
+    }
+
+    // 책 장바구니 담기
+    public ResponseEntity<ResponseDto> putBookToCart(String isbn, UserEntity user) {
+        System.out.println("---- 장바구니 담기 / 빼기");
+        try {
+            // 책 찾기
+            BookEntity book = getBookIfExistOrElseNull(isbn);
+            // 책 찾기 실패
+            if(book == null) {
+                return ResponseDto.notFoundBook();
+            }
+
+            Optional<BookCartEntity> bookCartOpt = bookCartRepository.findByUserAndBook(user, book);
+            if(bookCartOpt.isEmpty()) {
+                BookCartEntity bookCart = BookCartEntity.createBookCart(user, book);
+                bookCartRepository.save(bookCart);
+            } else {
+                // delete 문을 실행하기 전에 select 문이 자동으로 실행된다
+                bookCartRepository.deleteById(Long.valueOf(bookCartOpt.get().getId()));
+            }
+
+        } catch (Exception e) {
+            // 서버 에러
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        return ResponseDto.success("장바구니 담기 성공");
+    }
+
+    // 장바구니 담은 책 가져오기
+    public ResponseEntity<? super GetCartBookListResponseDto> getCartBookList(UserEntity user) {
+        System.out.println("장바구니 책 가져오기");
+        List<BookCart> bookCartList = null;
+        try {
+            bookCartList = bookCartRepository.findCartBookListByUser(user)
+                    .stream().map(BookCart::createBookCart).toList();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        return GetCartBookListResponseDto.success(bookCartList);
+    }
+
+
+    public ResponseEntity<?> getCartUserList(String isbn) {
+        System.out.println("--- 해당 책을 카트에 담은 유저 가져오기");
+        List<UserEntity> userList = null;
+        try {
+            // 책 유무 확인
+            Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
+            if(bookOpt.isEmpty()) {
+                return ResponseDto.notFoundBook();
+            }
+            BookEntity book = bookOpt.get();
+            // 해당 책을 카트에 담은 유저 가져오기
+            userList = userRepository.getCartUserListByBook(book);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        return ResponseEntity.ok(userList);
+    }
+
+    public ResponseEntity<?> getFavoriteUserList(String isbn) {
+        System.out.println("--- 해당 책을 좋아요 한 유저 가져오기");
+        List<UserEntity> userList = null;
+        try {
+            // 책 유무 확인
+            Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
+            if(bookOpt.isEmpty()) {
+                return ResponseDto.notFoundBook();
+            }
+            BookEntity book = bookOpt.get();
+            // 해당 책을 좋아요 한 유저 가져오기
+            userList = userRepository.getFavoriteUserListByBook(book);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseDto.internalServerError();
+        }
+        return ResponseEntity.ok(userList);
+    }
+}

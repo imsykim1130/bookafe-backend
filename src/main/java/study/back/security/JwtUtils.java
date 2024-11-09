@@ -7,7 +7,9 @@ import io.jsonwebtoken.security.SignatureException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import study.back.entity.UserEntity;
 
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -21,12 +23,12 @@ public class JwtUtils {
 
     // 토큰 생성
     public String generateToken(Authentication authentication) throws InvalidKeyException {
-        CustomUserDetails principal = (CustomUserDetails) authentication.getPrincipal();
+        UserEntity principal = (UserEntity) authentication.getPrincipal();
         List<String> roles = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
         return Jwts
                 .builder()
-                .setSubject(principal.getEmail()) // 시큐리티 상의 username
+                .setSubject(principal.getUsername()) // 시큐리티 상의 username
                 .claim("id", principal.getId())
                 .claim("roles", roles)
                 .setIssuedAt(new Date())

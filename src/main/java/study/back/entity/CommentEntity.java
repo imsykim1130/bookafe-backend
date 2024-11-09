@@ -1,13 +1,14 @@
 package study.back.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.*;
 
 @Entity
 @Getter
@@ -21,35 +22,42 @@ public class CommentEntity {
     @Column(length = 1000)
     private String content;
     private String writeDate;
-    private Integer favorite_count;
-    private Integer reply_count;
     private String emoji;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "isbn")
     private BookEntity book;
 
-    @ManyToOne
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
     private CommentEntity parent;
 
-    @OneToMany(
-            fetch = FetchType.LAZY,
-            mappedBy = "parent",
-            cascade = CascadeType.ALL)
-    private List<CommentEntity> children;
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favorites")
-    private Collection<UserEntity> favoriteUsers = new HashSet<>();
+    public static CommentEntity createComment(String content,
+                                              String emoji,
+                                              BookEntity book,
+                                              UserEntity user,
+                                              CommentEntity parent) {
 
-    // 비즈니스 로직
-    // 대댓글 추가
-    public void addChildrenComment(CommentEntity comment) {
-        comment.parent = this;
-        children.add(comment);
+        Date now = Date.from(Instant.now());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String datetime = simpleDateFormat.format(now);
+
+        CommentEntity commentEntity = new CommentEntity();
+        commentEntity.content = content;
+        commentEntity.writeDate = datetime;
+        commentEntity.emoji = emoji;
+        commentEntity.parent = parent;
+        commentEntity.book = book;
+        commentEntity.user = user;
+        return commentEntity;
     }
+
 }
