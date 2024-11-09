@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import study.back.dto.request.PostCommentRequestDto;
 import study.back.dto.response.GetCommentListResponseDto;
 import study.back.dto.response.GetReplyListResponseDto;
+import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
 import study.back.service.CommentService;
 
@@ -26,7 +27,7 @@ public class CommentController {
 
     // 댓글 좋아요
     @PostMapping("/comment/favorite/{commentId}")
-    public ResponseEntity<?> putCommentFavorite(
+    public ResponseEntity<ResponseDto> putCommentFavorite(
             @PathVariable(name="commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         return commentService.putCommentFavorite(commentId, user);

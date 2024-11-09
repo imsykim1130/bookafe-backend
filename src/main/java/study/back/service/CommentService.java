@@ -119,8 +119,8 @@ public class CommentService {
         return GetReplyListResponseDto.success(replyList);
     }
 
-
-    public ResponseEntity<?> putCommentFavorite(Long commentId, UserEntity user)  {
+    // 댓글에 좋아요 누르기
+    public ResponseEntity<ResponseDto> putCommentFavorite(Long commentId, UserEntity user)  {
         System.out.println("---- 댓글 좋아요/좋아요 취소");
         try {
             // 댓글 유무 확인
