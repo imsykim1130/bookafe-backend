@@ -55,9 +55,9 @@ public class BookController {
         return bookService.putBookToCart(isbn, user);
     }
 
-
+    // 좋아요 유저 리스트 가져오기
     @GetMapping("/book/{isbn}/favorite/users")
-    public ResponseEntity<?> getFavoriteUsers(@PathVariable(name="isbn") String isbn) {
+    public ResponseEntity<? super GetFavoriteUserIdListResponseDto> getFavoriteUsers(@PathVariable(name="isbn") String isbn) {
         return bookService.getFavoriteUserList(isbn);
     }
 
@@ -66,11 +66,5 @@ public class BookController {
         return bookService.getCartUserList(isbn);
     }
 
-    @GetMapping("/book/favorite-info")
-    public ResponseEntity<?> getFavoriteInfo(
-            @RequestParam(name="isbn") String isbn,
-            @AuthenticationPrincipal UserEntity user) {
-        return bookService.getFavoriteInfo(isbn, user);
-    }
 
 }
