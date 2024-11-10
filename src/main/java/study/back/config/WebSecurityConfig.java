@@ -84,8 +84,8 @@ public class WebSecurityConfig {
         http.httpBasic(AbstractHttpConfigurer::disable);
         http.authorizeHttpRequests(auth->
                 auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/test/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/book/detail", "/api/v1/books/search", "/api/v1/comments/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/search", "/api/v1/comments/**").permitAll()
                         .anyRequest().authenticated()
 
         );
