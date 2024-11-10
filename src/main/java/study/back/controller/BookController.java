@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import study.back.dto.response.GetCartBookListResponseDto;
+import study.back.dto.response.GetFavoriteUserIdListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
 import study.back.repository.QueryRepository;
