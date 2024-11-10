@@ -66,5 +66,11 @@ public class BookController {
         return bookService.getCartUserList(isbn);
     }
 
+    @GetMapping("/book/favorite-info")
+    public ResponseEntity<?> getFavoriteInfo(
+            @RequestParam(name="isbn") String isbn,
+            @AuthenticationPrincipal UserEntity user) {
+        return bookService.getFavoriteInfo(isbn, user);
+    }
 
 }
