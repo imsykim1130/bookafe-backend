@@ -19,6 +19,7 @@ public class UserController {
     private final UserService userService;
     private final BookService bookService;
 
+    // 로그인 유저 정보 가져오기
     @GetMapping("")
     public ResponseEntity<? super GetUserResponseDto> getUser(@AuthenticationPrincipal UserEntity user) {
         return userService.getUser(user);
