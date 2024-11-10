@@ -65,7 +65,7 @@ public class UserEntity implements UserDetails {
     }
 
     public UserItem toItem() {
-        return new UserItem(this.email, this.nickname, this.profileImg);
+        return new UserItem(this.id, this.email, this.nickname, this.profileImg);
     }
 
     @Override
