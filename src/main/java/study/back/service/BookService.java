@@ -248,9 +248,9 @@ public class BookService {
         return ResponseEntity.ok(userList);
     }
 
-    public ResponseEntity<?> getFavoriteUserList(String isbn) {
-        System.out.println("--- 해당 책을 좋아요 한 유저 가져오기");
-        List<UserEntity> userList = null;
+    public ResponseEntity<? super GetFavoriteUserIdListResponseDto> getFavoriteUserList(String isbn) {
+        System.out.println("--- 해당 책을 좋아요 한 유저 id 리스트 가져오기");
+        List<String> userIdList = null;
         try {
             // 책 유무 확인
             Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
@@ -259,12 +259,12 @@ public class BookService {
             }
             BookEntity book = bookOpt.get();
             // 해당 책을 좋아요 한 유저 가져오기
-            userList = userRepository.getFavoriteUserListByBook(book);
+            userIdList = userRepository.getFavoriteUserIdListByBook(book);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.internalServerError();
         }
-        return ResponseEntity.ok(userList);
+        return GetFavoriteUserIdListResponseDto.success(userIdList);
     }
 }
