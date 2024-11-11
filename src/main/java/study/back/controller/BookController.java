@@ -61,6 +61,7 @@ public class BookController {
         return bookService.getFavoriteUserList(isbn);
     }
 
+    // 장바구니 유저 리스트 가져오기
     @GetMapping("/book/{isbn}/cart/users")
     public ResponseEntity<?> getCartUsers(@PathVariable(name = "isbn") String isbn) {
         return bookService.getCartUserList(isbn);

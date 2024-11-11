@@ -227,10 +227,9 @@ public class BookService {
         return GetCartBookListResponseDto.success(bookCartList);
     }
 
-
-    public ResponseEntity<?> getCartUserList(String isbn) {
+    public ResponseEntity<? super GetCartUserIdListResponseDto> getCartUserList(String isbn) {
         System.out.println("--- 해당 책을 카트에 담은 유저 가져오기");
-        List<UserEntity> userList = null;
+        List<String> userIdList = null;
         try {
             // 책 유무 확인
             Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
@@ -239,13 +238,13 @@ public class BookService {
             }
             BookEntity book = bookOpt.get();
             // 해당 책을 카트에 담은 유저 가져오기
-            userList = userRepository.getCartUserListByBook(book);
+            userIdList = userRepository.getCartUserIdListByBook(book);
 
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.internalServerError();
         }
-        return ResponseEntity.ok(userList);
+        return GetCartUserIdListResponseDto.success(userIdList);
     }
 
     public ResponseEntity<? super GetFavoriteUserIdListResponseDto> getFavoriteUserList(String isbn) {

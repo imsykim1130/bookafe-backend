@@ -15,8 +15,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("select bf.user from BookFavorite bf where bf.book = ?1")
     List<UserEntity> getFavoriteUserListByBook(BookEntity book);
 
-    @Query("select bc.user from BookCartEntity bc where bc.book = ?1")
-    List<UserEntity> getCartUserListByBook(BookEntity book);
+    @Query("select bc.user.id from BookCartEntity bc where bc.book = ?1")
+    List<String> getCartUserIdListByBook(BookEntity book);
 
     @Query("select bf.user.id from BookFavorite bf where bf.book = ?1")
     List<String> getFavoriteUserIdListByBook(BookEntity book);
