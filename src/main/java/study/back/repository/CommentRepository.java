@@ -3,23 +3,28 @@ package study.back.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import study.back.dto.item.CommentItem;
-import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
+import study.back.repository.resultSet.CommentResultSet;
 
 import java.util.List;
 
 
 public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
-    @Query("select " +
-            "new study.back.dto.item.CommentItem(comment.id, comment.user.profileImg, comment.user.nickname, comment.writeDate, comment.emoji, comment.content) " +
-            "from CommentEntity comment where comment.book = ?1 and comment.parent is null")
-    List<CommentItem> findByBook(BookEntity book);
 
-    @Query("select " +
-            "new study.back.dto.item.CommentItem(comment.id, comment.user.profileImg, comment.user.nickname, comment.writeDate, comment.emoji, comment.content) " +
-            "from CommentEntity comment " +
-            "where comment.parent = :parent")
-    List<CommentItem> findByParent(@Param(value="parent") CommentEntity parent);
+    @Query(value = "select\n" +
+            "    comment_id as id, isbn, content, write_date as writeDate, emoji\n " +
+            "    ,profile_img, nickname,\n" +
+            "(select count(*) from comments as reply where reply.parent_comment_id = comment.comment_id) as replyCount\n" +
+            "from comments as comment left join users on comment.user_id = users.user_id\n" +
+            "where isbn=?1 and parent_comment_id is null", nativeQuery = true)
+    List<CommentResultSet> findByBook(String isbn);
+
+    @Query(value = "select\n" +
+            "    comment_id as id, isbn, content, write_date as writeDate, emoji\n " +
+            "    ,profile_img, nickname,\n" +
+            "(select count(*) from comments as reply where reply.parent_comment_id = comment.comment_id) as replyCount\n" +
+            "from comments as comment left join users on comment.user_id = users.user_id\n" +
+            "where parent_comment_id = :parent_id", nativeQuery = true)
+    List<CommentResultSet> findByParent(@Param(value="parent_id") String parent_id);
 
 }

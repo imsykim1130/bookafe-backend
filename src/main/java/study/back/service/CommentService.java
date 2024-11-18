@@ -16,6 +16,7 @@ import study.back.exception.NoParentCommentException;
 import study.back.repository.BookRepository;
 import study.back.repository.CommentFavoriteRepository;
 import study.back.repository.CommentRepository;
+import study.back.repository.resultSet.CommentResultSet;
 
 import java.util.List;
 import java.util.Optional;
@@ -79,6 +80,7 @@ public class CommentService {
     public ResponseEntity<? super GetCommentListResponseDto> getCommentList(String isbn) {
         System.out.println("댓글 가져오기");
         List<CommentItem> commentList;
+
         try {
             // 책 여부 확인
             Optional<BookEntity> bookOptional = bookRepository.findById(isbn);
@@ -88,7 +90,18 @@ public class CommentService {
             BookEntity book = bookOptional.get();
 
             // 책에 달린 댓글 찾기
-            commentList = commentRepository.findByBook(book);
+            commentList = commentRepository.findByBook(book.getIsbn())
+                    .stream()
+                    .map(commentResultSet -> new CommentItem(
+                            commentResultSet.getId(),
+                            commentResultSet.getProfileImg(),
+                            commentResultSet.getNickname(),
+                            commentResultSet.getWriteDate(),
+                            commentResultSet.getEmoji(),
+                            commentResultSet.getContent(),
+                            commentResultSet.getReplyCount()
+                            ))
+                    .toList();
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,7 +124,19 @@ public class CommentService {
             CommentEntity comment = commentOpt.get();
 
             // 책에 달린 댓글 찾기
-            replyList = commentRepository.findByParent(comment);
+            replyList = commentRepository.findByParent(String.valueOf(comment.getId()))
+                    .stream()
+                    .map(commentResultSet -> new CommentItem(
+                            commentResultSet.getId(),
+                            commentResultSet.getProfileImg(),
+                            commentResultSet.getNickname(),
+                            commentResultSet.getWriteDate(),
+                            commentResultSet.getEmoji(),
+                            commentResultSet.getContent(),
+                            commentResultSet.getReplyCount()
+                    ))
+                    .toList();
+
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.internalServerError();

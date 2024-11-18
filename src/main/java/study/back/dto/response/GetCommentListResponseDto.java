@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class GetCommentListResponseDto extends ResponseDto {
     private List<CommentItem> commentItemList;
+
     public static ResponseEntity<GetCommentListResponseDto> success(List<CommentItem> commentItemList) {
         GetCommentListResponseDto responseBody = new GetCommentListResponseDto();
         responseBody.code = "SU";
