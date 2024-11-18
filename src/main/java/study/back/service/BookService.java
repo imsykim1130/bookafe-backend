@@ -266,4 +266,19 @@ public class BookService {
         }
         return GetFavoriteUserIdListResponseDto.success(userIdList);
     }
+
+    public ResponseEntity<ResponseDto> deleteCartBook(String isbn, UserEntity user) {
+        System.out.println("장바구니 책 삭제");
+        try {
+            Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
+            if(bookOpt.isEmpty()) {
+                return ResponseDto.notFoundBook();
+            }
+            BookEntity book = bookOpt.get();
+            bookCartRepository.deleteByUserAndBook(user, book);
+        } catch (Exception e) {
+            return ResponseDto.internalServerError();
+        }
+        return ResponseDto.success("장바구니 책 삭제 성공");
+    }
 }

@@ -22,4 +22,6 @@ public interface BookCartRepository extends JpaRepository<BookCartEntity, Long> 
             "where bookCart.user = ?1")
     List<BookEntity> findCartBookListByUser(UserEntity user);
 
+    void deleteByUserAndBook(UserEntity user, BookEntity book);
+
 }

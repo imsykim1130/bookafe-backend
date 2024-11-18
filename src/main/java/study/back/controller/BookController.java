@@ -67,5 +67,10 @@ public class BookController {
         return bookService.getCartUserList(isbn);
     }
 
+    // 장바구니 책 삭제
+    @DeleteMapping("/book/cart/{isbn}")
+    public ResponseEntity<ResponseDto> deleteCartBook(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
+        return bookService.deleteCartBook(isbn, user);
+    }
 
 }

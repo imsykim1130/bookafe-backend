@@ -12,6 +12,7 @@ public class BookCart {
     private String isbn;
     private String bookImg;
     private String title;
+    private String author;
     private Integer price;
 
     public static BookCart createBookCart(BookEntity bookEntity) {
@@ -19,6 +20,7 @@ public class BookCart {
         bookCart.isbn = bookEntity.getIsbn();
         bookCart.bookImg = bookEntity.getBookImg();
         bookCart.title = bookEntity.getTitle();
+        bookCart.author = bookEntity.getAuthor();
         bookCart.price = bookEntity.getPrice();
         return bookCart;
     }
