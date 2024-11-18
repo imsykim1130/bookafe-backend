@@ -1,6 +1,7 @@
 package study.back.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
@@ -24,4 +25,9 @@ public interface BookCartRepository extends JpaRepository<BookCartEntity, Long> 
 
     void deleteByUserAndBook(UserEntity user, BookEntity book);
 
+    @Modifying
+    @Query(
+            value = "delete from BookCartEntity bc where bc.user.id = ?1 and bc.book.isbn = ?2"
+    )
+    void deleteCartBook(Long userId, String isbn);
 }

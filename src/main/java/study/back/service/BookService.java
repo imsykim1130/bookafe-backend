@@ -209,7 +209,7 @@ public class BookService {
             e.printStackTrace();
             return ResponseDto.internalServerError();
         }
-        return ResponseDto.success("장바구니 담기 성공");
+        return ResponseDto.success("장바구니 담기 / 빼기 성공");
     }
 
     // 장바구니 담은 책 가져오기
@@ -270,12 +270,7 @@ public class BookService {
     public ResponseEntity<ResponseDto> deleteCartBook(String isbn, UserEntity user) {
         System.out.println("장바구니 책 삭제");
         try {
-            Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
-            if(bookOpt.isEmpty()) {
-                return ResponseDto.notFoundBook();
-            }
-            BookEntity book = bookOpt.get();
-            bookCartRepository.deleteByUserAndBook(user, book);
+            bookCartRepository.deleteCartBook(user.getId(), isbn);
         } catch (Exception e) {
             return ResponseDto.internalServerError();
         }
