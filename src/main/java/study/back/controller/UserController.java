@@ -36,4 +36,11 @@ public class UserController {
     public ResponseEntity<? super GetCartBookListResponseDto> getCart(@AuthenticationPrincipal UserEntity user) {
         return bookService.getCartBookList(user);
     }
+
+    // 배송 관련 유저 정보 가져오기
+    @GetMapping("/order-info")
+    public ResponseEntity<?> getUserOrderInfo(@AuthenticationPrincipal UserEntity user) {
+        return userService.getUserOrderInfo(user);
+    }
+
 }

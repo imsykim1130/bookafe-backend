@@ -2,6 +2,7 @@ package study.back.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import study.back.dto.response.GetUserOrderInfoResponseDto;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
@@ -24,5 +25,9 @@ public class UserService {
             return ResponseDto.internalServerError();
         }
         return GetUserResponseDto.success(user);
+    }
+
+    public ResponseEntity<? super GetUserOrderInfoResponseDto> getUserOrderInfo(UserEntity user) {
+        return GetUserOrderInfoResponseDto.success(user);
     }
 }
