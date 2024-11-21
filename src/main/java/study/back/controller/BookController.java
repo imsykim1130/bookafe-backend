@@ -8,7 +8,6 @@ import study.back.dto.response.GetBookListByIsbnListResponseDto;
 import study.back.dto.response.GetFavoriteUserIdListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
-import study.back.repository.QueryRepository;
 import study.back.service.BookService;
 
 import java.util.List;
@@ -19,7 +18,6 @@ import java.util.List;
 public class BookController {
 
     private final BookService bookService;
-    private final QueryRepository queryRepository;
 
     // 책 검색 리스트 가져오기
     // query : 검색어
