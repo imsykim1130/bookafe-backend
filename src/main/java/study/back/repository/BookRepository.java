@@ -9,4 +9,7 @@ import java.util.List;
 public interface BookRepository extends JpaRepository<BookEntity, String> {
     @Query("select bookFavorite.book from BookFavorite bookFavorite where bookFavorite.user = ?1")
     List<BookEntity> findFavoriteBookListByUser(UserEntity user);
+
+    @Query("select book from BookEntity book where book.isbn in ?1")
+    List<BookEntity> findAllByIsbnList(List<String> isbnList);
 }

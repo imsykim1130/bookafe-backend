@@ -107,6 +107,18 @@ public class BookService {
         return book;
     }
 
+    public ResponseEntity<? super GetBookListByIsbnListResponseDto> getBookListByIsbnList(List<String> isbnList) {
+        List<BookCart> bookList;
+        try {
+            bookList = bookRepository.findAllByIsbnList(isbnList)
+                    .stream().map(BookCart::createBookCart).toList();
+
+        } catch (Exception e) {
+            return ResponseDto.internalServerError();
+        }
+        return GetBookListByIsbnListResponseDto.success(bookList);
+    }
+
 
     // 책 상세 정보 가져오기
     public ResponseEntity<? super GetBookDetailResponseDto> getBookDetail (String isbn) {

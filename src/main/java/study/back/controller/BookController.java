@@ -4,11 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.dto.response.GetBookListByIsbnListResponseDto;
 import study.back.dto.response.GetFavoriteUserIdListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
 import study.back.repository.QueryRepository;
 import study.back.service.BookService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +35,11 @@ public class BookController {
                                      @RequestParam(name = "target") String target
                                      ) {
         return bookService.getBookList(query, sort, page, size, target);
+    }
+
+    @GetMapping("/books")
+    public ResponseEntity<? super GetBookListByIsbnListResponseDto> getBookList(@RequestParam("isbnList") List<String> isbnList) {
+        return bookService.getBookListByIsbnList(isbnList);
     }
 
     // 책 상세정보
