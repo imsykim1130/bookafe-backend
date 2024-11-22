@@ -4,9 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
-import java.util.Collection;
-import java.util.HashSet;
-
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "coupon")
@@ -16,4 +13,5 @@ public class CouponEntity {
     private Long id;
     private String name;
     private Integer discountPercent;
+    private boolean pending;
 }
