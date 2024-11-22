@@ -1,6 +1,5 @@
 package study.back.entity;
 
-import com.google.gson.internal.bind.JsonTreeReader;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
