@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "user_coupon")
 public class UserCouponEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
