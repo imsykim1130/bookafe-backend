@@ -14,6 +14,7 @@ public class PointEntity {
     private Integer totalPoint;
     private Integer changedPoint;
     private String pointDatetime;
+    private String type;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
