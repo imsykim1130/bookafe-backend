@@ -2,6 +2,7 @@ package study.back.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 @Entity
@@ -14,4 +15,11 @@ public class CouponEntity {
     private String name;
     private Integer discountPercent;
     private boolean pending;
+
+    @Builder
+    public CouponEntity(String name, Integer discountPercent, boolean pending) {
+        this.name = name;
+        this.discountPercent = discountPercent;
+        this.pending = pending;
+    }
 }
