@@ -19,4 +19,9 @@ public class UserCouponEntity {
     @ManyToOne
     @JoinColumn(name = "coupon_id")
     private CouponEntity coupon;
+
+    public UserCouponEntity(UserEntity user, CouponEntity coupon) {
+        this.user = user;
+        this.coupon = coupon;
+    }
 }
