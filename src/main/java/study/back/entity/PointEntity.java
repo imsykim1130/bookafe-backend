@@ -16,7 +16,15 @@ public class PointEntity {
     private String pointDatetime;
     private String type;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
+
+    @Builder
+    public PointEntity(int changedPoint, String type, String pointDatetime, UserEntity user) {
+        this.changedPoint = changedPoint;
+        this.pointDatetime = pointDatetime;
+        this.type = type;
+        this.user = user;
+    }
 }
