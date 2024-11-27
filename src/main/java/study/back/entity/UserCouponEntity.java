@@ -13,15 +13,25 @@ public class UserCouponEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne
+
+    @Column(length = 5)
+    private String pending;
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_id")
     private CouponEntity coupon;
 
     public UserCouponEntity(UserEntity user, CouponEntity coupon) {
         this.user = user;
         this.coupon = coupon;
+        this.pending = "N";
+    }
+
+    public void updatePending() {
+        this.pending = "Y";
     }
 }
