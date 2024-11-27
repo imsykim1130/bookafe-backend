@@ -35,6 +35,13 @@ public class ResponseDto {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(responseBody);
     }
 
+    public static ResponseEntity<ResponseDto> notFound(String message) {
+        ResponseDto responseBody = new ResponseDto();
+        responseBody.code = "NF";
+        responseBody.message = message;
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(responseBody);
+    }
+
     // 존재하지 않는 유저
     public static ResponseEntity<ResponseDto> notFoundUser() {
         ResponseDto responseBody = new ResponseDto();
