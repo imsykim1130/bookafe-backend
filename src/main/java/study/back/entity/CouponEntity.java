@@ -3,8 +3,10 @@ package study.back.entity;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "coupon")
@@ -14,12 +16,10 @@ public class CouponEntity {
     private Long id;
     private String name;
     private Integer discountPercent;
-    private boolean pending;
 
     @Builder
-    public CouponEntity(String name, Integer discountPercent, boolean pending) {
+    public CouponEntity(String name, Integer discountPercent) {
         this.name = name;
         this.discountPercent = discountPercent;
-        this.pending = pending;
     }
 }
