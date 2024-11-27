@@ -1,8 +1,6 @@
 package study.back.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,13 +12,10 @@ import study.back.dto.item.UserItem;
 import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.util.*;
-import java.util.stream.Collectors;
-
-import static java.util.Arrays.stream;
 
 @Entity
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 @Table(name = "users")
 public class UserEntity implements UserDetails {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +32,6 @@ public class UserEntity implements UserDetails {
     private String createDate;
     @Enumerated(EnumType.STRING)
     private RoleName role;
-
 
     @Builder
     public static UserEntity toEntity(String email,
