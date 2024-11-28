@@ -21,4 +21,11 @@ public class OrderBookEntity {
     @JoinColumn(name = "isbn")
     private BookEntity book;
 
+    @Builder
+    public OrderBookEntity(Integer count, Integer discountPercent, UserEntity user, BookEntity book) {
+        this.count = count;
+        this.discountPercent = discountPercent;
+        this.user = user;
+        this.book = book;
+    }
 }
