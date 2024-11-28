@@ -2,12 +2,14 @@ package study.back.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @Table(name = "user_coupon")
 public class UserCouponEntity {
     @Id
@@ -29,9 +31,5 @@ public class UserCouponEntity {
         this.user = user;
         this.coupon = coupon;
         this.pending = "N";
-    }
-
-    public void updatePending() {
-        this.pending = "Y";
     }
 }
