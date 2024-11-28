@@ -11,9 +11,9 @@ public class OrderBookEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_book_id")
     private Long id;
-    private Integer point;
-    private Integer sales_price;
     private Integer count;
+    private Integer discountPercent;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private UserEntity user;
