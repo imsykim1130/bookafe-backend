@@ -14,8 +14,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
+    private final PointService pointService;
     private final UserRepository userRepository;
-    private final PointRepository pointRepository;
 
     public ResponseEntity<? super GetUserResponseDto> getUser(UserEntity user) {
         int totalPoint;
@@ -27,8 +27,7 @@ public class UserService {
             if(!userRepository.existsByEmail(user.getEmail())) {
                 return ResponseDto.notFoundUser();
             }
-            Optional<Integer> totalPointOpt = pointRepository.getTotalPointByUser(user);
-            totalPoint = totalPointOpt.orElse(0);
+            totalPoint = pointService.getTotalPoint(user);
 
         } catch (Exception e) {
             return ResponseDto.internalServerError();
