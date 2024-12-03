@@ -24,7 +24,9 @@ public class UserCouponController {
     // 사용한 쿠폰 삭제
     @DeleteMapping("/{userCouponId}")
     public ResponseEntity<ResponseDto> deleteUserCoupon(@PathVariable(name="userCouponId") Long userCouponId) {
-        return userCouponService.deleteUserCoupon(userCouponId);
+        userCouponService.deleteUserCoupon(userCouponId);
+        ResponseDto responseDto = new ResponseDto("SU", "사용한 쿠폰 삭제 성공");
+        return ResponseEntity.ok(responseDto);
     }
 
 }
