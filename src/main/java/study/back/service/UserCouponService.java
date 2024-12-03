@@ -3,10 +3,13 @@ package study.back.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import study.back.dto.response.GetUserCouponListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserCouponEntity;
 import study.back.entity.UserEntity;
+import study.back.exception.CouponNotFoundException;
+import study.back.exception.DeleteCouponFailException;
 import study.back.repository.UserCouponRepository;
 import study.back.repository.UserRepository;
 import study.back.repository.resultSet.UserCouponView;
@@ -15,6 +18,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserCouponService {
     private final UserCouponRepository userCouponRepository;
@@ -33,41 +37,31 @@ public class UserCouponService {
         return GetUserCouponListResponseDto.success(couponList);
     }
 
-    public ResponseEntity<ResponseDto> updateUserCouponPending(Long userCouponId) {
-        try {
-            Optional<UserCouponEntity> userCouponOpt = userCouponRepository.findById(userCouponId);
-            if (userCouponOpt.isEmpty()) {
-                return ResponseDto.notFound("쿠폰이 존재하지 않습니다");
-            }
-            UserCouponEntity userCoupon = userCouponOpt.get();
-            userCoupon.updatePending();
-            userCouponRepository.save(userCoupon);
-
-        } catch (Exception e) {
-            return ResponseDto.internalServerError();
+    public UserCouponEntity updateUserCouponPending(Long userCouponId) {
+        Optional<UserCouponEntity> userCouponOpt = userCouponRepository.findById(userCouponId);
+        if (userCouponOpt.isEmpty()) {
+            throw new CouponNotFoundException("쿠폰이 존재하지 않습니다");
         }
-        return ResponseDto.success("쿠폰 사용대기 상태 변경 성공");
+        UserCouponEntity userCoupon = userCouponOpt.get();
+        userCoupon.updatePending();
+        return userCouponRepository.save(userCoupon);
     }
 
-    public ResponseEntity<ResponseDto> deleteUserCoupon(Long userCouponId) {
-        try {
-            UserCouponEntity userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
-            if (userCoupon == null) {
-                return ResponseDto.notFound("쿠폰이 존재하지 않습니다");
-            }
-
-            userCouponRepository.delete(userCoupon);
-            userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
-
-            if(userCoupon != null) {
-                throw new RuntimeException("쿠폰 삭제 실패");
-            }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            return ResponseDto.internalServerError();
+    public void deleteUserCoupon(Long userCouponId) {
+        UserCouponEntity userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
+        if (userCoupon == null) {
+            throw new CouponNotFoundException("쿠폰이 존재하지 않습니다");
         }
-        return ResponseDto.success("쿠폰 삭제 성공");
+
+        userCouponRepository.delete(userCoupon);
+        userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
+
+        if(userCoupon != null) {
+            throw new DeleteCouponFailException("쿠폰 삭제 실패");
+        }
+    }
+
+    public UserCouponEntity getUserCoupon(Long couponId) {
+        return userCouponRepository.findById(couponId).orElse(null);
     }
 }
