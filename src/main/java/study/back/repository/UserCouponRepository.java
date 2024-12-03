@@ -16,7 +16,7 @@ public interface UserCouponRepository extends JpaRepository<UserCouponEntity, Lo
     List<UserCouponView> findAllByUser(UserEntity user);
 
     @Modifying
-    @Query("update UserCouponEntity uc set uc.pending = :pending where uc.id in :userCouponIdList")
-    int updateUserCouponPending(@Param("pending") String pending, @Param("userCouponIdList") List<Long> userCouponIdList);
+    @Query("update UserCouponEntity uc set uc.pending = :pending where uc.id = :userCouponId")
+    int updateUserCouponPending(@Param("pending") String pending, @Param("userCouponId") Long userCouponId);
 
 }
