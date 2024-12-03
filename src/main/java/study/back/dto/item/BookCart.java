@@ -1,7 +1,6 @@
 package study.back.dto.item;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import study.back.entity.BookEntity;
@@ -14,6 +13,7 @@ public class BookCart {
     private String title;
     private String author;
     private Integer price;
+    private Integer discountPercent;
 
     public static BookCart createBookCart(BookEntity bookEntity) {
         BookCart bookCart = new BookCart();
@@ -22,6 +22,7 @@ public class BookCart {
         bookCart.title = bookEntity.getTitle();
         bookCart.author = bookEntity.getAuthor();
         bookCart.price = bookEntity.getPrice();
+        bookCart.discountPercent = bookEntity.getDiscountPercent();
         return bookCart;
     }
 }
