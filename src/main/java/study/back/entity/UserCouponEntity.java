@@ -1,10 +1,7 @@
 package study.back.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
@@ -27,9 +24,15 @@ public class UserCouponEntity {
     @JoinColumn(name = "coupon_id")
     private CouponEntity coupon;
 
+    @Builder
     public UserCouponEntity(UserEntity user, CouponEntity coupon) {
         this.user = user;
         this.coupon = coupon;
         this.pending = "N";
+    }
+
+    public String updatePending() {
+        this.pending = "Y";
+        return this.pending;
     }
 }
