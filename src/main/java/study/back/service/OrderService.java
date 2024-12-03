@@ -1,8 +1,7 @@
 package study.back.service;
 
-import org.springframework.stereotype.Service;
+import study.back.entity.OrderEntity;
 
-@Service
-public class OrderService {
-
+public interface OrderService {
+    OrderEntity saveOrder(Long userId, String address, String addressDetail, String phoneNumber,int totalPrice, String now);
 }
