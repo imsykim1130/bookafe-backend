@@ -21,12 +21,6 @@ public class UserCouponController {
         return userCouponService.getCouponList(user);
     }
 
-    // 쿠폰 pending 상태 변경
-    @PutMapping("/pending/{userCouponId}")
-    public ResponseEntity<ResponseDto> updateUserCouponPending(@PathVariable(name="userCouponId") Long userCouponId) {
-        return userCouponService.updateUserCouponPending(userCouponId);
-    }
-
     // 사용한 쿠폰 삭제
     @DeleteMapping("/{userCouponId}")
     public ResponseEntity<ResponseDto> deleteUserCoupon(@PathVariable(name="userCouponId") Long userCouponId) {
