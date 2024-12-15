@@ -17,7 +17,6 @@ import study.back.service.UserService;
 @RequestMapping("/api/v1/user")
 public class UserController {
     private final UserService userService;
-    private final BookService bookService;
 
     // 로그인 유저 정보 가져오기
     @GetMapping("")
