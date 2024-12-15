@@ -25,18 +25,6 @@ public class UserController {
         return userService.getUser(user);
     }
 
-    // 좋아요 책 리스트 가져오기
-    @GetMapping("/books/favorite")
-    public ResponseEntity<?> getFavorite(@AuthenticationPrincipal UserEntity user) {
-        return bookService.getFavoriteBookList(user);
-    }
-
-    // 장바구니 책 리스트 가져오기
-    @GetMapping("/books/cart")
-    public ResponseEntity<? super GetCartBookListResponseDto> getCart(@AuthenticationPrincipal UserEntity user) {
-        return bookService.getCartBookList(user);
-    }
-
     // 배송 관련 유저 정보 가져오기
     @GetMapping("/order-info")
     public ResponseEntity<?> getUserOrderInfo(@AuthenticationPrincipal UserEntity user) {
