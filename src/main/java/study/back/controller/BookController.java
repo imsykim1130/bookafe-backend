@@ -86,6 +86,14 @@ public class BookController {
         return bookService.getCartBookList(user);
     }
 
+    // 장바구니 책 수량 변경
+    @PatchMapping("/book/cart/count")
+    public ResponseEntity<Integer> setCount(@AuthenticationPrincipal UserEntity user,
+                                      @RequestBody ChangeCartBookCountRequestDto requestDto) {
+        int changedCount = bookService.changeCartBookCount(requestDto, user);
+        return ResponseEntity.ok(changedCount);
+    }
+
     // 장바구니 책 삭제
     @DeleteMapping("/book/cart/{isbn}")
     public ResponseEntity<ResponseDto> deleteCartBook(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
