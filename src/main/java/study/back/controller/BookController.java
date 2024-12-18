@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.dto.item.CartBookView;
+import study.back.dto.request.ChangeCartBookCountRequestDto;
 import study.back.dto.response.GetBookListByIsbnListResponseDto;
-import study.back.dto.response.GetCartBookListResponseDto;
 import study.back.dto.response.GetFavoriteUserIdListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
@@ -82,7 +83,7 @@ public class BookController {
 
     // 장바구니 책 리스트 가져오기
     @GetMapping("/books/cart")
-    public ResponseEntity<? super GetCartBookListResponseDto> getCart(@AuthenticationPrincipal UserEntity user) {
+    public List<CartBookView> getCart(@AuthenticationPrincipal UserEntity user) {
         return bookService.getCartBookList(user);
     }
 
@@ -98,5 +99,19 @@ public class BookController {
     @DeleteMapping("/book/cart/{isbn}")
     public ResponseEntity<ResponseDto> deleteCartBook(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
         return bookService.deleteCartBook(isbn, user);
+    }
+
+    // 장바구니 책 리스트 삭제
+    @DeleteMapping("/books/cart")
+    public ResponseEntity<?> deleteCartBookList(@AuthenticationPrincipal UserEntity user,
+                                                @RequestBody List<String> isbnList) {
+
+        boolean isSuccess = bookService.deleteCartBookList(user, isbnList);
+
+        if(isSuccess) {
+            return ResponseEntity.ok().body(true);
+        } else {
+            return ResponseEntity.internalServerError().body(false);
+        }
     }
 }
