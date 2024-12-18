@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class BookCartEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    private Integer count;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
@@ -25,6 +26,7 @@ public class BookCartEntity {
         BookCartEntity bookCartEntity = new BookCartEntity();
         bookCartEntity.user = user;
         bookCartEntity.book = book;
+        bookCartEntity.count = 1;
         return bookCartEntity;
     }
 }
