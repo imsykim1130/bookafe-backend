@@ -1,5 +1,6 @@
 package study.back.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -7,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 
 @Getter
 @NoArgsConstructor
+@AllArgsConstructor
 public class ResponseDto {
     String code;
     String message;
@@ -17,6 +19,21 @@ public class ResponseDto {
         responseBody.code = "SU";
         responseBody.message = message;
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
+    }
+
+    public static ResponseDto success(String code, String message) {
+        ResponseDto responseBody = new ResponseDto();
+        responseBody.code = code;
+        responseBody.message = message;
+        return responseBody;
+    }
+
+    // 실패
+    public static ResponseEntity<ResponseDto> fail(String code, String message, HttpStatus status) {
+        ResponseDto responseBody = new ResponseDto();
+        responseBody.code = code;
+        responseBody.message = message;
+        return ResponseEntity.status(status).body(responseBody);
     }
 
     // 중복된 유저

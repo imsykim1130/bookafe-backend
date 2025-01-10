@@ -7,8 +7,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -90,7 +88,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(auth->
                 auth
                         .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/search", "/api/v1/comments/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**","/api/v1/books", "/api/v1/books/**", "/api/v1/comments/**").permitAll()
                         .anyRequest().authenticated()
 
         );

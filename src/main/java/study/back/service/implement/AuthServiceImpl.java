@@ -5,7 +5,6 @@ import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.UserItem;
@@ -97,6 +96,15 @@ public class AuthServiceImpl implements AuthService {
             }
 
             // dto -> entity
+            RoleName role = null;
+
+            if(signUpRequestDto.getRole().equals("admin")) {
+                role = RoleName.ROLE_ADMIN;
+            }
+            if(signUpRequestDto.getRole().equals("user")) {
+                role = RoleName.ROLE_USER;
+            }
+
             UserEntity user = UserEntity.builder()
                     .email(signUpRequestDto.getEmail())
                     .encodedPassword(encodedPassword)
@@ -104,7 +112,7 @@ public class AuthServiceImpl implements AuthService {
                     .address(signUpRequestDto.getAddress())
                     .phoneNumber(signUpRequestDto.getPhoneNumber())
                     .addressDetail(signUpRequestDto.getAddressDetail())
-                    .role(RoleName.ROLE_USER)
+                    .role(role)
                     .build();
 
             // db 저장

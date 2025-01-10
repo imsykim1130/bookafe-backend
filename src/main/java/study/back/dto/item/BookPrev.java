@@ -12,6 +12,9 @@ public class BookPrev {
     private String bookImg;
     private String title;
     private String author;
+    private int price;
+    private int discountPercent;
+    private boolean isCart;
 
     public static BookPrev createBookPrev(BookEntity book) {
         BookPrev bookPrev = new BookPrev();
@@ -19,6 +22,8 @@ public class BookPrev {
         bookPrev.bookImg = book.getBookImg();
         bookPrev.title = book.getTitle();
         bookPrev.author = book.getAuthor();
+        bookPrev.price = book.getPrice();
+        bookPrev.discountPercent = book.getDiscountPercent();
         return bookPrev;
     }
 

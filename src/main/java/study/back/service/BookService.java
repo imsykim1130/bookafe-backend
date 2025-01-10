@@ -7,13 +7,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestClient;
 import study.back.dto.item.*;
+import study.back.dto.request.ChangeCartBookCountRequestDto;
 import study.back.dto.response.*;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
 import study.back.entity.BookFavorite;
 import study.back.entity.UserEntity;
 import study.back.exception.KakaoAuthorizationException;
+import study.back.exception.NotExistBookException;
 import study.back.repository.*;
+import study.back.repository.resultSet.FavoriteBookView;
 
 import java.util.List;
 import java.util.Optional;
@@ -196,6 +199,11 @@ public class BookService {
         return GetFavoriteBookListResponseDto.success(bookPrevList);
     }
 
+    // 좋아요 책 리스트 가져오기 v2
+    public List<FavoriteBookView> getFavoriteBookViewList(UserEntity user) {
+        return bookRepository.findFavoriteBookViewList(user);
+    }
+
     // 책 장바구니 담기
     public ResponseEntity<ResponseDto> putBookToCart(String isbn, UserEntity user) {
         System.out.println("---- 장바구니 담기 / 빼기");
@@ -225,18 +233,17 @@ public class BookService {
     }
 
     // 장바구니 담은 책 가져오기
-    public ResponseEntity<? super GetCartBookListResponseDto> getCartBookList(UserEntity user) {
+    public List<CartBookView> getCartBookList(UserEntity user) {
         System.out.println("장바구니 책 가져오기");
-        List<BookCart> bookCartList = null;
+        List<CartBookView> cartBookViewList = null;
         try {
-            bookCartList = bookCartRepository.findCartBookListByUser(user)
-                    .stream().map(BookCart::createBookCart).toList();
+            cartBookViewList = bookCartRepository.findCartBookViewByUser(user);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseDto.internalServerError();
+            throw new RuntimeException("서버 에러");
         }
-        return GetCartBookListResponseDto.success(bookCartList);
+        return cartBookViewList;
     }
 
     public ResponseEntity<? super GetCartUserIdListResponseDto> getCartUserList(String isbn) {
@@ -279,6 +286,7 @@ public class BookService {
         return GetFavoriteUserIdListResponseDto.success(userIdList);
     }
 
+    // 장바구니 책 삭제
     public ResponseEntity<ResponseDto> deleteCartBook(String isbn, UserEntity user) {
         System.out.println("장바구니 책 삭제");
         try {
@@ -288,4 +296,29 @@ public class BookService {
         }
         return ResponseDto.success("장바구니 책 삭제 성공");
     }
+
+    // 장바구니 책 수량 변경
+    // in : 장바구니 수량 변경하고자 하는 책 isbn, 유저
+    // out : 변경된 수량 반환
+    public int changeCartBookCount(ChangeCartBookCountRequestDto requestDto, UserEntity user) {
+        bookCartRepository.updateBookCartCount(requestDto.getCount(), user, requestDto.getIsbn());
+        return bookCartRepository.getBookCartCount(user, requestDto.getIsbn());
+    }
+
+    // 장바구니 책 리스트 삭제
+    public boolean deleteCartBookList(List<Long> cartBookIdList) {
+        try {
+            bookCartRepository.deleteAllByIdList(cartBookIdList);
+        } catch (Exception e) {
+            return false;
+        }
+        return true;
+    }
+
+    // 좋아요 책 삭제
+    public int deleteFavoriteBook(UserEntity user, String isbn) {
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("존재하지 않는 책입니다"));
+        return bookFavoriteRepository.deleteFavoriteBookByUserAndBook(user, book);
+    }
+
 }

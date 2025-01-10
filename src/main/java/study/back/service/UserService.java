@@ -1,4 +1,5 @@
 package study.back.service;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -6,12 +7,10 @@ import study.back.dto.response.GetUserOrderInfoResponseDto;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
-import study.back.repository.PointRepository;
 import study.back.repository.UserRepository;
 
-import java.util.Optional;
-
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class UserService {
     private final PointService pointService;
@@ -37,5 +36,13 @@ public class UserService {
 
     public ResponseEntity<? super GetUserOrderInfoResponseDto> getUserOrderInfo(UserEntity user) {
         return GetUserOrderInfoResponseDto.success(user);
+    }
+
+    public void changeProfileImage(UserEntity user, String profileImage) {
+        if(profileImage.isEmpty() || profileImage.isBlank()) {
+            throw new RuntimeException("이미지 주소가 잘못되었습니다");
+        }
+        user.changeProfileImg(profileImage);
+        userRepository.save(user);
     }
 }

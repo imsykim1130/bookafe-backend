@@ -6,8 +6,6 @@ import lombok.*;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Builder
-@AllArgsConstructor
 @Table(name="recommend_book")
 public class RecommendBookEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,4 +14,9 @@ public class RecommendBookEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "isbn")
     private BookEntity book;
+
+    @Builder
+    public RecommendBookEntity(BookEntity book) {
+        this.book = book;
+    }
 }

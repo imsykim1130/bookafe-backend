@@ -1,6 +1,7 @@
 package study.back.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import lombok.*;
 
 @Entity
@@ -11,21 +12,27 @@ public class OrderBookEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "order_book_id")
     private Long id;
+    @Min(1)
     private Integer count;
     private Integer discountPercent;
 
     @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
+    @JoinColumn(name = "order_id")
+    private OrderEntity order;
     @ManyToOne
     @JoinColumn(name = "isbn")
     private BookEntity book;
 
     @Builder
-    public OrderBookEntity(Integer count, Integer discountPercent, UserEntity user, BookEntity book) {
+    public OrderBookEntity(Integer count, OrderEntity order, BookEntity book) {
         this.count = count;
-        this.discountPercent = discountPercent;
-        this.user = user;
+        this.discountPercent = book.getDiscountPercent();
+        this.order = order;
         this.book = book;
+    }
+
+    public int changeCount (int changeCount) {
+        this.count = changeCount;
+        return this.count;
     }
 }

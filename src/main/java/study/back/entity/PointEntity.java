@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -13,7 +15,7 @@ public class PointEntity {
     @Column(name = "point_id")
     private Long id;
     private Integer changedPoint;
-    private String pointDatetime;
+    private LocalDateTime pointDatetime;
     private String type;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -21,7 +23,7 @@ public class PointEntity {
     private UserEntity user;
 
     @Builder
-    public PointEntity(int changedPoint, String type, String pointDatetime, UserEntity user) {
+    public PointEntity(int changedPoint, String type, LocalDateTime pointDatetime, UserEntity user) {
         this.changedPoint = changedPoint;
         this.pointDatetime = pointDatetime;
         this.type = type;

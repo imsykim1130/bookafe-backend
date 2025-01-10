@@ -10,4 +10,5 @@ public class SignUpRequestDto {
     private String address;
     private String addressDetail;
     private String phoneNumber;
+    private String role;
 }

@@ -1,11 +1,14 @@
 package study.back.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import study.back.utils.CustomUtil;
+import lombok.*;
+import org.springframework.format.annotation.DateTimeFormat;
+import study.back.exception.DeliveryAlreadyDoneException;
+import study.back.exception.DeliveryAlreadyStartedException;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Getter
@@ -18,23 +21,37 @@ public class OrderEntity {
     private String address;
     private String addressDetail;
     private String phoneNumber;
-    private String orderDatetime;
+
+    private LocalDateTime orderDatetime;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;
+    private int totalPrice;
+    private boolean isDiscounted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Builder
-    public static OrderEntity createEntity(String address, String addressDetail, String phoneNumber, UserEntity user) {
+    public static OrderEntity createEntity(String address, String addressDetail, String phoneNumber, LocalDateTime orderDatetime, int totalPrice, UserEntity user, boolean isDiscounted) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.address = address;
         orderEntity.addressDetail = addressDetail;
         orderEntity.phoneNumber = phoneNumber;
-        orderEntity.orderDatetime = CustomUtil.getDateTime();
+        orderEntity.orderDatetime = orderDatetime;
         orderEntity.orderStatus = OrderStatus.READY;
+        orderEntity.totalPrice = totalPrice;
         orderEntity.user = user;
+        orderEntity.isDiscounted = isDiscounted;
         return orderEntity;
+    }
+
+    // 배송상태 변경
+    public OrderStatus changeOrderStatus(OrderStatus orderStatus) {
+        if (this.orderStatus.equals(OrderStatus.DELIVERED)) {
+            throw new DeliveryAlreadyDoneException("이미 배송이 완료된 주문입니다");
+        }
+        this.orderStatus = orderStatus;
+        return this.orderStatus;
     }
 }

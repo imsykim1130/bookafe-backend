@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -18,11 +19,13 @@ import java.util.*;
 @NoArgsConstructor
 @Table(name = "users")
 public class UserEntity implements UserDetails {
+    @Setter
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
     private String email;
     private String password;
+    @Setter
     private String nickname;
     private String profileImg;
     private String address;
@@ -59,7 +62,7 @@ public class UserEntity implements UserDetails {
     }
 
     public UserItem toItem() {
-        return new UserItem(this.id, this.email, this.nickname, this.profileImg);
+        return new UserItem(this.id, this.email, this.nickname, this.profileImg, this.createDate, this.role.toString());
     }
 
     @Override
@@ -75,6 +78,10 @@ public class UserEntity implements UserDetails {
         }
 
         return authorities;
+    }
+
+    public void changeProfileImg(String profileImg) {
+        this.profileImg = profileImg;
     }
 
     @Override
@@ -101,4 +108,5 @@ public class UserEntity implements UserDetails {
     public boolean isEnabled() {
         return UserDetails.super.isEnabled();
     }
+
 }

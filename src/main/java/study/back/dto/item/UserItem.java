@@ -13,6 +13,8 @@ public class UserItem {
     private String email;
     private String nickname;
     private String profileImg;
+    private String createDate;
+    private String role;
 
     public static UserItem createUserItem(UserEntity user) {
         UserItem userItem = new UserItem();
@@ -20,6 +22,8 @@ public class UserItem {
         userItem.email = user.getEmail();
         userItem.nickname = user.getNickname();
         userItem.profileImg = user.getProfileImg();
+        userItem.createDate = user.getCreateDate().split(" ")[0];
+        userItem.role = user.getRole().toString();
         return userItem;
     }
 }
