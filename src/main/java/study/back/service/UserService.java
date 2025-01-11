@@ -3,11 +3,15 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserOrderInfoResponseDto;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
 import study.back.repository.UserRepository;
+import study.back.repository.resultSet.EmailDatetimeView;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -44,5 +48,33 @@ public class UserService {
         }
         user.changeProfileImg(profileImage);
         userRepository.save(user);
+    }
+
+    // 유저 검색 결과 가져오기
+    // 입력 : 검색어
+    // 출력 : UserManagementInfo 형태의 리스트
+    public List<UserManagementInfo> getSearchUserList(String searchWord) {
+        // 이메일에 검색어가 포함된 유저 리스트 가져오기
+        List<UserEntity> allEmailAndDatetime = userRepository.findAllEmailAndDatetime(searchWord);
+
+        return allEmailAndDatetime.stream().map(user -> {
+            // 각 유저의 보유 포인트 가져오기
+            int totalPoint = pointService.getTotalPoint(user);
+            // 각 유저의 댓글 작성 개수 가져오기
+            int commentCount = userRepository.countCommentByUser(user);
+
+            // dto 로 변환
+            return UserManagementInfo.builder()
+                    .id(user.getId())
+                    .email(user.getEmail())
+                    .datetime(user.getCreateDate())
+                    .point(totalPoint)
+                    .commentCount(commentCount)
+                    .build();
+        }).toList();
+    }
+
+    public void deleteUser(Long id) {
+        userRepository.deleteById(id);
     }
 }

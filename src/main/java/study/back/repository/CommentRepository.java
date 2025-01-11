@@ -27,4 +27,6 @@ public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
             "where parent_comment_id = :parent_id", nativeQuery = true)
     List<CommentResultSet> findByParent(@Param(value="parent_id") String parent_id);
 
+
+
 }

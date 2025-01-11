@@ -4,9 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.entity.UserEntity;
 import study.back.service.UserService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +34,12 @@ public class UserController {
     public ResponseEntity<?> changeProfileImage(@AuthenticationPrincipal UserEntity user, @PathVariable(value = "profileImage") String profileImage) {
         userService.changeProfileImage(user, profileImage);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord) {
+        List<UserManagementInfo> result = userService.getSearchUserList(searchWord);
+        return ResponseEntity.ok().body(result);
     }
 
 }

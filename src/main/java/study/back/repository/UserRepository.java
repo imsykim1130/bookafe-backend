@@ -2,6 +2,7 @@ package study.back.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import study.back.entity.BookEntity;
 import study.back.entity.UserEntity;
 
@@ -20,4 +21,12 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     @Query("select bf.user.id from BookFavorite bf where bf.book = ?1")
     List<String> getFavoriteUserIdListByBook(BookEntity book);
+
+    @Query("select u from UserEntity u " +
+            "where u.email like concat('%', :searchWord, '%') ")
+    List<UserEntity> findAllEmailAndDatetime(@Param("searchWord") String searchWord);
+
+    @Query("select count(c) from CommentEntity c where c.user = :user")
+    int countCommentByUser(@Param("user") UserEntity user);
+
 }
