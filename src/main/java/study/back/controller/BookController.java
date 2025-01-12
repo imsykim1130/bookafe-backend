@@ -44,8 +44,8 @@ public class BookController {
     }
 
     // 책 상세정보
-    @GetMapping("/book/detail")
-    public ResponseEntity<?> getBookDetail(@RequestParam(name = "isbn") String isbn) {
+    @GetMapping("/book/detail/{isbn}")
+    public ResponseEntity<?> getBookDetail(@PathVariable(name = "isbn") String isbn) {
         return bookService.getBookDetail(isbn);
     }
 
