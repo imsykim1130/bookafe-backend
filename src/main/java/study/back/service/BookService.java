@@ -33,7 +33,6 @@ public class BookService {
     @Value("${kakao-authorization}")
     private String kakaoAuthorization;
 
-
     // 카카오 api 에서 책 정보 가져오기
     private OriginBookItem getBookDataFromKakaoApi(String query, String sort, String page, String size, String target) throws KakaoAuthorizationException {
         OriginBookItem result;
@@ -217,7 +216,7 @@ public class BookService {
 
             Optional<BookCartEntity> bookCartOpt = bookCartRepository.findByUserAndBook(user, book);
             if(bookCartOpt.isEmpty()) {
-                BookCartEntity bookCart = BookCartEntity.createBookCart(user, book);
+                BookCartEntity bookCart = BookCartEntity.createBookCart(user, isbn);
                 bookCartRepository.save(bookCart);
             } else {
                 // delete 문을 실행하기 전에 select 문이 자동으로 실행된다

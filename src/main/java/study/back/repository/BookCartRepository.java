@@ -3,6 +3,7 @@ package study.back.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import study.back.dto.item.CartBookView;
 import study.back.dto.item.PriceCountView;
 import study.back.entity.BookCartEntity;
@@ -13,45 +14,38 @@ import java.util.List;
 import java.util.Optional;
 
 public interface BookCartRepository extends JpaRepository<BookCartEntity, Long> {
-    Optional<BookCartEntity> findByUserAndBook(UserEntity user, BookEntity book);
+    @Query("select bc from BookCartEntity bc inner join BookEntity b on b.isbn = bc.isbn where b = :book and bc.user = :user")
+    Optional<BookCartEntity> findByUserAndBook(@Param("user") UserEntity user, @Param("book") BookEntity book);
 
-    @Query("select bookCart.user " +
-            "from BookCartEntity bookCart " +
-            "where bookCart.book = ?1")
-    List<UserEntity> findCartUserListByBook(BookEntity book);
-
-    @Query("select bookCart.book " +
-            "from BookCartEntity bookCart " +
-            "where bookCart.user = ?1")
-    List<BookEntity> findCartBookListByUser(UserEntity user);
-
-    @Query("select bc.id as id, bc.book.isbn as isbn, bc.book.title as title, bc.book.author as author, bc.book.bookImg as img, bc.count as count, bc.book.price as price, bc.book.discountPercent as discountPercent from BookCartEntity bc where bc.user = ?1")
-    List<CartBookView> findCartBookViewByUser(UserEntity user);
-
-    void deleteByUserAndBook(UserEntity user, BookEntity book);
+    @Query("select bc.id as id, b.isbn as isbn, b.title as title, b.author as author, b.bookImg as img, bc.count as count, b.price as price, b.discountPercent as discountPercent from BookCartEntity bc " +
+            "inner join BookEntity b on b.isbn = bc.isbn " +
+            "where bc.user = :user")
+    List<CartBookView> findCartBookViewByUser(@Param("user") UserEntity user);
 
     @Modifying
     @Query(
-            value = "delete from BookCartEntity bc where bc.user.id = ?1 and bc.book.isbn = ?2"
+            value = "delete from BookCartEntity bc where bc.user.id = :userId and bc.isbn = :isbn"
     )
-    int deleteCartBook(Long userId, String isbn);
+    int deleteCartBook(@Param("userId") Long userId, @Param("isbn") String isbn);
 
     @Modifying
-    @Query("update BookCartEntity bc set bc.count = ?1 where bc.user = ?2 and bc.book.isbn = ?3")
-    void updateBookCartCount(int count, UserEntity user, String isbn);
+    @Query("update BookCartEntity bc set bc.count = :count where bc.user = :user and bc.isbn = :isbn")
+    void updateBookCartCount(@Param("count") int count, @Param("user") UserEntity user,@Param("isbn") String isbn);
 
-    @Query("select bc.count from BookCartEntity bc where bc.user = ?1 and bc.book.isbn = ?2")
-    int getBookCartCount(UserEntity user, String isbn);
-
-    @Modifying
-    @Query("delete from BookCartEntity bc where bc.user = ?1 and bc.book.isbn in ?2")
-    void deleteAllByIsbn(UserEntity user, List<String> isbnList);
-
-    @Query("select bc.book.price as price, bc.count as count, bc.book.discountPercent as discountPercent, bc.book as book from BookCartEntity bc where bc.id in ?1")
-    List<PriceCountView> findPriceCountDiscountPercentByIdList(List<Long> idList);
+    @Query("select bc.count from BookCartEntity bc where bc.user = :user and bc.isbn = :isbn")
+    int getBookCartCount(@Param("user") UserEntity user, @Param("isbn") String isbn);
 
     @Modifying
-    @Query("delete from BookCartEntity bc where bc.id in ?1")
-    void deleteAllByIdList(List<Long> cartBookIdList);
+    @Query("delete from BookCartEntity bc where bc.user = :user and bc.isbn in :isbnList")
+    void deleteAllByIsbn(@Param("user") UserEntity user, @Param("isbnList") List<String> isbnList);
+
+    @Query("select b.price as price, bc.count as count, b.discountPercent as discountPercent, b as book from BookCartEntity bc " +
+            "inner join BookEntity b on b.isbn = bc.isbn " +
+            "where bc.id in :idList")
+    List<PriceCountView> findPriceCountDiscountPercentByIdList(@Param("idList") List<Long> idList);
+
+    @Modifying
+    @Query("delete from BookCartEntity bc where bc.id in :cartBookIdList")
+    void deleteAllByIdList(@Param("cartBookIdList") List<Long> cartBookIdList);
 
 }

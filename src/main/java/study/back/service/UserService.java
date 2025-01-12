@@ -1,5 +1,4 @@
 package study.back.service;
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +9,6 @@ import study.back.dto.response.GetUserResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
 import study.back.repository.UserRepository;
-import study.back.repository.resultSet.EmailDatetimeView;
 
 import java.util.List;
 

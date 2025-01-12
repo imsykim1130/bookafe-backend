@@ -18,14 +18,12 @@ public class BookCartEntity {
     @JoinColumn(name="user_id")
     private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "isbn")
-    private BookEntity book;
+    private String isbn;
 
-    public static BookCartEntity createBookCart(UserEntity user, BookEntity book) {
+    public static BookCartEntity createBookCart(UserEntity user, String isbn) {
         BookCartEntity bookCartEntity = new BookCartEntity();
         bookCartEntity.user = user;
-        bookCartEntity.book = book;
+        bookCartEntity.isbn = isbn;
         bookCartEntity.count = 1;
         return bookCartEntity;
     }
