@@ -1,4 +1,4 @@
-package study.back.repository;
+package study.back.repository.origin;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.jdbc.core.JdbcTemplate;

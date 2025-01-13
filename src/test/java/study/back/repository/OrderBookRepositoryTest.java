@@ -8,6 +8,7 @@ import study.back.dto.item.OrderBookView;
 import study.back.entity.BookEntity;
 import study.back.entity.OrderBookEntity;
 import study.back.entity.OrderEntity;
+import study.back.repository.origin.OrderBookRepository;
 
 import java.util.List;
 

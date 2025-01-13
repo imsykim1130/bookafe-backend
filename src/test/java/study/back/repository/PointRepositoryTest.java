@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.TestPropertySource;
 import study.back.entity.PointEntity;
 import study.back.entity.UserEntity;
+import study.back.repository.origin.PointRepository;
+import study.back.repository.origin.UserRepository;
 
 import java.util.List;
 

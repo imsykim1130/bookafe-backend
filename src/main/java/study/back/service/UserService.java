@@ -8,7 +8,7 @@ import study.back.dto.response.GetUserOrderInfoResponseDto;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
-import study.back.repository.UserRepository;
+import study.back.repository.origin.UserRepository;
 
 import java.util.List;
 

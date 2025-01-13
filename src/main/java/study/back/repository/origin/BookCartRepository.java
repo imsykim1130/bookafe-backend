@@ -1,4 +1,4 @@
-package study.back.repository;
+package study.back.repository.origin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -48,4 +48,7 @@ public interface BookCartRepository extends JpaRepository<BookCartEntity, Long> 
     @Query("delete from BookCartEntity bc where bc.id in :cartBookIdList")
     void deleteAllByIdList(@Param("cartBookIdList") List<Long> cartBookIdList);
 
+    Boolean existsByIsbn(String isbn);
+
+    Optional<BookCartEntity> findByIsbn(String isbn);
 }

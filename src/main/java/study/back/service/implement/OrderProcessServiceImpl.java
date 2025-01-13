@@ -8,16 +8,13 @@ import study.back.dto.request.CreateOrderRequestDto;
 import study.back.entity.*;
 import study.back.exception.NotValidTotalPriceException;
 import study.back.exception.PointAndCouponConflictException;
-import study.back.repository.BookCartRepository;
-import study.back.repository.OrderRepository;
+import study.back.repository.origin.BookCartRepository;
+import study.back.repository.origin.OrderRepository;
 import study.back.service.OrderProcessService;
 import study.back.service.PointService;
 import study.back.service.UserCouponService;
 
-import java.time.Instant;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 
 @Service

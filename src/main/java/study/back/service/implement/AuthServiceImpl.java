@@ -15,7 +15,7 @@ import study.back.dto.response.SignInResponseDto;
 import study.back.dto.response.SignUpResponseDto;
 import study.back.entity.RoleName;
 import study.back.entity.UserEntity;
-import study.back.repository.UserRepository;
+import study.back.repository.origin.UserRepository;
 import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;
 import study.back.service.AuthService;

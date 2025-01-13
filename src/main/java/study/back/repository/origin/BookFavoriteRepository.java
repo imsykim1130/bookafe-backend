@@ -1,4 +1,4 @@
-package study.back.repository;
+package study.back.repository.origin;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -7,7 +7,6 @@ import study.back.entity.BookEntity;
 import study.back.entity.BookFavorite;
 import study.back.entity.UserEntity;
 
-import java.util.List;
 import java.util.Optional;
 
 

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import study.back.entity.OrderEntity;
 import study.back.entity.UserEntity;
+import study.back.repository.origin.OrderRepository;
 import study.back.repository.resultSet.OrderView;
 
 import java.util.List;

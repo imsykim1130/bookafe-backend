@@ -15,7 +15,10 @@ import study.back.entity.BookFavorite;
 import study.back.entity.UserEntity;
 import study.back.exception.KakaoAuthorizationException;
 import study.back.exception.NotExistBookException;
-import study.back.repository.*;
+import study.back.repository.origin.BookCartRepository;
+import study.back.repository.origin.BookFavoriteRepository;
+import study.back.repository.origin.BookRepository;
+import study.back.repository.origin.UserRepository;
 import study.back.repository.resultSet.FavoriteBookView;
 
 import java.util.List;

@@ -13,6 +13,7 @@ import study.back.entity.CouponEntity;
 import study.back.entity.RoleName;
 import study.back.entity.UserCouponEntity;
 import study.back.entity.UserEntity;
+import study.back.repository.origin.UserCouponRepository;
 import study.back.repository.resultSet.UserCouponView;
 import java.util.List;
 

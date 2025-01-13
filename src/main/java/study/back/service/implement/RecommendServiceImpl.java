@@ -8,8 +8,8 @@ import study.back.entity.RecommendBookEntity;
 import study.back.exception.AlreadyRecommendedBookException;
 import study.back.exception.NoMoreRecommendBookException;
 import study.back.exception.NotExistBookException;
-import study.back.repository.BookRepository;
-import study.back.repository.RecommendBookRepository;
+import study.back.repository.origin.BookRepository;
+import study.back.repository.origin.RecommendBookRepository;
 import study.back.repository.resultSet.RecommendBookView;
 import study.back.service.RecommendBookService;
 

@@ -6,17 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-import study.back.dto.response.OrderDetail;
 import study.back.entity.OrderEntity;
 import study.back.entity.UserEntity;
 import study.back.exception.UserNotFoundException;
-import study.back.repository.OrderRepository;
-import study.back.repository.UserRepository;
-import study.back.service.UserService;
+import study.back.repository.origin.OrderRepository;
+import study.back.repository.origin.UserRepository;
 import study.back.utils.CustomUtil;
-
-import java.util.Date;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 

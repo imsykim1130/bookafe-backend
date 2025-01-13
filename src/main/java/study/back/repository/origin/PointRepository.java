@@ -1,4 +1,4 @@
-package study.back.repository;
+package study.back.repository.origin;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

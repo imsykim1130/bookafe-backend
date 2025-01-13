@@ -13,10 +13,9 @@ import study.back.entity.CommentEntity;
 import study.back.entity.CommentFavoriteEntity;
 import study.back.entity.UserEntity;
 import study.back.exception.NoParentCommentException;
-import study.back.repository.BookRepository;
-import study.back.repository.CommentFavoriteRepository;
-import study.back.repository.CommentRepository;
-import study.back.repository.resultSet.CommentResultSet;
+import study.back.repository.origin.BookRepository;
+import study.back.repository.origin.CommentFavoriteRepository;
+import study.back.repository.origin.CommentRepository;
 
 import java.util.List;
 import java.util.Optional;

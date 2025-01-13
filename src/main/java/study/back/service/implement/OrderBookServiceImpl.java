@@ -10,8 +10,8 @@ import study.back.entity.OrderStatus;
 import study.back.exception.DeliveryAlreadyDoneException;
 import study.back.exception.DeliveryAlreadyStartedException;
 import study.back.exception.OrderNotFoundException;
-import study.back.repository.BookRepository;
-import study.back.repository.OrderBookRepository;
+import study.back.repository.origin.BookRepository;
+import study.back.repository.origin.OrderBookRepository;
 import study.back.service.OrderBookService;
 
 import java.util.List;

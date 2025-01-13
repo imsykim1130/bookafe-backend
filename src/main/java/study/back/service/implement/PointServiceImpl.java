@@ -12,8 +12,8 @@ import study.back.exception.NotEnoughPointsException;
 import study.back.exception.UnUsablePointsException;
 import study.back.exception.UserNotFoundException;
 import study.back.exception.ZeroPointsException;
-import study.back.repository.PointRepository;
-import study.back.repository.UserRepository;
+import study.back.repository.origin.PointRepository;
+import study.back.repository.origin.UserRepository;
 import study.back.repository.resultSet.PointLogView;
 import study.back.service.PointService;
 

@@ -1,4 +1,4 @@
-package study.back.repository;
+package study.back.repository.origin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import study.back.entity.CommentEntity;

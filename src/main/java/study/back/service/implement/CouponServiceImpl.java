@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.back.entity.UserEntity;
 import study.back.exception.UserNotFoundException;
-import study.back.repository.UserCouponRepository;
-import study.back.repository.UserRepository;
+import study.back.repository.origin.UserCouponRepository;
+import study.back.repository.origin.UserRepository;
 import study.back.repository.resultSet.UserCouponView;
 import study.back.service.CouponService;
 
