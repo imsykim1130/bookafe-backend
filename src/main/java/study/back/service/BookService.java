@@ -149,39 +149,6 @@ public class BookService {
         return GetBookDetailResponseDto.success(bookDetail);
     }
 
-    // 책에 좋아요 누르기
-    public ResponseEntity<ResponseDto> putFavoriteToBook(String isbn, UserEntity user) {
-        System.out.println("---- 책 좋아요 누르기");
-        try {
-            // 책 찾기
-            Optional<BookEntity> bookOpt = bookRepository.findById(isbn);
-
-            // 책 찾기 실패
-            if(bookOpt.isEmpty()) {
-                return ResponseDto.notFoundBook();
-            }
-            BookEntity book = bookOpt.get();
-
-            // 좋아요 누르기 / 취소하기
-            // 좋아요 상태 확인하기
-            Optional<BookFavorite> bookFavoriteOptional = bookFavoriteRepository.findByUserAndBook(user, book);
-
-            if(bookFavoriteOptional.isEmpty()) {
-                // 좋아요 누르기
-                BookFavorite bookFavorite = BookFavorite.createBookFavorite(user, book);
-                bookFavoriteRepository.save(bookFavorite);
-            } else {
-                // 좋아요 취소하기
-                bookFavoriteRepository.delete(bookFavoriteOptional.get());
-            }
-
-        } catch (Exception e) {
-            // 서버 에러
-            e.printStackTrace();
-            return ResponseDto.internalServerError();
-        }
-        return ResponseDto.success("좋아요 누르기 성공");
-    }
 
     // 좋아요 누른 책 리스트 가져오기
     public ResponseEntity<? super GetFavoriteBookListResponseDto> getFavoriteBookList(UserEntity user) {
@@ -201,10 +168,10 @@ public class BookService {
         return GetFavoriteBookListResponseDto.success(bookPrevList);
     }
 
-    // 좋아요 책 리스트 가져오기 v2
-    public List<FavoriteBookView> getFavoriteBookViewList(UserEntity user) {
-        return bookRepository.findFavoriteBookViewList(user);
-    }
+//    // 좋아요 책 리스트 가져오기 v2
+//    public List<FavoriteBookView> getFavoriteBookViewList(UserEntity user) {
+//        return bookRepository.findFavoriteBookViewList(user);
+//    }
 
     // 책 장바구니 담기
     public ResponseEntity<ResponseDto> putBookToCart(String isbn, UserEntity user) {
@@ -279,7 +246,7 @@ public class BookService {
             }
             BookEntity book = bookOpt.get();
             // 해당 책을 좋아요 한 유저 가져오기
-            userIdList = userRepository.getFavoriteUserIdListByBook(book);
+            userIdList = userRepository.getFavoriteUserIdListByIsbn(isbn);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -315,12 +282,6 @@ public class BookService {
             return false;
         }
         return true;
-    }
-
-    // 좋아요 책 삭제
-    public int deleteFavoriteBook(UserEntity user, String isbn) {
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("존재하지 않는 책입니다"));
-        return bookFavoriteRepository.deleteFavoriteBookByUserAndBook(user, book);
     }
 
 }

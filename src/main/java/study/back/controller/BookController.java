@@ -2,15 +2,9 @@ package study.back.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import study.back.dto.item.CartBookView;
-import study.back.dto.request.ChangeCartBookCountRequestDto;
 import study.back.dto.response.GetBookListByIsbnListResponseDto;
 import study.back.dto.response.GetFavoriteUserIdListResponseDto;
-import study.back.dto.response.ResponseDto;
-import study.back.entity.UserEntity;
-import study.back.repository.resultSet.FavoriteBookView;
 import study.back.service.BookService;
 
 import java.util.List;
@@ -49,14 +43,6 @@ public class BookController {
         return bookService.getBookDetail(isbn);
     }
 
-    // 책 좋아요
-    @PutMapping("/book/favorite/{isbn}")
-    public ResponseEntity<ResponseDto> putBookFavorite(@PathVariable(name = "isbn") String isbn,
-                                                    @AuthenticationPrincipal UserEntity user) {
-
-        return bookService.putFavoriteToBook(isbn, user);
-    }
-
     // 좋아요 유저 리스트 가져오기
     @GetMapping("/book/{isbn}/favorite/users")
     public ResponseEntity<? super GetFavoriteUserIdListResponseDto> getFavoriteUsers(@PathVariable(name="isbn") String isbn) {
@@ -67,57 +53,5 @@ public class BookController {
     @GetMapping("/book/{isbn}/cart/users")
     public ResponseEntity<?> getCartUsers(@PathVariable(name = "isbn") String isbn) {
         return bookService.getCartUserList(isbn);
-    }
-
-    // 좋아요 책 리스트 가져오기
-    @GetMapping("/books/favorite")
-    public ResponseEntity<?> getFavorite(@AuthenticationPrincipal UserEntity user) {
-        return bookService.getFavoriteBookList(user);
-    }
-
-    // 좋아요 책 리스트 가져오기 v2
-    @GetMapping("/book/favorite-list")
-    public ResponseEntity<List<FavoriteBookView>> getFavoriteList(@AuthenticationPrincipal UserEntity user) {
-        List<FavoriteBookView> favoriteBookViewList = bookService.getFavoriteBookViewList(user);
-        return ResponseEntity.ok(favoriteBookViewList);
-    }
-
-    @DeleteMapping("/book/favorite/{isbn}")
-    public ResponseEntity<Boolean> deleteBookFavorite(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
-        bookService.deleteFavoriteBook(user, isbn);
-        return ResponseEntity.ok().build();
-    }
-
-    // 장바구니 책 리스트 가져오기
-    @GetMapping("/books/cart")
-    public List<CartBookView> getCart(@AuthenticationPrincipal UserEntity user) {
-        return bookService.getCartBookList(user);
-    }
-
-    // 장바구니 책 수량 변경
-    @PatchMapping("/book/cart/count")
-    public ResponseEntity<Integer> setCount(@AuthenticationPrincipal UserEntity user,
-                                      @RequestBody ChangeCartBookCountRequestDto requestDto) {
-        int changedCount = bookService.changeCartBookCount(requestDto, user);
-        return ResponseEntity.ok(changedCount);
-    }
-
-    // 장바구니 책 삭제
-    @DeleteMapping("/book/cart/{isbn}")
-    public ResponseEntity<ResponseDto> deleteCartBook(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
-        return bookService.deleteCartBook(isbn, user);
-    }
-
-    // 장바구니 책 리스트 삭제
-    @DeleteMapping("/books/cart")
-    public ResponseEntity<?> deleteCartBookList(@RequestBody List<Long> cartBookIdList) {
-
-        boolean isSuccess = bookService.deleteCartBookList(cartBookIdList);
-
-        if(isSuccess) {
-            return ResponseEntity.ok().body(true);
-        } else {
-            return ResponseEntity.internalServerError().body(false);
-        }
     }
 }

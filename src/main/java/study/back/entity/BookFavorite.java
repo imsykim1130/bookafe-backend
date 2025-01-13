@@ -13,16 +13,15 @@ public class BookFavorite {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String isbn;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "isbn")
-    private BookEntity book;
 
-    public static BookFavorite createBookFavorite(UserEntity user, BookEntity book) {
+    public static BookFavorite createBookFavorite(UserEntity user, String isbn) {
         BookFavorite bookFavorite = new BookFavorite();
-        bookFavorite.book = book;
+        bookFavorite.isbn = isbn;
         bookFavorite.user = user;
         return bookFavorite;
     }

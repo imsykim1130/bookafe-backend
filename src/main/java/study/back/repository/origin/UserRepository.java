@@ -13,14 +13,11 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     boolean existsByEmail(String email);
     boolean existsByNickname(String nickname);
 
-    @Query("select bf.user from BookFavorite bf where bf.book = ?1")
-    List<UserEntity> getFavoriteUserListByBook(BookEntity book);
-
     @Query("select bc.user.id from BookCartEntity bc inner join BookEntity b on b.isbn = bc.isbn where b = :book")
     List<String> getCartUserIdListByBook(@Param("book") BookEntity book);
 
-    @Query("select bf.user.id from BookFavorite bf where bf.book = ?1")
-    List<String> getFavoriteUserIdListByBook(BookEntity book);
+    @Query("select bf.user.id from BookFavorite bf where bf.isbn = :isbn")
+    List<String> getFavoriteUserIdListByIsbn(@Param("isbn") String isbn);
 
     @Query("select u from UserEntity u " +
             "where u.email like concat('%', :searchWord, '%') ")
