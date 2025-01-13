@@ -4,8 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.dto.item.CartBookView;
 import study.back.entity.UserEntity;
 import study.back.service.BookCartService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -30,5 +33,11 @@ public class BookCartController {
     public ResponseEntity<Boolean> isCart(@PathVariable(name = "isbn") String isbn) {
         boolean result = bookCartService.isCart(isbn);
         return ResponseEntity.ok(result);
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<CartBookView>> getBookCartList(@AuthenticationPrincipal UserEntity user) {
+        List<CartBookView> bookCartList = bookCartService.getBookCartList(user);
+        return ResponseEntity.ok(bookCartList);
     }
 }

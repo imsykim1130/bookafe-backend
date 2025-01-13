@@ -3,11 +3,14 @@ package study.back.service.implement;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
 import study.back.entity.UserEntity;
 import study.back.exception.NotExistBookException;
 import study.back.repository.BookCartRepositoryInterface;
 import study.back.service.BookCartService;
+
+import java.util.List;
 
 
 @Service
@@ -39,5 +42,11 @@ public class BookCartServiceImpl implements BookCartService {
     @Override
     public boolean isCart(String isbn) {
         return bookCartRepository.existsByIsbn(isbn);
+    }
+
+    // 장바구니 책 리스트 가져오기
+    @Override
+    public List<CartBookView> getBookCartList(UserEntity user) {
+        return bookCartRepository.findCartBookViewListByUser(user);
     }
 }

@@ -51,4 +51,5 @@ public interface BookCartRepository extends JpaRepository<BookCartEntity, Long> 
     Boolean existsByIsbn(String isbn);
 
     Optional<BookCartEntity> findByIsbn(String isbn);
+
 }
