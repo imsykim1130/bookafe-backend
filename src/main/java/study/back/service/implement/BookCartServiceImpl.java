@@ -39,6 +39,7 @@ public class BookCartServiceImpl implements BookCartService {
         bookCartRepository.delete(bookCart);
     }
 
+    // 장바구니 여부
     @Override
     public boolean isCart(String isbn) {
         return bookCartRepository.existsByIsbn(isbn);
