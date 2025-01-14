@@ -11,4 +11,5 @@ public interface BookCartService {
     boolean isCart(String isbn);
     List<CartBookView> getBookCartList(UserEntity user);
     void deleteList(List<Long> cartBookIdList);
+    void changeCartBookCount(UserEntity user, String isbn, Integer count);
 }

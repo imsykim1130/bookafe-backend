@@ -42,6 +42,14 @@ public class BookCartRepoImpl implements BookCartRepositoryInterface {
     }
 
     @Override
+    public Optional<BookCartEntity> findByIsbnAndUser(String isbn, UserEntity user) {
+        return em.createQuery("select bc from BookCartEntity bc where bc.user = :user and bc.isbn = :isbn", BookCartEntity.class)
+                .setParameter("user", user)
+                .setParameter("isbn", isbn)
+                .getResultList().stream().findFirst();
+    }
+
+    @Override
     public void delete(BookCartEntity bookCart) {
         bookCartRepository.delete(bookCart);
     }

@@ -27,4 +27,8 @@ public class BookCartEntity {
         bookCartEntity.count = 1;
         return bookCartEntity;
     }
+
+    public void changeCount(int changeCount) {
+        this.count = changeCount;
+    }
 }

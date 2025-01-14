@@ -13,6 +13,7 @@ public interface BookCartRepositoryInterface {
     Boolean existsByIsbn(String isbn);
     void save(BookCartEntity bookCart);
     Optional<BookCartEntity> findByIsbn(String isbn);
+    Optional<BookCartEntity> findByIsbnAndUser(String isbn, UserEntity user);
     void delete(BookCartEntity bookCart);
     List<CartBookView> findCartBookViewListByUser(UserEntity user);
     void deleteAllByIdList(List<Long> cartBookIdList);
