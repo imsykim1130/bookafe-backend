@@ -5,10 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.CartBookView;
+import study.back.dto.request.DeleteCartBookListRequestDto;
 import study.back.entity.UserEntity;
 import study.back.service.BookCartService;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -39,5 +41,13 @@ public class BookCartController {
     public ResponseEntity<List<CartBookView>> getBookCartList(@AuthenticationPrincipal UserEntity user) {
         List<CartBookView> bookCartList = bookCartService.getBookCartList(user);
         return ResponseEntity.ok(bookCartList);
+    }
+
+
+    @DeleteMapping("/list")
+    public ResponseEntity deleteBookCartList(@AuthenticationPrincipal UserEntity user,
+                                             @RequestBody DeleteCartBookListRequestDto requestBody) {
+        bookCartService.deleteList(requestBody.getCartBookIdList());
+        return ResponseEntity.ok().build();
     }
 }

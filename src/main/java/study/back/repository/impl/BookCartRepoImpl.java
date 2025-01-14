@@ -1,5 +1,6 @@
 package study.back.repository.impl;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import study.back.dto.item.CartBookView;
@@ -18,6 +19,7 @@ import java.util.Optional;
 public class BookCartRepoImpl implements BookCartRepositoryInterface {
     private final BookRepository bookRepository;
     private final BookCartRepository bookCartRepository;
+    private final EntityManager em;
 
     @Override
     public Optional<BookEntity> getBookByIsbn(String isbn) {
@@ -47,5 +49,14 @@ public class BookCartRepoImpl implements BookCartRepositoryInterface {
     @Override
     public List<CartBookView> findCartBookViewListByUser(UserEntity user) {
         return bookCartRepository.findCartBookViewByUser(user);
+    }
+
+    @Override
+    public void deleteAllByIdList(List<Long> cartBookIdList) {
+        System.out.println(cartBookIdList);
+        em.createQuery("delete from BookCartEntity bc where bc.id in :cartBookIdList")
+                .setParameter("cartBookIdList", cartBookIdList)
+                .executeUpdate();
+        em.clear();
     }
 }

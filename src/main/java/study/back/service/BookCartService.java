@@ -10,4 +10,5 @@ public interface BookCartService {
     void deleteBookFromCart(String isbn);
     boolean isCart(String isbn);
     List<CartBookView> getBookCartList(UserEntity user);
+    void deleteList(List<Long> cartBookIdList);
 }

@@ -50,4 +50,10 @@ public class BookCartServiceImpl implements BookCartService {
     public List<CartBookView> getBookCartList(UserEntity user) {
         return bookCartRepository.findCartBookViewListByUser(user);
     }
+
+    // 장바구니 책 여러개 동시 삭제
+    @Override
+    public void deleteList(List<Long> cartBookIdList) {
+        bookCartRepository.deleteAllByIdList(cartBookIdList);
+    }
 }

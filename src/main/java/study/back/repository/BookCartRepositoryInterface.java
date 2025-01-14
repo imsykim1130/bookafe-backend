@@ -15,4 +15,5 @@ public interface BookCartRepositoryInterface {
     Optional<BookCartEntity> findByIsbn(String isbn);
     void delete(BookCartEntity bookCart);
     List<CartBookView> findCartBookViewListByUser(UserEntity user);
+    void deleteAllByIdList(List<Long> cartBookIdList);
 }
