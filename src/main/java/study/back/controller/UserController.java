@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.entity.UserEntity;
-import study.back.service.UserService;
+import study.back.service.implement.UserServiceImpl;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
 public class UserController {
-    private final UserService userService;
+    private final UserServiceImpl userService;
 
     // 로그인 유저 정보 가져오기
     @GetMapping("")
