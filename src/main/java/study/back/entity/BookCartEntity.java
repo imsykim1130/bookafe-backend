@@ -13,12 +13,11 @@ public class BookCartEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private Integer count;
+    private String isbn;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="user_id")
     private UserEntity user;
-
-    private String isbn;
 
     public static BookCartEntity createBookCart(UserEntity user, String isbn) {
         BookCartEntity bookCartEntity = new BookCartEntity();

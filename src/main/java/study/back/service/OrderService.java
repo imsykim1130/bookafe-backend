@@ -9,7 +9,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface OrderService {
-    OrderEntity saveOrder(Long userId, String address, String addressDetail, String phoneNumber, int totalPrice, LocalDateTime now, boolean isDiscounted);
     List<OrderDetail> getOrderDetailList(UserEntity user, LocalDateTime startDate, LocalDateTime endDate);
     void cancelOrder(Long orderId);
     List<DeliveryStatusView> getDeliveryStatusList(String orderStatus, LocalDateTime datetime);

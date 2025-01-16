@@ -14,21 +14,19 @@ public class OrderBookEntity {
     private Long id;
     @Min(1)
     private Integer count;
-    private Integer discountPercent;
+    private Integer salesPrice;
+    private String isbn;
 
     @ManyToOne
     @JoinColumn(name = "order_id")
     private OrderEntity order;
-    @ManyToOne
-    @JoinColumn(name = "isbn")
-    private BookEntity book;
 
     @Builder
-    public OrderBookEntity(Integer count, OrderEntity order, BookEntity book) {
+    public OrderBookEntity(Integer count, OrderEntity order, Integer salesPrice, String isbn) {
         this.count = count;
-        this.discountPercent = book.getDiscountPercent();
+        this.salesPrice = salesPrice;
         this.order = order;
-        this.book = book;
+        this.isbn = isbn;
     }
 
     public int changeCount (int changeCount) {

@@ -7,18 +7,13 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.request.ChangeDeliveryStatusRequestDto;
 import study.back.dto.request.CreateOrderRequestDto;
-import study.back.dto.response.CreateOrderResponseDto;
 import study.back.dto.response.OrderDetail;
 import study.back.dto.response.ResponseDto;
-import study.back.entity.OrderEntity;
 import study.back.entity.OrderStatus;
 import study.back.entity.UserEntity;
 import study.back.repository.resultSet.DeliveryStatusView;
-import study.back.service.implement.OrderProcessServiceImpl;
 import study.back.service.implement.OrderServiceImpl;
-import study.back.utils.CustomUtil;
 
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -27,7 +22,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/order")
 public class OrderController {
-    private final OrderProcessServiceImpl orderProcessService;
     private final OrderServiceImpl orderService;
 
     // 주문 생성
@@ -35,16 +29,9 @@ public class OrderController {
     public ResponseEntity<ResponseDto> createOrder(@AuthenticationPrincipal UserEntity user,
                                                    @RequestBody CreateOrderRequestDto requestDto) {
 
-        OrderEntity order = orderProcessService.createOrder(user, requestDto);
-
-        CreateOrderResponseDto responseBody = CreateOrderResponseDto.builder()
-                .code("SU")
-                .message("주문 성공")
-                .price(order.getTotalPrice())
-                .build();
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseBody);
+        orderService.createOrder(user, requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     };
-
 
     // 주문 상세정보 가져오기
     @GetMapping("/details")
