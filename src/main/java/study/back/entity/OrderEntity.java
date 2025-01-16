@@ -39,7 +39,7 @@ public class OrderEntity {
         orderEntity.addressDetail = addressDetail;
         orderEntity.phoneNumber = phoneNumber;
         orderEntity.orderDatetime = orderDatetime;
-        orderEntity.orderStatus = orderStatus.equals(null) ? OrderStatus.READY : orderStatus;
+        orderEntity.orderStatus = orderStatus == null ? OrderStatus.READY : orderStatus;
         orderEntity.totalPrice = totalPrice;
         orderEntity.user = user;
         orderEntity.isDiscounted = isDiscounted;
