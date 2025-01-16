@@ -33,13 +33,13 @@ public class OrderEntity {
     private UserEntity user;
 
     @Builder
-    public static OrderEntity createEntity(String address, String addressDetail, String phoneNumber, LocalDateTime orderDatetime, int totalPrice, UserEntity user, boolean isDiscounted) {
+    public static OrderEntity createEntity(String address, String addressDetail, String phoneNumber, LocalDateTime orderDatetime, OrderStatus orderStatus, int totalPrice, UserEntity user, boolean isDiscounted) {
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.address = address;
         orderEntity.addressDetail = addressDetail;
         orderEntity.phoneNumber = phoneNumber;
         orderEntity.orderDatetime = orderDatetime;
-        orderEntity.orderStatus = OrderStatus.READY;
+        orderEntity.orderStatus = orderStatus.equals(null) ? OrderStatus.READY : orderStatus;
         orderEntity.totalPrice = totalPrice;
         orderEntity.user = user;
         orderEntity.isDiscounted = isDiscounted;
