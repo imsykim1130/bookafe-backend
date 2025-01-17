@@ -8,41 +8,43 @@ import study.back.dto.request.PostCommentRequestDto;
 import study.back.dto.response.GetCommentListResponseDto;
 import study.back.dto.response.GetReplyListResponseDto;
 import study.back.dto.response.ResponseDto;
+import study.back.entity.CommentEntity;
 import study.back.entity.UserEntity;
 import study.back.service.CommentService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1")
+@RequestMapping("/api/v1/comment")
 public class CommentController {
 
     private final CommentService commentService;
 
     // 댓글 작성
-    @PostMapping("/comment")
-    public ResponseEntity<?> postComment(@RequestBody PostCommentRequestDto requestDto,
+    @PostMapping("")
+    public ResponseEntity postComment(@RequestBody PostCommentRequestDto requestDto,
                                          @AuthenticationPrincipal UserEntity user) {
-        return commentService.postComment(requestDto, user);
+        commentService.postComment(requestDto, user);
+        return ResponseEntity.ok().build();
     }
 
-    // 댓글 좋아요
-    @PostMapping("/comment/favorite/{commentId}")
-    public ResponseEntity<ResponseDto> putCommentFavorite(
-            @PathVariable(name="commentId") Long commentId,
-            @AuthenticationPrincipal UserEntity user) {
-        return commentService.putCommentFavorite(commentId, user);
-    }
-
-    // 댓글 가져오기
-    @GetMapping("/comments/{isbn}")
-    public ResponseEntity<? super GetCommentListResponseDto> getCommentList(@PathVariable(name = "isbn") String isbn) {
-        return commentService.getCommentList(isbn);
-    }
-
-    // 리플 가져오기
-    @GetMapping("/comments/{commentId}/reply")
-    public ResponseEntity<? super GetReplyListResponseDto> getReplyList(@PathVariable(name = "commentId") Long commentId) {
-        return commentService.getReplyList(commentId);
-    }
+//    // 댓글 좋아요
+//    @PostMapping("/favorite/{commentId}")
+//    public ResponseEntity<ResponseDto> putCommentFavorite(
+//            @PathVariable(name="commentId") Long commentId,
+//            @AuthenticationPrincipal UserEntity user) {
+//        return commentService.putCommentFavorite(commentId, user);
+//    }
+//
+//    // 댓글 가져오기
+//    @GetMapping("/list/{isbn}")
+//    public ResponseEntity<? super GetCommentListResponseDto> getCommentList(@PathVariable(name = "isbn") String isbn) {
+//        return commentService.getCommentList(isbn);
+//    }
+//
+//    // 리플 가져오기
+//    @GetMapping("/reply/list/{parentCommentId}")
+//    public ResponseEntity<? super GetReplyListResponseDto> getReplyList(@PathVariable(name = "parentCommentId") Long parentCommentId) {
+//        return commentService.getReplyList(parentCommentId);
+//    }
 
 }

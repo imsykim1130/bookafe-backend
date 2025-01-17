@@ -3,12 +3,11 @@ package study.back.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -21,7 +20,7 @@ public class CommentEntity {
     private Long id;
     @Column(length = 1000)
     private String content;
-    private String writeDate;
+    private LocalDateTime writeDate;
     private String emoji;
 
     @JsonIgnore
@@ -40,24 +39,20 @@ public class CommentEntity {
     private CommentEntity parent;
 
 
-    public static CommentEntity createComment(String content,
-                                              String emoji,
-                                              BookEntity book,
-                                              UserEntity user,
-                                              CommentEntity parent) {
+    @Builder
+    public CommentEntity (String content,
+                          LocalDateTime writeDate,
+                          String emoji,
+                          CommentEntity parent,
+                          BookEntity book,
+                          UserEntity user){
 
-        Date now = Date.from(Instant.now());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String datetime = simpleDateFormat.format(now);
-
-        CommentEntity commentEntity = new CommentEntity();
-        commentEntity.content = content;
-        commentEntity.writeDate = datetime;
-        commentEntity.emoji = emoji;
-        commentEntity.parent = parent;
-        commentEntity.book = book;
-        commentEntity.user = user;
-        return commentEntity;
+        this.content = content;
+        this.writeDate = writeDate;
+        this.emoji = emoji;
+        this.parent = parent;
+        this.book = book;
+        this.user = user;
     }
 
 }
