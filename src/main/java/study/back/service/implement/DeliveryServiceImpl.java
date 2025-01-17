@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.back.entity.OrderEntity;
 import study.back.entity.OrderStatus;
-import study.back.exception.AlreadyDeliveredException;
-import study.back.exception.AlreadyDeliveringException;
-import study.back.exception.NotDeliveringOrderException;
-import study.back.exception.OrderNotFoundException;
+import study.back.exception.*;
 import study.back.repository.DeliveryRepositoryInterface;
 import study.back.service.DeliveryService;
 
@@ -22,7 +19,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     public void changeOrderStatusToDelivering(Long orderId) {
         // 주문 여부 확인
         OrderEntity order = repository.findOrderByOrderId(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("해당 주문이 존재하지 않습니다"));
+                .orElseThrow(() -> new NotExistOrderException("해당 주문이 존재하지 않습니다"));
 
         // 배송 상태 확인
         if(order.getOrderStatus().equals(OrderStatus.DELIVERING)) {
@@ -37,7 +34,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public void changeOrderStatusToDelivered(Long orderId) {
         OrderEntity order = repository.findOrderByOrderId(orderId)
-                .orElseThrow(() -> new OrderNotFoundException("해당 주문이 존재하지 않습니다"));
+                .orElseThrow(() -> new NotExistOrderException("해당 주문이 존재하지 않습니다"));
 
         // 배송 상태 확인
         if(order.getOrderStatus().equals(OrderStatus.DELIVERED)) {
