@@ -22,6 +22,7 @@ public class CommentEntity {
     private String content;
     private LocalDateTime writeDate;
     private String emoji;
+    private Boolean isDeleted;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -43,6 +44,7 @@ public class CommentEntity {
     public CommentEntity (String content,
                           LocalDateTime writeDate,
                           String emoji,
+                          Boolean isDeleted,
                           CommentEntity parent,
                           BookEntity book,
                           UserEntity user){
@@ -50,6 +52,7 @@ public class CommentEntity {
         this.content = content;
         this.writeDate = writeDate;
         this.emoji = emoji;
+        this.isDeleted = isDeleted;
         this.parent = parent;
         this.book = book;
         this.user = user;

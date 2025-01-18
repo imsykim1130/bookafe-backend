@@ -61,6 +61,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity comment = CommentEntity.builder()
                 .writeDate(LocalDateTime.now())
                 .content(content)
+                .isDeleted(false)
                 .parent(parent)
                 .book(book)
                 .emoji(emoji)
