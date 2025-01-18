@@ -67,4 +67,13 @@ public class BookCartRepoImpl implements BookCartRepositoryInterface {
                 .executeUpdate();
         em.clear();
     }
+
+    @Override
+    public Boolean existsBookCart(String isbn, UserEntity user) {
+        Long count = em.createQuery("select count(bc) from BookCartEntity bc where bc.user = :user and bc.isbn = :isbn", Long.class)
+                .setParameter("user", user)
+                .setParameter("isbn", isbn)
+                .getSingleResult();
+        return count == 1;
+    }
 }

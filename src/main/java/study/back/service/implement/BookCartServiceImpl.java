@@ -43,9 +43,9 @@ public class BookCartServiceImpl implements BookCartService {
 
     // 장바구니 여부
     @Override
-    public boolean isCart(String isbn) {
+    public boolean isCart(String isbn, UserEntity user) {
         System.out.println("장바구니 여부");
-        return repository.existsByIsbn(isbn);
+        return repository.existsBookCart(isbn, user);
     }
 
     // 장바구니 책 리스트 가져오기

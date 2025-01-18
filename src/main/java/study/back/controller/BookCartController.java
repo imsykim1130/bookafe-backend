@@ -32,8 +32,8 @@ public class BookCartController {
     }
 
     @GetMapping("/{isbn}")
-    public ResponseEntity<Boolean> isCart(@PathVariable(name = "isbn") String isbn) {
-        boolean result = bookCartService.isCart(isbn);
+    public ResponseEntity<Boolean> isCart(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
+        boolean result = bookCartService.isCart(isbn, user);
         return ResponseEntity.ok(result);
     }
 
