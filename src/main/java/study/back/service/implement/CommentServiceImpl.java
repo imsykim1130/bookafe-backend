@@ -87,38 +87,13 @@ public class CommentServiceImpl implements CommentService {
 
     // 대댓글 가져오기
     @Override
-    public List<CommentItem> getReplyList(Long commentId) {
-//        System.out.println("리플 가져오기");
-//        List<CommentItem> replyList;
-//        try {
-//            // 댓글 여부 확인
-//            Optional<CommentEntity> commentOpt = commentRepository.findById(commentId);
-//            if(commentOpt.isEmpty()) {
-//                return ResponseDto.notFoundComment();
-//            }
-//
-//            CommentEntity comment = commentOpt.get();
-//
-//            // 책에 달린 댓글 찾기
-//            replyList = commentRepository.findByParent(String.valueOf(comment.getId()))
-//                    .stream()
-//                    .map(commentResultSet -> new CommentItem(
-//                            commentResultSet.getId(),
-//                            commentResultSet.getProfileImg(),
-//                            commentResultSet.getNickname(),
-//                            commentResultSet.getWriteDate(),
-//                            commentResultSet.getEmoji(),
-//                            commentResultSet.getContent(),
-//                            commentResultSet.getReplyCount()
-//                    ))
-//                    .toList();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseDto.internalServerError();
-//        }
-//        return GetReplyListResponseDto.success(replyList);
-        return null;
+    public List<CommentItem> getReplyList(Long parentCommentId) {
+        System.out.println("리플 가져오기");
+        List<CommentItem> replyList;
+
+        replyList = repository.findAllReplyByParentCommentId(parentCommentId);
+
+        return replyList;
     }
 
     // 댓글에 좋아요 누르기

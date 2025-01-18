@@ -33,6 +33,13 @@ public class CommentController {
         return ResponseEntity.ok(result);
     }
 
+    // 리플 가져오기
+    @GetMapping("/reply/list/{parentCommentId}")
+    public ResponseEntity<List<CommentItem>> getReplyList(@PathVariable(name = "parentCommentId") Long parentCommentId) {
+        List<CommentItem> result = commentService.getReplyList(parentCommentId);
+        return ResponseEntity.ok(result);
+    }
+
 //    // 댓글 좋아요
 //    @PostMapping("/favorite/{commentId}")
 //    public ResponseEntity<ResponseDto> putCommentFavorite(
@@ -40,12 +47,4 @@ public class CommentController {
 //            @AuthenticationPrincipal UserEntity user) {
 //        return commentService.putCommentFavorite(commentId, user);
 //    }
-//
-//
-//    // 리플 가져오기
-//    @GetMapping("/reply/list/{parentCommentId}")
-//    public ResponseEntity<? super GetReplyListResponseDto> getReplyList(@PathVariable(name = "parentCommentId") Long parentCommentId) {
-//        return commentService.getReplyList(parentCommentId);
-//    }
-
 }

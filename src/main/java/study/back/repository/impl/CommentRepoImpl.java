@@ -43,4 +43,11 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
                 .getResultList();
         return result;
     }
+
+    @Override
+    public List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId) {
+        return em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount from CommentEntity c where c.parent.id = :parentCommentId", CommentItem.class)
+                .setParameter("parentCommentId", parentCommentId)
+                .getResultList();
+    }
 }

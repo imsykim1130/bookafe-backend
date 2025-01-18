@@ -13,4 +13,5 @@ public interface CommentRepositoryInterface {
     Optional<CommentEntity> findCommentById(Long parentId);
     Optional<BookEntity> findBookById(String isbn);
     List<CommentItem> findAllCommentItemByIsbn(String isbn);
+    List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId);
 }
