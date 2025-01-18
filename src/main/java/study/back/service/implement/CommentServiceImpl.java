@@ -72,37 +72,17 @@ public class CommentServiceImpl implements CommentService {
     // 책의 댓글 가져오기
     @Override
     public List<CommentItem> getCommentList(String isbn) {
-//        System.out.println("댓글 가져오기");
-//        List<CommentItem> commentList;
-//
-//        try {
-//            // 책 여부 확인
-//            Optional<BookEntity> bookOptional = bookRepository.findById(isbn);
-//            if(bookOptional.isEmpty()) {
-//                return ResponseDto.notFoundBook();
-//            }
-//            BookEntity book = bookOptional.get();
-//
-//            // 책에 달린 댓글 찾기
-//            commentList = commentRepository.findByBook(book.getIsbn())
-//                    .stream()
-//                    .map(commentResultSet -> new CommentItem(
-//                            commentResultSet.getId(),
-//                            commentResultSet.getProfileImg(),
-//                            commentResultSet.getNickname(),
-//                            commentResultSet.getWriteDate(),
-//                            commentResultSet.getEmoji(),
-//                            commentResultSet.getContent(),
-//                            commentResultSet.getReplyCount()
-//                    ))
-//                    .toList();
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseDto.internalServerError();
-//        }
-//        return GetCommentListResponseDto.success(commentList);
-        return null;
+        System.out.println("댓글 가져오기");
+        List<CommentItem> commentList;
+
+        // 책 여부 확인
+        BookEntity book = repository.findBookById(isbn)
+                .orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+
+        // 댓글 가져오기
+        commentList = repository.findAllCommentItemByIsbn(isbn);
+
+        return commentList;
     }
 
     // 대댓글 가져오기

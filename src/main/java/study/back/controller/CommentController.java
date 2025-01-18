@@ -4,13 +4,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.dto.item.CommentItem;
 import study.back.dto.request.PostCommentRequestDto;
-import study.back.dto.response.GetCommentListResponseDto;
-import study.back.dto.response.GetReplyListResponseDto;
-import study.back.dto.response.ResponseDto;
-import study.back.entity.CommentEntity;
 import study.back.entity.UserEntity;
 import study.back.service.CommentService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +26,13 @@ public class CommentController {
         return ResponseEntity.ok().build();
     }
 
+    // 댓글 가져오기
+    @GetMapping("/list/{isbn}")
+    public ResponseEntity<List<CommentItem>> getCommentList(@PathVariable(name = "isbn") String isbn) {
+        List<CommentItem> result = commentService.getCommentList(isbn);
+        return ResponseEntity.ok(result);
+    }
+
 //    // 댓글 좋아요
 //    @PostMapping("/favorite/{commentId}")
 //    public ResponseEntity<ResponseDto> putCommentFavorite(
@@ -35,11 +41,6 @@ public class CommentController {
 //        return commentService.putCommentFavorite(commentId, user);
 //    }
 //
-//    // 댓글 가져오기
-//    @GetMapping("/list/{isbn}")
-//    public ResponseEntity<? super GetCommentListResponseDto> getCommentList(@PathVariable(name = "isbn") String isbn) {
-//        return commentService.getCommentList(isbn);
-//    }
 //
 //    // 리플 가져오기
 //    @GetMapping("/reply/list/{parentCommentId}")

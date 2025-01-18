@@ -3,12 +3,14 @@ package study.back.repository.impl;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.repository.origin.BookRepository;
 import study.back.repository.origin.CommentRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Component
@@ -32,5 +34,13 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
     @Override
     public Optional<BookEntity> findBookById(String isbn) {
         return bookRepository.findById(isbn);
+    }
+
+    @Override
+    public List<CommentItem> findAllCommentItemByIsbn(String isbn) {
+        List<CommentItem> result = em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount from CommentEntity c where c.book.isbn = :isbn and c.parent is null", CommentItem.class)
+                .setParameter("isbn", isbn)
+                .getResultList();
+        return result;
     }
 }
