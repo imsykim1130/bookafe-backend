@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
+import study.back.entity.UserEntity;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.repository.origin.BookRepository;
 import study.back.repository.origin.CommentRepository;
@@ -49,5 +50,21 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
         return em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount from CommentEntity c where c.parent.id = :parentCommentId", CommentItem.class)
                 .setParameter("parentCommentId", parentCommentId)
                 .getResultList();
+    }
+
+    @Override
+    public Optional<UserEntity> findUserByCommentId(Long commentId) {
+        UserEntity user = em.createQuery("select c.user from CommentEntity c where c.id = :commentId", UserEntity.class)
+                .setParameter("commentId", commentId)
+                .getSingleResult();
+        return Optional.ofNullable(user);
+    }
+
+    @Override
+    public void updateCommentContent(Long commentId, String content) {
+        em.createQuery("update CommentEntity c set c.content = :content where c.id = :commentId")
+                .setParameter("content", content)
+                .setParameter("commentId", commentId)
+                .executeUpdate();
     }
 }

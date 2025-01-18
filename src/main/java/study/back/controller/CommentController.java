@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.CommentItem;
+import study.back.dto.request.ModifyCommentRequestDto;
 import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.UserEntity;
 import study.back.service.CommentService;
@@ -38,6 +39,14 @@ public class CommentController {
     public ResponseEntity<List<CommentItem>> getReplyList(@PathVariable(name = "parentCommentId") Long parentCommentId) {
         List<CommentItem> result = commentService.getReplyList(parentCommentId);
         return ResponseEntity.ok(result);
+    }
+
+    // 댓글 수정하기
+    @PatchMapping("")
+    public ResponseEntity<String> modifyComment(@RequestBody ModifyCommentRequestDto requestDto,
+                                        @AuthenticationPrincipal UserEntity user) {
+        String modifiedContent = commentService.modifyComment(requestDto, user);
+        return ResponseEntity.ok(modifiedContent);
     }
 
 //    // 댓글 좋아요

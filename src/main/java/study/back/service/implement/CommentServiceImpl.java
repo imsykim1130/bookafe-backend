@@ -4,10 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CommentItem;
+import study.back.dto.request.ModifyCommentRequestDto;
 import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.UserEntity;
+import study.back.exception.CommentAuthorMismatchException;
 import study.back.exception.NoCommentContentException;
 import study.back.exception.NoParentCommentException;
 import study.back.exception.NotExistBookException;
@@ -16,6 +18,7 @@ import study.back.service.CommentService;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -94,6 +97,23 @@ public class CommentServiceImpl implements CommentService {
         replyList = repository.findAllReplyByParentCommentId(parentCommentId);
 
         return replyList;
+    }
+
+    // 댓글 수정하기
+    @Override
+    public String modifyComment(ModifyCommentRequestDto requestDto, UserEntity user) {
+        Long commentId = requestDto.getCommentId();
+        String content = requestDto.getContent();
+
+        // 로그인 유저와 댓글 작성자 동일 여부 검증
+        Optional<UserEntity> commentUser = repository.findUserByCommentId(commentId);
+
+        if(!user.getEmail().equals(commentUser.get().getEmail())) {
+            throw new CommentAuthorMismatchException("댓글 수정 권한이 없습니다");
+        }
+
+        repository.updateCommentContent(commentId, content);
+        return content;
     }
 
     // 댓글에 좋아요 누르기

@@ -3,6 +3,7 @@ package study.back.repository;
 import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
+import study.back.entity.UserEntity;
 
 import java.util.List;
 import java.util.Optional;
@@ -14,4 +15,6 @@ public interface CommentRepositoryInterface {
     Optional<BookEntity> findBookById(String isbn);
     List<CommentItem> findAllCommentItemByIsbn(String isbn);
     List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId);
+    Optional<UserEntity> findUserByCommentId(Long commentId);
+    void updateCommentContent(Long commentId, String content);
 }
