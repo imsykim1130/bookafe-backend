@@ -8,6 +8,7 @@ import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import study.back.dto.item.UserItem;
 
 import java.text.SimpleDateFormat;
@@ -38,7 +39,7 @@ public class UserEntity implements UserDetails {
 
     @Builder
     public static UserEntity toEntity(String email,
-                                      String encodedPassword,
+                                      String password,
                                       String nickname,
                                       String address,
                                       String addressDetail,
@@ -47,6 +48,9 @@ public class UserEntity implements UserDetails {
         Date now = Date.from(Instant.now());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String datetime = simpleDateFormat.format(now);
+
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        String encodedPassword = encoder.encode(password);
 
         UserEntity userEntity = new UserEntity();
         userEntity.email = email;

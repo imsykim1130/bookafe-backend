@@ -76,9 +76,6 @@ public class AuthServiceImpl implements AuthService {
     // 회원가입
     @Override
     public ResponseEntity<? super SignUpResponseDto> signUp(SignUpRequestDto signUpRequestDto) {
-        // db 에는 비밀번호 원본을 넣는것은 위험하다. 인코딩 된 값을 db 에 넣자
-        String encodedPassword = passwordEncoder.encode(signUpRequestDto.getPassword());
-
         try {
             // todo
             //  지금처럼 쿼리문 두개를 보내서 어떤 항목이 중복인지 알려주는게 좋은지
@@ -107,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
 
             UserEntity user = UserEntity.builder()
                     .email(signUpRequestDto.getEmail())
-                    .encodedPassword(encodedPassword)
+                    .password(signUpRequestDto.getPassword())
                     .nickname(signUpRequestDto.getNickname())
                     .address(signUpRequestDto.getAddress())
                     .phoneNumber(signUpRequestDto.getPhoneNumber())
