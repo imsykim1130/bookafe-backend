@@ -23,13 +23,7 @@ public class FileController {
     @PostMapping(value = "", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String uploadFile(@AuthenticationPrincipal UserEntity user, @RequestPart("file") MultipartFile file) {
         String fileName = fileService.upload(file);
-        userService.changeProfileImage(user, fileName);
+//        userService.changeProfileImage(user, fileName);
         return fileName;
-    }
-
-    // 파일 가져오기
-    @GetMapping("/{fileName}")
-    public ResponseEntity<UrlResource> downloadFile(@PathVariable(value = "fileName") String fileName) {
-        return fileService.getProfileImage(fileName);
     }
 }

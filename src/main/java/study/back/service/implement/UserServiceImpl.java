@@ -4,12 +4,14 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserOrderInfoResponseDto;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserEntity;
 import study.back.repository.origin.UserRepository;
+import study.back.service.FileService;
 import study.back.service.PointService;
 import study.back.service.UserService;
 
@@ -21,6 +23,7 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     private final PointService pointService;
     private final UserRepository userRepository;
+    private final FileService fileService;
 
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(UserEntity user) {
@@ -46,13 +49,18 @@ public class UserServiceImpl implements UserService {
         return GetUserOrderInfoResponseDto.success(user);
     }
 
+
     @Override
-    public void changeProfileImage(UserEntity user, String profileImage) {
-        if(profileImage.isEmpty() || profileImage.isBlank()) {
-            throw new RuntimeException("이미지 주소가 잘못되었습니다");
+    public String changeProfileImage(UserEntity user, MultipartFile file) {
+        // 파일 업로드
+        String fileName = fileService.upload(file);
+        user.changeProfileImg(fileName);
+        UserEntity changedUser = userRepository.save(user);// 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
+
+        if(changedUser.getProfileImg() == null) {
+            throw new RuntimeException("이미지 변경 실패");
         }
-        user.changeProfileImg(profileImage);
-        userRepository.save(user);
+        return changedUser.getProfileImg();
     }
 
     @Override

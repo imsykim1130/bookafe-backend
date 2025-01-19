@@ -1,9 +1,11 @@
 package study.back.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserResponseDto;
 import study.back.entity.UserEntity;
@@ -30,10 +32,10 @@ public class UserController {
     }
 
     // 프로필 이미지 변경하기
-    @PostMapping("/profile-image/{profileImage}")
-    public ResponseEntity<?> changeProfileImage(@AuthenticationPrincipal UserEntity user, @PathVariable(value = "profileImage") String profileImage) {
-        userService.changeProfileImage(user, profileImage);
-        return ResponseEntity.ok().build();
+    @PostMapping(value = "/profile-image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public ResponseEntity<String> changeProfileImage(@AuthenticationPrincipal UserEntity user, @RequestPart(name = "file") MultipartFile file) {
+        String result = userService.changeProfileImage(user, file);
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping("/search")

@@ -84,8 +84,9 @@ public class UserEntity implements UserDetails {
         return authorities;
     }
 
-    public void changeProfileImg(String profileImg) {
+    public String changeProfileImg(String profileImg) {
         this.profileImg = profileImg;
+        return this.profileImg;
     }
 
     @Override
