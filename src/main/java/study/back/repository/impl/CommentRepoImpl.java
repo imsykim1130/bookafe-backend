@@ -67,4 +67,11 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
                 .setParameter("commentId", commentId)
                 .executeUpdate();
     }
+
+    @Override
+    public void updateCommentToDeleted(Long commentId) {
+        em.createQuery("update CommentEntity c set c.isDeleted = true where c.id = :commentId")
+                .setParameter("commentId", commentId)
+                .executeUpdate();
+    }
 }

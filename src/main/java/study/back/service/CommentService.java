@@ -14,4 +14,5 @@ public interface CommentService {
     List<CommentItem> getReplyList(Long commentId);
     void putCommentFavorite(Long commentId, UserEntity user);
     String modifyComment(ModifyCommentRequestDto requestDto, UserEntity user);
+    void deleteComment(Long commentId, UserEntity user);
 }

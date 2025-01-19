@@ -17,4 +17,5 @@ public interface CommentRepositoryInterface {
     List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId);
     Optional<UserEntity> findUserByCommentId(Long commentId);
     void updateCommentContent(Long commentId, String content);
+    void updateCommentToDeleted(Long commentId);
 }

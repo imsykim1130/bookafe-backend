@@ -9,10 +9,7 @@ import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.UserEntity;
-import study.back.exception.CommentAuthorMismatchException;
-import study.back.exception.NoCommentContentException;
-import study.back.exception.NoParentCommentException;
-import study.back.exception.NotExistBookException;
+import study.back.exception.*;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.service.CommentService;
 
@@ -115,6 +112,20 @@ public class CommentServiceImpl implements CommentService {
 
         repository.updateCommentContent(commentId, content);
         return content;
+    }
+
+    // 댓글 삭제하기
+    @Override
+    public void deleteComment(Long commentId, UserEntity user) {
+        // 로그인 유저와 댓글 작성자 동일 여부 검증
+        UserEntity commentUser = repository.findUserByCommentId(commentId).orElseThrow(() -> new UserNotFoundException("유저가 존재하지 않습니다"));
+
+        if(!commentUser.getEmail().equals(user.getEmail())) {
+            throw new CommentAuthorMismatchException("댓글 삭제 권한이 없습니다");
+        }
+
+        repository.updateCommentToDeleted(commentId);
+
     }
 
     // 댓글에 좋아요 누르기
