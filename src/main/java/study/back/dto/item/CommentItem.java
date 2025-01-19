@@ -9,8 +9,11 @@ import java.time.LocalDateTime;
 public class CommentItem {
     @Getter
     private Long id;
+    @Getter
     private String profileImg;
+    @Getter
     private String nickname;
+    @Getter
     private LocalDateTime writeDate;
     private String emoji;
     private String content;
@@ -19,17 +22,6 @@ public class CommentItem {
     @Getter
     private Boolean isDeleted;
 
-    public String getProfileImg() {
-        return isDeleted ? null : profileImg;
-    }
-
-    public String getNickname() {
-        return isDeleted ? null : nickname;
-    }
-
-    public LocalDateTime getWriteDate() {
-        return isDeleted ? null : writeDate;
-    }
 
     public String getEmoji() {
         return isDeleted ? null : emoji;

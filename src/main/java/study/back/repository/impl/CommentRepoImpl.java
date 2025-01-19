@@ -39,7 +39,7 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
 
     @Override
     public List<CommentItem> findAllCommentItemByIsbn(String isbn) {
-        List<CommentItem> result = em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c where c.book.isbn = :isbn and c.parent is null", CommentItem.class)
+        List<CommentItem> result = em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c where c.book.isbn = :isbn and c.parent is null order by c.writeDate", CommentItem.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
         return result;
@@ -47,7 +47,7 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
 
     @Override
     public List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId) {
-        return em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c where c.parent.id = :parentCommentId", CommentItem.class)
+        return em.createQuery("select c.id as id, c.user.profileImg as profileImg, c.user.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c where c.parent.id = :parentCommentId order by c.writeDate", CommentItem.class)
                 .setParameter("parentCommentId", parentCommentId)
                 .getResultList();
     }
@@ -69,9 +69,10 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
     }
 
     @Override
-    public void updateCommentToDeleted(Long commentId) {
-        em.createQuery("update CommentEntity c set c.isDeleted = true where c.id = :commentId")
+    public Boolean updateCommentToDeleted(Long commentId) {
+        int count = em.createQuery("update CommentEntity c set c.isDeleted = true where c.id = :commentId")
                 .setParameter("commentId", commentId)
                 .executeUpdate();
+        return count == 1;
     }
 }

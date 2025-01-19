@@ -116,7 +116,7 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글 삭제하기
     @Override
-    public void deleteComment(Long commentId, UserEntity user) {
+    public Boolean deleteComment(Long commentId, UserEntity user) {
         // 로그인 유저와 댓글 작성자 동일 여부 검증
         UserEntity commentUser = repository.findUserByCommentId(commentId).orElseThrow(() -> new UserNotFoundException("유저가 존재하지 않습니다"));
 
@@ -124,8 +124,9 @@ public class CommentServiceImpl implements CommentService {
             throw new CommentAuthorMismatchException("댓글 삭제 권한이 없습니다");
         }
 
-        repository.updateCommentToDeleted(commentId);
+        Boolean result = repository.updateCommentToDeleted(commentId);
 
+        return result;
     }
 
     // 댓글에 좋아요 누르기

@@ -51,10 +51,10 @@ public class CommentController {
 
     // 댓글 삭제하기
     @DeleteMapping("/{commentId}")
-    public ResponseEntity deleteComment(@PathVariable(name = "commentId") Long commentId,
+    public ResponseEntity<Boolean> deleteComment(@PathVariable(name = "commentId") Long commentId,
                                         @AuthenticationPrincipal UserEntity user) {
-        commentService.deleteComment(commentId, user);
-        return ResponseEntity.ok().build();
+        Boolean result = commentService.deleteComment(commentId, user);
+        return ResponseEntity.ok(result);
     }
 
 
