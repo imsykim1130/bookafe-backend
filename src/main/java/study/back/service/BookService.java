@@ -11,7 +11,6 @@ import study.back.dto.request.ChangeCartBookCountRequestDto;
 import study.back.dto.response.*;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
-import study.back.entity.BookFavorite;
 import study.back.entity.UserEntity;
 import study.back.exception.KakaoAuthorizationException;
 import study.back.exception.NotExistBookException;

@@ -1,11 +1,16 @@
 package study.back.repository.resultSet;
 
-public interface FavoriteBookView {
-   String getIsbn();
-   String getBookImg();
-   String getTitle();
-   String getAuthor();
-   Integer getPrice();
-   Integer getDiscountPercent();
-   Integer getIsCart();
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@Getter
+@AllArgsConstructor
+public class FavoriteBookView {
+   String isbn;
+   String bookImg;
+   String title;
+   String author;
+   Integer price;
+   Integer discountPercent;
+   Long isCart;
 }

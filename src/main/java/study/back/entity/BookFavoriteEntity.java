@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class BookFavorite {
+@Table(name = "book_favorite")
+public class BookFavoriteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +20,8 @@ public class BookFavorite {
     @JoinColumn(name="user_id")
     private UserEntity user;
 
-    public static BookFavorite createBookFavorite(UserEntity user, String isbn) {
-        BookFavorite bookFavorite = new BookFavorite();
+    public static BookFavoriteEntity createBookFavorite(UserEntity user, String isbn) {
+        BookFavoriteEntity bookFavorite = new BookFavoriteEntity();
         bookFavorite.isbn = isbn;
         bookFavorite.user = user;
         return bookFavorite;

@@ -5,7 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.entity.UserEntity;
+import study.back.repository.resultSet.FavoriteBookView;
 import study.back.service.BookFavoriteService;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,6 +35,12 @@ public class BookFavoriteController {
                                  @PathVariable(name = "isbn") String isbn) {
         bookFavoriteService.deleteBookFromFavorite(user, isbn);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/list")
+    public ResponseEntity<List<FavoriteBookView>> favoriteList(@AuthenticationPrincipal UserEntity user) {
+        List<FavoriteBookView> result = bookFavoriteService.getFavoriteBookList(user);
+        return ResponseEntity.ok(result);
     }
 
 }

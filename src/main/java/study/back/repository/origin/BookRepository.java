@@ -4,12 +4,11 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.back.entity.BookEntity;
 import study.back.entity.UserEntity;
-import study.back.repository.resultSet.FavoriteBookView;
 
 import java.util.List;
 
 public interface BookRepository extends JpaRepository<BookEntity, String> {
-    @Query("select bf from BookFavorite bf inner join BookEntity b on b.isbn = bf.isbn where bf.user = :user")
+    @Query("select bf from BookFavoriteEntity bf inner join BookEntity b on b.isbn = bf.isbn where bf.user = :user")
     List<BookEntity> findFavoriteBookListByUser(@Param("user")UserEntity user);
 
 //    @Query("select bf.book.isbn as isbn, bf.book.bookImg as bookImg, bf.book.title as title, bf.book.author as author, bf.book.price as price, bf.book.discountPercent as discountPercent, (select count(bc) from BookCartEntity bc inner join BookEntity b on b.isbn = bc.isbn where b = bf.book) as isCart from BookFavorite bf where bf.user = ?1")

@@ -1,9 +1,11 @@
 package study.back.repository;
 
 import study.back.entity.BookEntity;
-import study.back.entity.BookFavorite;
+import study.back.entity.BookFavoriteEntity;
 import study.back.entity.UserEntity;
+import study.back.repository.resultSet.FavoriteBookView;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface BookFavoriteRepositoryInterface {
@@ -11,9 +13,11 @@ public interface BookFavoriteRepositoryInterface {
 
     Optional<BookEntity> findBookByIsbn(String isbn);
 
-    void saveBookFavorite(BookFavorite bookFavorite);
+    void saveBookFavorite(BookFavoriteEntity bookFavorite);
 
-    Optional<BookFavorite> findBookFavoriteByUserAndIsbn(UserEntity user, String isbn);
+    Optional<BookFavoriteEntity> findBookFavoriteByUserAndIsbn(UserEntity user, String isbn);
 
-    void deleteBookFavorite(BookFavorite bookFavorite);
+    void deleteBookFavorite(BookFavoriteEntity bookFavorite);
+
+    List<FavoriteBookView> findAllFavoriteBookView(UserEntity user);
 }

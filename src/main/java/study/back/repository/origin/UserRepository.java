@@ -16,7 +16,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
     @Query("select bc.user.id from BookCartEntity bc inner join BookEntity b on b.isbn = bc.isbn where b = :book")
     List<String> getCartUserIdListByBook(@Param("book") BookEntity book);
 
-    @Query("select bf.user.id from BookFavorite bf where bf.isbn = :isbn")
+    @Query("select bf.user.id from BookFavoriteEntity bf where bf.isbn = :isbn")
     List<String> getFavoriteUserIdListByIsbn(@Param("isbn") String isbn);
 
     @Query("select u from UserEntity u " +
