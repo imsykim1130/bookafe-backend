@@ -57,12 +57,12 @@ public class CommentController {
         return ResponseEntity.ok(result);
     }
 
-
-//    // 댓글 좋아요
-//    @PostMapping("/favorite/{commentId}")
-//    public ResponseEntity<ResponseDto> putCommentFavorite(
-//            @PathVariable(name="commentId") Long commentId,
-//            @AuthenticationPrincipal UserEntity user) {
-//        return commentService.putCommentFavorite(commentId, user);
-//    }
+    // 댓글 좋아요
+    @PostMapping("/favorite/{commentId}")
+    public ResponseEntity putCommentFavorite(
+            @PathVariable(name="commentId") Long commentId,
+            @AuthenticationPrincipal UserEntity user) {
+        commentService.putCommentFavorite(commentId, user);
+        return ResponseEntity.ok().build();
+    }
 }

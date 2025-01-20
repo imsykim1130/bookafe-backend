@@ -20,4 +20,5 @@ public interface CommentRepositoryInterface {
     void updateCommentContent(Long commentId, String content);
     Boolean updateCommentToDeleted(Long commentId);
     CommentFavoriteEntity saveCommentFavorite(CommentFavoriteEntity commentFavorite);
+    Optional<CommentFavoriteEntity> findCommentFavorite(CommentEntity comment, UserEntity user);
 }

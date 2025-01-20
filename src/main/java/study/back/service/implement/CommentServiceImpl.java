@@ -140,32 +140,24 @@ public class CommentServiceImpl implements CommentService {
 
     // 댓글에 좋아요 누르기
     @Override
-    public void putCommentFavorite(Long commentId, UserEntity user)  {
-//        System.out.println("---- 댓글 좋아요/좋아요 취소");
-//        try {
-//            // 댓글 유무 확인
-//            System.out.println("댓글 유무 확인");
-//            Optional<CommentEntity> commentOpt = commentRepository.findById(commentId);
-//            if(commentOpt.isEmpty()) {
-//                return ResponseDto.notFoundComment();
-//            }
-//            CommentEntity comment = commentOpt.get();
-//
-//            System.out.println("댓글 좋아요 유무 확인");
-//            Optional<CommentFavoriteEntity> commentFavoriteOpt = commentFavoriteRepository.findByCommentAndUser(comment, user);
-//            if(commentFavoriteOpt.isEmpty()) {
-//                System.out.println("좋아요 누르기");
-//                CommentFavoriteEntity commentFavorite = CommentFavoriteEntity.createCommentFavorite(comment, user);
-//                commentFavoriteRepository.save(commentFavorite);
-//            } else {
-//                System.out.println("좋아요 취소하기");
-//                commentFavoriteRepository.deleteById(commentFavoriteOpt.get().getId());
-//            }
-//
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            return ResponseDto.internalServerError();
-//        }
-//        return ResponseDto.success("댓글 좋아요 변경 성공");
+    public Boolean putCommentFavorite(Long commentId, UserEntity user)  {
+        System.out.println("---- 댓글 좋아요 누르기");
+
+        // 댓글 유무 확인
+        CommentEntity comment = repository.findCommentById(commentId).orElseThrow(() -> new NotExistCommentException());
+
+        // 좋아요 유무 확인
+        repository.findCommentFavorite(comment, user).ifPresent(commentFavorite -> {
+            throw new AlreadyFavoriteCommentException();
+        });
+
+        // comment favorite 생성
+        CommentFavoriteEntity commentFavorite = CommentFavoriteEntity.builder()
+                .user(user)
+                .comment(comment)
+                .build();
+
+        repository.saveCommentFavorite(commentFavorite);
+        return true;
     }
 }

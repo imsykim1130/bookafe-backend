@@ -1,13 +1,13 @@
 package study.back.entity;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
+@AllArgsConstructor
 @Table(name = "comment_favorite")
 public class CommentFavoriteEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

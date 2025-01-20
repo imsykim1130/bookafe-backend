@@ -80,4 +80,18 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
         em.persist(commentFavorite);
         return commentFavorite;
     }
+
+    @Override
+    public Optional<CommentFavoriteEntity> findCommentFavorite(CommentEntity comment, UserEntity user) {
+        List<CommentFavoriteEntity> result =
+                em.createQuery("select cf from CommentFavoriteEntity cf where cf.comment = :comment and cf.user = :user",
+                                CommentFavoriteEntity.class)
+                .setParameter("comment", comment)
+                .setParameter("user", user)
+                .getResultList();
+
+        if(result.isEmpty()) return Optional.ofNullable(null);
+        return Optional.ofNullable(result.get(0));
+    }
+
 }
