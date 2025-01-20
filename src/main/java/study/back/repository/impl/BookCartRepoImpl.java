@@ -14,7 +14,6 @@ import study.back.repository.origin.BookRepository;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 @RequiredArgsConstructor
 public class BookCartRepoImpl implements BookCartRepositoryInterface {
     private final BookRepository bookRepository;

@@ -2,6 +2,7 @@ package study.back.service.implement;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import study.back.entity.BookEntity;
 import study.back.entity.RecommendBookEntity;
@@ -22,6 +23,10 @@ public class RecommendServiceImpl implements RecommendBookService {
     private final RecommendBookRepository recommendBookRepository;
     private final BookRepository bookRepository;
 
+    @Value("${recommend-book-max-count}")
+    private int recommendBookMaxCount;
+
+    // 책 추천하기
     @Override
     public Boolean registerRecommendBook(String isbn) {
         // 책 여부 검증
@@ -33,10 +38,9 @@ public class RecommendServiceImpl implements RecommendBookService {
         }
 
         // 추천 책 개수 제한 검증
-        int maxNumber = 3;
         long count = recommendBookRepository.count();
 
-        if(count >= maxNumber) {
+        if(count >= recommendBookMaxCount) {
             throw new NoMoreRecommendBookException("이미 책 추천이 모두 완료되었습니다");
         }
 
@@ -49,6 +53,7 @@ public class RecommendServiceImpl implements RecommendBookService {
         return true;
     }
 
+    // 책 추천 취소하기
     @Override
     public Boolean deleteRecommendBook(String isbn) {
         BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
@@ -56,11 +61,13 @@ public class RecommendServiceImpl implements RecommendBookService {
         return true;
     }
 
+    // 추천 책 가져오기
     @Override
     public List<RecommendBookView> getAllRecommendBook() {
         return recommendBookRepository.getAllRecommendBook();
     }
 
+    // 추천 여부 가져오기
     @Override
     public Boolean confirmRecommendBook(String isbn) {
         BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));

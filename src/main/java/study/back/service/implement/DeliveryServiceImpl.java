@@ -7,13 +7,18 @@ import study.back.entity.OrderEntity;
 import study.back.entity.OrderStatus;
 import study.back.exception.*;
 import study.back.repository.DeliveryRepositoryInterface;
+import study.back.repository.impl.DeliveryRepoImpl;
 import study.back.service.DeliveryService;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
-    private final DeliveryRepositoryInterface repository;
+    private DeliveryRepositoryInterface repository;
+
+    public DeliveryServiceImpl(DeliveryRepoImpl repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void changeOrderStatusToDelivering(Long orderId) {

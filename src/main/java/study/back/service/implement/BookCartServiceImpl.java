@@ -1,13 +1,17 @@
 package study.back.service.implement;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
 import study.back.entity.UserEntity;
 import study.back.exception.NotExistBookException;
 import study.back.repository.BookCartRepositoryInterface;
+import study.back.repository.impl.BookCartRepoImpl;
+import study.back.repository.origin.BookCartRepository;
+import study.back.repository.origin.BookRepository;
 import study.back.service.BookCartService;
 
 import java.util.List;
@@ -15,9 +19,13 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class BookCartServiceImpl implements BookCartService {
-    private final BookCartRepositoryInterface repository;
+    private BookCartRepositoryInterface repository;
+
+    @Autowired
+    public BookCartServiceImpl(BookRepository bookRepository, BookCartRepository bookCartRepository, EntityManager em) {
+        this.repository = new BookCartRepoImpl(bookRepository, bookCartRepository, em);
+    }
 
     // 장바구니 담기
     public void putBookToCart(UserEntity user, String isbn) {

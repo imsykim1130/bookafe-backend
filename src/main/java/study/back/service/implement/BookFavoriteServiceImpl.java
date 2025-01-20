@@ -1,13 +1,17 @@
 package study.back.service.implement;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.entity.BookEntity;
 import study.back.entity.BookFavoriteEntity;
 import study.back.entity.UserEntity;
 import study.back.exception.NotExistBookException;
 import study.back.repository.BookFavoriteRepositoryInterface;
+import study.back.repository.impl.BookFavoriteRepoImpl;
+import study.back.repository.origin.BookFavoriteRepository;
+import study.back.repository.origin.BookRepository;
 import study.back.repository.resultSet.FavoriteBookView;
 import study.back.service.BookFavoriteService;
 
@@ -15,9 +19,13 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class BookFavoriteServiceImpl implements BookFavoriteService {
-    private final BookFavoriteRepositoryInterface repository;
+    private BookFavoriteRepositoryInterface repository;
+
+    @Autowired
+    public BookFavoriteServiceImpl(BookFavoriteRepository bookFavoriteRepository, BookRepository bookRepository, EntityManager em) {
+        this.repository = new BookFavoriteRepoImpl(bookFavoriteRepository, bookRepository, em);
+    }
 
     @Override
     public boolean isFavorite(UserEntity user, String isbn) {

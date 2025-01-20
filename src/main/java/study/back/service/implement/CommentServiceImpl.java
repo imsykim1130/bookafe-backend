@@ -1,16 +1,21 @@
 package study.back.service.implement;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CommentItem;
 import study.back.dto.request.ModifyCommentRequestDto;
 import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
+import study.back.entity.CommentFavoriteEntity;
 import study.back.entity.UserEntity;
 import study.back.exception.*;
 import study.back.repository.CommentRepositoryInterface;
+import study.back.repository.impl.CommentRepoImpl;
+import study.back.repository.origin.BookRepository;
+import study.back.repository.origin.CommentRepository;
 import study.back.service.CommentService;
 
 import java.time.LocalDateTime;
@@ -19,9 +24,13 @@ import java.util.Optional;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
-    private final CommentRepositoryInterface repository;
+    private CommentRepositoryInterface repository;
+
+    @Autowired
+    public CommentServiceImpl(CommentRepository commentRepository, BookRepository bookRepository, EntityManager em) {
+        this.repository = new CommentRepoImpl(commentRepository, bookRepository, em);
+    }
 
     // 댓글 달기
     // 입력 : parentId, isbn, content, emoji / user

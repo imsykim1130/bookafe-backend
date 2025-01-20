@@ -2,10 +2,10 @@ package study.back.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
+import study.back.entity.CommentFavoriteEntity;
 import study.back.entity.UserEntity;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.repository.origin.BookRepository;
@@ -14,7 +14,6 @@ import study.back.repository.origin.CommentRepository;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 @RequiredArgsConstructor
 public class CommentRepoImpl implements CommentRepositoryInterface {
     private final CommentRepository commentRepository;
@@ -74,5 +73,11 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
                 .setParameter("commentId", commentId)
                 .executeUpdate();
         return count == 1;
+    }
+
+    @Override
+    public CommentFavoriteEntity saveCommentFavorite(CommentFavoriteEntity commentFavorite) {
+        em.persist(commentFavorite);
+        return commentFavorite;
     }
 }

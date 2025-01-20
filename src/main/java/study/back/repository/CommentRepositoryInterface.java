@@ -3,6 +3,7 @@ package study.back.repository;
 import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
+import study.back.entity.CommentFavoriteEntity;
 import study.back.entity.UserEntity;
 
 import java.util.List;
@@ -18,4 +19,5 @@ public interface CommentRepositoryInterface {
     Optional<UserEntity> findUserByCommentId(Long commentId);
     void updateCommentContent(Long commentId, String content);
     Boolean updateCommentToDeleted(Long commentId);
+    CommentFavoriteEntity saveCommentFavorite(CommentFavoriteEntity commentFavorite);
 }

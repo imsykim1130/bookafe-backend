@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import study.back.dto.request.CreateOrderRequestDto;
 import study.back.entity.*;
 import study.back.repository.OrderRepositoryInterface;
+import study.back.repository.impl.OrderRepoImpl;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.dto.item.OrderBookView;
@@ -29,7 +30,11 @@ import java.util.regex.Pattern;
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private static final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
-    private final OrderRepositoryInterface repository;
+    private OrderRepositoryInterface repository;
+
+    public OrderServiceImpl(OrderRepoImpl repository) {
+        this.repository = repository;
+    }
 
     // 주문 생성
     public void createOrder(UserEntity user, CreateOrderRequestDto requestDto) {

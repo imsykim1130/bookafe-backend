@@ -4,6 +4,7 @@ import study.back.dto.item.CommentItem;
 import study.back.dto.request.ModifyCommentRequestDto;
 import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.CommentEntity;
+import study.back.entity.CommentFavoriteEntity;
 import study.back.entity.UserEntity;
 
 import java.util.List;

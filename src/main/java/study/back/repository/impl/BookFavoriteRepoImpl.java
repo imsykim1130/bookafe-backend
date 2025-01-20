@@ -14,7 +14,6 @@ import study.back.repository.resultSet.FavoriteBookView;
 import java.util.List;
 import java.util.Optional;
 
-@Component
 @RequiredArgsConstructor
 public class BookFavoriteRepoImpl implements BookFavoriteRepositoryInterface {
     private final BookFavoriteRepository bookFavoriteRepository;

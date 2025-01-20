@@ -1,12 +1,12 @@
 package study.back.dto.item;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import study.back.entity.BookEntity;
 
 @Getter
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 public class BookCart {
     private String isbn;
     private String bookImg;

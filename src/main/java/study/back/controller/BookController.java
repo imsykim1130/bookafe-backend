@@ -3,11 +3,8 @@ package study.back.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.back.dto.response.GetBookListByIsbnListResponseDto;
-import study.back.dto.response.GetFavoriteUserIdListResponseDto;
+import study.back.dto.item.RecommendBookView;
 import study.back.service.BookService;
-
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,26 +29,17 @@ public class BookController {
         return bookService.getBookList(query, sort, page, size, target);
     }
 
-    @GetMapping("/books")
-    public ResponseEntity<? super GetBookListByIsbnListResponseDto> getBookList(@RequestParam("isbnList") List<String> isbnList) {
-        return bookService.getBookListByIsbnList(isbnList);
-    }
-
     // 책 상세정보
     @GetMapping("/book/detail/{isbn}")
     public ResponseEntity<?> getBookDetail(@PathVariable(name = "isbn") String isbn) {
         return bookService.getBookDetail(isbn);
     }
 
-    // 좋아요 유저 리스트 가져오기
-    @GetMapping("/book/{isbn}/favorite/users")
-    public ResponseEntity<? super GetFavoriteUserIdListResponseDto> getFavoriteUsers(@PathVariable(name="isbn") String isbn) {
-        return bookService.getFavoriteUserList(isbn);
+    // 추천책 가져오기
+    @GetMapping("/book/recommend")
+    public ResponseEntity<RecommendBookView> getRecommendBook() {
+        RecommendBookView result = bookService.getRecommendBook();
+        return ResponseEntity.ok(result);
     }
 
-    // 장바구니 유저 리스트 가져오기
-    @GetMapping("/book/{isbn}/cart/users")
-    public ResponseEntity<?> getCartUsers(@PathVariable(name = "isbn") String isbn) {
-        return bookService.getCartUserList(isbn);
-    }
 }
