@@ -81,4 +81,11 @@ public class CommentController {
         Boolean result = commentService.isFavoriteComment(commentId, user);
         return ResponseEntity.ok(result);
     }
+
+    // 댓글 좋아요 개수
+    @GetMapping("/favorite/count/{commentId}")
+    public ResponseEntity<Long> countCommentFavorite(@PathVariable(name = "commentId") Long commentId) {
+        Long result = commentService.countCommentFavorite(commentId);
+        return ResponseEntity.ok(result);
+    }
 }

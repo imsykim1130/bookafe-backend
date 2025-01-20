@@ -17,5 +17,5 @@ public interface CommentService {
     Boolean deleteComment(Long commentId, UserEntity user);
     Boolean cancelCommentFavorite(Long commentId, UserEntity user);
     Boolean isFavoriteComment(Long commentId, UserEntity user);
-
+    Long countCommentFavorite(Long commentId);
 }

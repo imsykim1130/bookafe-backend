@@ -113,4 +113,12 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
         return count == 1;
     }
 
+    @Override
+    public Long countCommentFavorite(Long commentId) {
+        return em.createQuery("select count(cf) from CommentFavoriteEntity cf where cf.comment.id = :commentId", Long.class)
+                .setParameter("commentId", commentId)
+                .getSingleResult();
+
+    }
+
 }

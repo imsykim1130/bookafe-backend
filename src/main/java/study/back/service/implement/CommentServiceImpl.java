@@ -173,4 +173,11 @@ public class CommentServiceImpl implements CommentService {
     public Boolean isFavoriteComment(Long commentId, UserEntity user) {
         return repository.existsCommentFavorite(commentId, user);
     }
+
+    // 댓글 좋아요 개수
+    @Override
+    public Long countCommentFavorite(Long commentId) {
+        Long result = repository.countCommentFavorite(commentId);
+        return result;
+    }
 }
