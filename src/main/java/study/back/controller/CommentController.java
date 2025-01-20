@@ -65,4 +65,20 @@ public class CommentController {
         commentService.putCommentFavorite(commentId, user);
         return ResponseEntity.ok().build();
     }
+
+    // 댓글 좋아요 취소
+    @DeleteMapping("/favorite/{commentId}")
+    public ResponseEntity cancelCommentFavorite(@AuthenticationPrincipal UserEntity user,
+                                                @PathVariable(name = "commentId") Long commentId) {
+        commentService.cancelCommentFavorite(commentId, user);
+        return ResponseEntity.ok().build();
+    }
+
+    // 댓글 좋아요 여부
+    @GetMapping("/is-favorite/{commentId}")
+    public ResponseEntity<Boolean> isCommentFavorite(@AuthenticationPrincipal UserEntity user,
+                                                     @PathVariable(name = "commentId") Long commentId) {
+        Boolean result = commentService.isFavoriteComment(commentId, user);
+        return ResponseEntity.ok(result);
+    }
 }

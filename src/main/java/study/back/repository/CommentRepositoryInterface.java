@@ -21,4 +21,6 @@ public interface CommentRepositoryInterface {
     Boolean updateCommentToDeleted(Long commentId);
     CommentFavoriteEntity saveCommentFavorite(CommentFavoriteEntity commentFavorite);
     Optional<CommentFavoriteEntity> findCommentFavorite(CommentEntity comment, UserEntity user);
+    int deleteCommentFavorite(Long commentId, UserEntity user);
+    Boolean existsCommentFavorite(Long commentId, UserEntity user);
 }

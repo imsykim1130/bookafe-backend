@@ -15,4 +15,7 @@ public interface CommentService {
     Boolean putCommentFavorite(Long commentId, UserEntity user);
     String modifyComment(ModifyCommentRequestDto requestDto, UserEntity user);
     Boolean deleteComment(Long commentId, UserEntity user);
+    Boolean cancelCommentFavorite(Long commentId, UserEntity user);
+    Boolean isFavoriteComment(Long commentId, UserEntity user);
+
 }

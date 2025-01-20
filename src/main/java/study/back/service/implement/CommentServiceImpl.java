@@ -160,4 +160,17 @@ public class CommentServiceImpl implements CommentService {
         repository.saveCommentFavorite(commentFavorite);
         return true;
     }
+
+    // 댓글 좋아요 취소
+    @Override
+    public Boolean cancelCommentFavorite(Long commentId, UserEntity user) {
+        int deleteCount = repository.deleteCommentFavorite(commentId, user);
+        return deleteCount > 0;
+    }
+
+    // 댓글 좋아요 여부
+    @Override
+    public Boolean isFavoriteComment(Long commentId, UserEntity user) {
+        return repository.existsCommentFavorite(commentId, user);
+    }
 }

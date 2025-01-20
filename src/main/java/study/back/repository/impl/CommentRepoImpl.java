@@ -94,4 +94,23 @@ public class CommentRepoImpl implements CommentRepositoryInterface {
         return Optional.ofNullable(result.get(0));
     }
 
+    @Override
+    public int deleteCommentFavorite(Long commentId, UserEntity user) {
+        int result = em.createQuery("delete from CommentFavoriteEntity cf where cf.comment.id = :commentId and cf.user = :user")
+                .setParameter("commentId", commentId)
+                .setParameter("user", user)
+                .executeUpdate();
+        return result;
+    }
+
+    @Override
+    public Boolean existsCommentFavorite(Long commentId, UserEntity user) {
+        Long count = em.createQuery("select count(cf) from CommentFavoriteEntity cf where cf.comment.id = :commentId and cf.user = :user", Long.class)
+                .setParameter("commentId", commentId)
+                .setParameter("user", user)
+                .getSingleResult();
+
+        return count == 1;
+    }
+
 }
