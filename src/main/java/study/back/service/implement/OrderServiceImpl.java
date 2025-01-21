@@ -1,7 +1,9 @@
 package study.back.service.implement;
 
+import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import study.back.dto.request.CreateOrderRequestDto;
 import study.back.entity.*;
 import study.back.repository.OrderRepositoryInterface;
 import study.back.repository.impl.OrderRepoImpl;
+import study.back.repository.origin.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.dto.item.OrderBookView;
@@ -24,7 +27,6 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
 
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -32,8 +34,9 @@ public class OrderServiceImpl implements OrderService {
     private static final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
     private OrderRepositoryInterface repository;
 
-    public OrderServiceImpl(OrderRepoImpl repository) {
-        this.repository = repository;
+    @Autowired
+    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, PointRepository pointRepository, OrderBookRepository orderBookRepository, UserCouponRepository userCouponRepository, EntityManager em) {
+        this.repository = new OrderRepoImpl(orderRepository, userRepository, pointRepository, orderBookRepository, userCouponRepository, em);
     }
 
     // 주문 생성

@@ -21,9 +21,9 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
     private final OrderRepository orderRepository;
     private final UserRepository userRepository;
     private final PointRepository pointRepository;
-    private final EntityManager em;
     private final OrderBookRepository orderBookRepository;
     private final UserCouponRepository userCouponRepository;
+    private final EntityManager em;
 
 
     @Override
