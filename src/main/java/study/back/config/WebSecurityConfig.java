@@ -88,7 +88,7 @@ public class WebSecurityConfig {
         http.authorizeHttpRequests(auth->
                 auth
                         .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**","/api/v1/books", "/api/v1/books/**", "/api/v1/comment/**", "/image/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**","/api/v1/books", "/api/v1/books/**", "/api/v1/comment/**", "/image/**", "/api/v1/favorite/top10").permitAll()
                         .anyRequest().authenticated()
 
         );

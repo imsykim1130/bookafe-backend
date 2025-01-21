@@ -13,6 +13,7 @@ import study.back.repository.impl.BookFavoriteRepoImpl;
 import study.back.repository.origin.BookFavoriteRepository;
 import study.back.repository.origin.BookRepository;
 import study.back.repository.resultSet.FavoriteBookView;
+import study.back.repository.resultSet.Top10View;
 import study.back.service.BookFavoriteService;
 
 import java.util.List;
@@ -60,6 +61,13 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
     public List<FavoriteBookView> getFavoriteBookList(UserEntity user) {
         List<FavoriteBookView> result = null;
         result = repository.findAllFavoriteBookView(user);
+        return result;
+    }
+
+    // top10 가져오기
+    @Override
+    public List<Top10View> getTop10BookList() {
+        List<Top10View> result = repository.findAllTop10View();
         return result;
     }
 }
