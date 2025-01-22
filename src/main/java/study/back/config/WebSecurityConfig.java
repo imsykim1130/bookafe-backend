@@ -21,12 +21,17 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import study.back.security.JwtFilter;
 import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -70,6 +75,32 @@ public class WebSecurityConfig {
 //        };
 //    }
 
+    // 스프링 시큐리티용 cors 설정
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        ArrayList<String> allowedOrigins = new ArrayList<>();
+        allowedOrigins.add("http://localhost:5173");
+        allowedOrigins.add("http://127.0.0.1:5173");
+        configuration.setAllowedOrigins(allowedOrigins);
+
+        ArrayList<String> allowedMethods = new ArrayList<>();
+        allowedMethods.add("GET");
+        allowedMethods.add("POST");
+        allowedMethods.add("PUT");
+        allowedMethods.add("DELETE");
+        allowedMethods.add("PATCH");
+        configuration.setAllowedMethods(allowedMethods);
+
+        configuration.setAllowedHeaders(Collections.singletonList("*"));
+
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
@@ -78,7 +109,7 @@ public class WebSecurityConfig {
 
         http.addFilterBefore(filter, CsrfFilter.class);
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(cors->cors.configurationSource(CorsConfig.corsConfigurationSource()));
+        http.cors(cors->cors.configurationSource(corsConfigurationSource()));
         http.exceptionHandling(exception->exception.authenticationEntryPoint(new CustomExceptionEntryPoint()));
         // jwt 기반 인증 사용을 위해 stateless 하게 바꿔주기
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

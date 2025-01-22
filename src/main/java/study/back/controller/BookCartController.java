@@ -18,6 +18,7 @@ import java.util.List;
 public class BookCartController {
     private final BookCartService bookCartService;
 
+    // 장바구니 담기
     @PutMapping("/{isbn}")
     public ResponseEntity add(@PathVariable(name = "isbn") String isbn,
                               @AuthenticationPrincipal UserEntity user) {
@@ -25,25 +26,28 @@ public class BookCartController {
         return ResponseEntity.ok().build();
     }
 
+    // 장바구니 빼기
     @DeleteMapping("/{isbn}")
     public ResponseEntity delete(@PathVariable(name = "isbn") String isbn) {
         bookCartService.deleteBookFromCart(isbn);
         return ResponseEntity.ok().build();
     }
 
+    // 장바구니 여부
     @GetMapping("/{isbn}")
     public ResponseEntity<Boolean> isCart(@PathVariable(name = "isbn") String isbn, @AuthenticationPrincipal UserEntity user) {
         boolean result = bookCartService.isCart(isbn, user);
         return ResponseEntity.ok(result);
     }
 
+    // 장바구니 담긴 책 리스트
     @GetMapping("/list")
     public ResponseEntity<List<CartBookView>> getBookCartList(@AuthenticationPrincipal UserEntity user) {
         List<CartBookView> bookCartList = bookCartService.getBookCartList(user);
         return ResponseEntity.ok(bookCartList);
     }
 
-
+    // 장바구니 책 리스트 빼기
     @DeleteMapping("/list")
     public ResponseEntity deleteBookCartList(@AuthenticationPrincipal UserEntity user,
                                              @RequestBody DeleteCartBookListRequestDto requestBody) {
@@ -51,6 +55,7 @@ public class BookCartController {
         return ResponseEntity.ok().build();
     }
 
+    // 장바구니 수량 변경
     @PatchMapping("/count")
     public ResponseEntity changeCount(@AuthenticationPrincipal UserEntity user,
                                       @RequestBody ChangeCountRequestDto requestBody) {

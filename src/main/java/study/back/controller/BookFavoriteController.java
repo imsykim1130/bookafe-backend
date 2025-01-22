@@ -17,6 +17,7 @@ import java.util.List;
 public class BookFavoriteController {
     private final BookFavoriteService bookFavoriteService;
 
+    // 좋아요 여부
     @GetMapping("/{isbn}")
     public ResponseEntity<Boolean> isFavorite(@AuthenticationPrincipal UserEntity user,
                                               @PathVariable(name = "isbn") String isbn) {
@@ -24,6 +25,7 @@ public class BookFavoriteController {
         return ResponseEntity.ok(result);
     }
 
+    // 좋아요
     @PutMapping("/{isbn}")
     public ResponseEntity add(@AuthenticationPrincipal UserEntity user,
                               @PathVariable(name = "isbn") String isbn) {
@@ -31,6 +33,7 @@ public class BookFavoriteController {
         return ResponseEntity.ok().build();
     }
 
+    // 좋아요 취소
     @DeleteMapping("/{isbn}")
     public ResponseEntity delete(@AuthenticationPrincipal UserEntity user,
                                  @PathVariable(name = "isbn") String isbn) {
@@ -38,6 +41,7 @@ public class BookFavoriteController {
         return ResponseEntity.ok().build();
     }
 
+    // 좋아요 책 리스트 가져오기
     @GetMapping("/list")
     public ResponseEntity<List<FavoriteBookView>> favoriteList(@AuthenticationPrincipal UserEntity user) {
         List<FavoriteBookView> result = bookFavoriteService.getFavoriteBookList(user);
