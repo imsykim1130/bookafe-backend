@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.back.entity.PointEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

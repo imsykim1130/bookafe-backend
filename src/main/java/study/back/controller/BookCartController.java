@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.CartBookView;
 import study.back.dto.request.ChangeCountRequestDto;
 import study.back.dto.request.DeleteCartBookListRequestDto;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.service.BookCartService;
 
 import java.util.List;

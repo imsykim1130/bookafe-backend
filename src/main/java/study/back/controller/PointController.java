@@ -1,20 +1,15 @@
 package study.back.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.response.GetPointLogResponse;
-import study.back.entity.PointEntity;
-import study.back.entity.UserEntity;
-import study.back.repository.resultSet.PointLogView;
+import study.back.user.entity.UserEntity;
 import study.back.service.PointService;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

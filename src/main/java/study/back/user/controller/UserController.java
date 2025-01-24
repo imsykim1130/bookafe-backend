@@ -1,4 +1,4 @@
-package study.back.controller;
+package study.back.user.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserResponseDto;
-import study.back.entity.UserEntity;
-import study.back.service.implement.UserServiceImpl;
+import study.back.user.entity.UserEntity;
+import study.back.user.service.UserServiceImpl;
 
 import java.util.List;
 

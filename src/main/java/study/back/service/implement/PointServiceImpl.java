@@ -7,13 +7,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.back.dto.response.GetPointLogResponse;
 import study.back.entity.PointEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.exception.NotEnoughPointsException;
 import study.back.exception.UnUsablePointsException;
 import study.back.exception.UserNotFoundException;
 import study.back.exception.ZeroPointsException;
 import study.back.repository.origin.PointRepository;
-import study.back.repository.origin.UserRepository;
+import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.PointLogView;
 import study.back.service.PointService;
 
@@ -25,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PointServiceImpl implements PointService {
     private final PointRepository pointRepository;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
     // 포인트 차감시 검증 로직
     private void minusPointValidation(Integer totalPoint, Integer usedPoints) {
@@ -91,7 +91,7 @@ public class PointServiceImpl implements PointService {
         Page<PointEntity> pointLogPage;
         List<PointLogView> pointLogViews;
 
-        if(!userRepository.existsById(user.getId())) {
+        if(!userJpaRepository.existsById(user.getId())) {
             throw new UserNotFoundException("해당 유저가 존재하지 않습니다");
         }
 

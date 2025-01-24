@@ -1,4 +1,4 @@
-package study.back.entity;
+package study.back.user.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;

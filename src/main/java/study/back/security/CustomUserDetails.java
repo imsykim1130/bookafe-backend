@@ -5,13 +5,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.util.Collection;
-import java.util.List;
-import java.util.stream.Collectors;
 
 
 // 미사용

@@ -11,7 +11,7 @@ import study.back.dto.response.DeliveryStatusResponse;
 import study.back.dto.response.OrderDetail;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.OrderStatus;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.service.implement.OrderServiceImpl;
 
 import java.time.LocalDateTime;

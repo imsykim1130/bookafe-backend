@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.FavoriteBookView;
 import study.back.repository.resultSet.Top10View;
 import study.back.service.BookFavoriteService;

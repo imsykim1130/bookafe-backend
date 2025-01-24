@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.entity.BookEntity;
 import study.back.entity.BookFavoriteEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.exception.NotExistBookException;
 import study.back.repository.BookFavoriteRepositoryInterface;
 import study.back.repository.impl.BookFavoriteRepoImpl;

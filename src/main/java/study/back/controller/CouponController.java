@@ -6,7 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.UserCouponView;
 import study.back.service.CouponService;
 

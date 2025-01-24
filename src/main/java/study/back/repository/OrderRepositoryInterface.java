@@ -7,6 +7,7 @@ import study.back.entity.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.repository.resultSet.OrderView;
+import study.back.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
 import java.util.List;

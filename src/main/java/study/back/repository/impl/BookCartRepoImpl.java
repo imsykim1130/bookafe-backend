@@ -2,11 +2,10 @@ package study.back.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.BookCartRepositoryInterface;
 import study.back.repository.origin.BookCartRepository;
 import study.back.repository.origin.BookRepository;

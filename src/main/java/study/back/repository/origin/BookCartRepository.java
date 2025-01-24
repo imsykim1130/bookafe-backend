@@ -8,7 +8,7 @@ import study.back.dto.item.CartBookView;
 import study.back.dto.item.PriceCountView;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.util.List;
 import java.util.Optional;

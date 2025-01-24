@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import study.back.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
 

@@ -4,7 +4,7 @@ import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.CommentFavoriteEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.util.List;
 import java.util.Optional;

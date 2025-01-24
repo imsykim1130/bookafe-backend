@@ -3,6 +3,7 @@ package study.back.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import study.back.exception.DeliveryAlreadyDoneException;
+import study.back.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
 

@@ -10,7 +10,7 @@ import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.CommentFavoriteEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.exception.*;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.repository.impl.CommentRepoImpl;

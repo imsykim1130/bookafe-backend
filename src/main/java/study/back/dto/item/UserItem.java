@@ -3,7 +3,7 @@ package study.back.dto.item;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 @Getter
 @NoArgsConstructor

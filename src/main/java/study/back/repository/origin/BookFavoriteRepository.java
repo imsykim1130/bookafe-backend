@@ -3,7 +3,7 @@ package study.back.repository.origin;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import study.back.entity.BookFavoriteEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.util.Optional;
 

@@ -2,7 +2,7 @@ package study.back.repository;
 
 import study.back.entity.BookEntity;
 import study.back.entity.BookFavoriteEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.FavoriteBookView;
 import study.back.repository.resultSet.Top10View;
 

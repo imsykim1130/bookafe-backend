@@ -6,7 +6,7 @@ import study.back.dto.item.CommentItem;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.CommentFavoriteEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.repository.origin.BookRepository;
 import study.back.repository.origin.CommentRepository;

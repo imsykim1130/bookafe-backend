@@ -1,6 +1,6 @@
 package study.back.service;
 
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.UserCouponView;
 
 import java.util.List;

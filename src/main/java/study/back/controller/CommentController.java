@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.CommentItem;
 import study.back.dto.request.ModifyCommentRequestDto;
 import study.back.dto.request.PostCommentRequestDto;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.service.CommentService;
 
 import java.util.List;

@@ -13,6 +13,6 @@ public class UserManagementInfo {
     private Long id;
     private String email;
     private String datetime;
-    private int point;
-    private int commentCount;
+    private Long point;
+    private Long commentCount;
 }

@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import study.back.entity.OrderEntity;
 import study.back.entity.OrderStatus;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.OrderView;
 
 import java.time.LocalDateTime;

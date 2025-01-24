@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import study.back.dto.request.CreateOrderRequestDto;
 import study.back.dto.response.DeliveryStatusResponse;
@@ -21,6 +20,8 @@ import study.back.dto.response.OrderDetail;
 import study.back.exception.*;
 import study.back.repository.resultSet.OrderView;
 import study.back.service.OrderService;
+import study.back.user.entity.UserEntity;
+import study.back.user.repository.UserJpaRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -38,8 +39,8 @@ public class OrderServiceImpl implements OrderService {
     private OrderRepositoryInterface repository;
 
     @Autowired
-    public OrderServiceImpl(OrderRepository orderRepository, UserRepository userRepository, PointRepository pointRepository, OrderBookRepository orderBookRepository, UserCouponRepository userCouponRepository, EntityManager em) {
-        this.repository = new OrderRepoImpl(orderRepository, userRepository, pointRepository, orderBookRepository, userCouponRepository, em);
+    public OrderServiceImpl(OrderRepository orderRepository, UserJpaRepository userJpaRepository, PointRepository pointRepository, OrderBookRepository orderBookRepository, UserCouponRepository userCouponRepository, EntityManager em) {
+        this.repository = new OrderRepoImpl(orderRepository, userJpaRepository, pointRepository, orderBookRepository, userCouponRepository, em);
     }
 
     // 주문 생성

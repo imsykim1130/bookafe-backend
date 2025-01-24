@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.exception.NotExistBookException;
 import study.back.repository.BookCartRepositoryInterface;
 import study.back.repository.impl.BookCartRepoImpl;

@@ -13,9 +13,9 @@ import study.back.dto.request.SignUpRequestDto;
 import study.back.dto.response.ResponseDto;
 import study.back.dto.response.SignInResponseDto;
 import study.back.dto.response.SignUpResponseDto;
-import study.back.entity.RoleName;
-import study.back.entity.UserEntity;
-import study.back.repository.origin.UserRepository;
+import study.back.user.entity.RoleName;
+import study.back.user.entity.UserEntity;
+import study.back.user.repository.UserJpaRepository;
 import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;
 import study.back.service.AuthService;
@@ -25,7 +25,7 @@ import java.security.InvalidKeyException;
 @RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
     private final UserDetailsServiceImpl userDetailsService;
@@ -83,12 +83,12 @@ public class AuthServiceImpl implements AuthService {
             //  가입이 서버에 부하를 줄 만큼 자주 일어나는 동작은 아닌 것 같고
             //  쿼리 1 -> 2 개는 성능에 큰 영향을 주지 않을 것 같긴하다.
             // 유저 여부 확인
-            if (userRepository.existsByEmail(signUpRequestDto.getEmail())) {
+            if (userJpaRepository.existsByEmail(signUpRequestDto.getEmail())) {
                 return ResponseDto.existedUser();
             }
 
             // 닉네임 중복 확인
-            if (userRepository.existsByNickname(signUpRequestDto.getNickname())) {
+            if (userJpaRepository.existsByNickname(signUpRequestDto.getNickname())) {
                 return ResponseDto.existedNickname();
             }
 
@@ -113,7 +113,7 @@ public class AuthServiceImpl implements AuthService {
                     .build();
 
             // db 저장
-            userRepository.save(user);
+            userJpaRepository.save(user);
         // 데이터베이스 에러
         } catch (IllegalArgumentException | OptimisticLockingFailureException e) {
             e.printStackTrace();

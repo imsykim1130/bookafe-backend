@@ -2,7 +2,7 @@ package study.back.dto.response;
 
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 @Getter
 public class GetUserOrderInfoResponseDto extends ResponseDto {

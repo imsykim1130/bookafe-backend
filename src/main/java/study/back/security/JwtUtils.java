@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.security.InvalidKeyException;
 import java.security.Key;

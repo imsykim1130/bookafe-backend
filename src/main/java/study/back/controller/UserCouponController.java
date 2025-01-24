@@ -6,7 +6,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.response.GetUserCouponListResponseDto;
 import study.back.dto.response.ResponseDto;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.service.UserCouponService;
 
 @RestController

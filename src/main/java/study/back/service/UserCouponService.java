@@ -7,11 +7,11 @@ import org.springframework.transaction.annotation.Transactional;
 import study.back.dto.response.GetUserCouponListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserCouponEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import study.back.exception.CouponNotFoundException;
 import study.back.exception.DeleteCouponFailException;
 import study.back.repository.origin.UserCouponRepository;
-import study.back.repository.origin.UserRepository;
+import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.UserCouponView;
 
 import java.util.List;
@@ -22,12 +22,12 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserCouponService {
     private final UserCouponRepository userCouponRepository;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
 
     public ResponseEntity<? super GetUserCouponListResponseDto> getCouponList(UserEntity user) {
         List<UserCouponView> couponList;
         try {
-            if(!userRepository.existsById(user.getId())) {
+            if(!userJpaRepository.existsById(user.getId())) {
                 return ResponseDto.notFoundUser();
             }
             couponList = userCouponRepository.findAllByUser(user);

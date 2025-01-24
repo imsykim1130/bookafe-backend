@@ -1,11 +1,11 @@
-package study.back.service;
+package study.back.user.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserOrderInfoResponseDto;
 import study.back.dto.response.GetUserResponseDto;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 
 import java.util.List;
 

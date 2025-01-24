@@ -2,7 +2,7 @@ package study.back.service;
 
 import study.back.dto.response.GetPointLogResponse;
 import study.back.entity.PointEntity;
-import study.back.entity.UserEntity;
+import study.back.user.entity.UserEntity;
 import java.time.LocalDateTime;
 
 public interface PointService {

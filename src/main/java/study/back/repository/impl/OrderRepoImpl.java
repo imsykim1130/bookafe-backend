@@ -11,6 +11,8 @@ import study.back.repository.origin.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.repository.resultSet.OrderView;
+import study.back.user.entity.UserEntity;
+import study.back.user.repository.UserJpaRepository;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -20,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class OrderRepoImpl implements OrderRepositoryInterface {
     private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    private final UserJpaRepository userJpaRepository;
     private final PointRepository pointRepository;
     private final OrderBookRepository orderBookRepository;
     private final UserCouponRepository userCouponRepository;
@@ -29,7 +31,7 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
 
     @Override
     public Optional<UserEntity> findUserByUserId(Long userId) {
-        return userRepository.findById(userId);
+        return userJpaRepository.findById(userId);
     }
 
     @Override
