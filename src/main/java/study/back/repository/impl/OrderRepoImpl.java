@@ -12,6 +12,7 @@ import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.repository.resultSet.OrderView;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
@@ -97,6 +98,27 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
                 .setParameter("orderStatus", orderStatus)
                 .getResultList();
     }
+    
+
+    @Override
+    public Page<OrderEntity> findAllDeliveryStatusViewWithPagination(LocalDateTime datetime, Pageable pageable) {
+        // 원하는 날짜를 오늘 0시 0분 0초와 다음날 0시 0분 0초로 바꾸기
+        LocalDate date = LocalDate.of(datetime.getYear(), datetime.getMonth(), datetime.getDayOfMonth());
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        return orderRepository.findAllDeliveryStatusViewListWithPagination(startOfDay, endOfDay, pageable);
+    }
+
+    @Override
+    public Page<OrderEntity> findAllDeliveryStatusViewWithPagination(LocalDateTime datetime, OrderStatus orderStatus, Pageable pageable) {
+        // 원하는 날짜를 오늘 0시 0분 0초와 다음날 0시 0분 0초로 바꾸기
+        LocalDate date = LocalDate.of(datetime.getYear(), datetime.getMonth(), datetime.getDayOfMonth());
+        LocalDateTime startOfDay = date.atStartOfDay();
+        LocalDateTime endOfDay = startOfDay.plusDays(1);
+
+        return orderRepository.findAllDeliveryStatusViewListWithPagination(startOfDay, endOfDay, orderStatus, pageable);
+    }
 
     @Override
     public PointEntity savePoint(PointEntity point) {
@@ -119,7 +141,7 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
 
     @Override
     public Integer deleteAllBookCartByUser(UserEntity user) {
-       return em.createQuery("delete from BookCartEntity bc where bc.user = :user")
+        return em.createQuery("delete from BookCartEntity bc where bc.user = :user")
                 .setParameter("user", user)
                 .executeUpdate();
     }

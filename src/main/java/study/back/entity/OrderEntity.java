@@ -2,13 +2,9 @@ package study.back.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
 import study.back.exception.DeliveryAlreadyDoneException;
-import study.back.exception.DeliveryAlreadyStartedException;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Getter
@@ -21,7 +17,6 @@ public class OrderEntity {
     private String address;
     private String addressDetail;
     private String phoneNumber;
-
     private LocalDateTime orderDatetime;
     @Enumerated(EnumType.STRING)
     private OrderStatus orderStatus;

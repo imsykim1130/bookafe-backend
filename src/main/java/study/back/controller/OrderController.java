@@ -7,11 +7,11 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.request.ChangeDeliveryStatusRequestDto;
 import study.back.dto.request.CreateOrderRequestDto;
+import study.back.dto.response.DeliveryStatusResponse;
 import study.back.dto.response.OrderDetail;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.OrderStatus;
 import study.back.entity.UserEntity;
-import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.service.implement.OrderServiceImpl;
 
 import java.time.LocalDateTime;
@@ -27,7 +27,7 @@ public class OrderController {
     // 주문 생성
     @PostMapping("")
     public ResponseEntity<ResponseDto> createOrder(@AuthenticationPrincipal UserEntity user,
-                                                   @RequestBody CreateOrderRequestDto requestDto) {
+                                                    @RequestBody CreateOrderRequestDto requestDto) {
 
         orderService.createOrder(user, requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -55,10 +55,14 @@ public class OrderController {
 
     // 배송정보 리스트 가져오기
     @GetMapping("/delivery-status-list")
-    public ResponseEntity<?> getDeliveryStatusList(@RequestParam(name = "orderStatus", required = false) String orderStatus,
-                                                                               @RequestParam(name = "datetime", required = false) LocalDateTime datetime) {
-        List<DeliveryStatusView> deliveryStatusList = orderService.getDeliveryStatusList(orderStatus, datetime);
-        return ResponseEntity.status(HttpStatus.OK).body(deliveryStatusList);
+    public ResponseEntity<DeliveryStatusResponse> getDeliveryStatusList(@RequestParam(name = "orderStatus", required = false) String orderStatus,
+                                                                        @RequestParam(name = "datetime", required = false) String datetime,
+                                                                        @RequestParam(name = "page") Integer page) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime parsedDatetime = LocalDateTime.parse(datetime, formatter);
+
+        DeliveryStatusResponse result = orderService.getDeliveryStatusListWithPagination(orderStatus, parsedDatetime, page);
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 주문 배송상태 변경

@@ -6,8 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import study.back.dto.request.CreateOrderRequestDto;
+import study.back.dto.response.DeliveryStatusResponse;
 import study.back.entity.*;
 import study.back.repository.OrderRepositoryInterface;
 import study.back.repository.impl.OrderRepoImpl;
@@ -26,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -217,6 +220,29 @@ public class OrderServiceImpl implements OrderService {
 
         return deliveryStatusViewList;
     }
+
+    // 배송정보 리스트 페이지네이션 적용후 가져오기
+    @Override
+    public DeliveryStatusResponse getDeliveryStatusListWithPagination(String orderStatus, LocalDateTime datetime, int page) {
+        Page<OrderEntity> pages;
+        List<DeliveryStatusView> result;
+
+        PageRequest pageRequest = PageRequest.of(page, 10); // 한 페이지 당 10개의 데이터 보내기
+
+        if(orderStatus.equals("전체")) {
+            pages = repository.findAllDeliveryStatusViewWithPagination(datetime, pageRequest);
+        } else {
+            pages =  repository.findAllDeliveryStatusViewWithPagination(datetime, OrderStatus.getOrderStatus(orderStatus), pageRequest);
+        }
+
+        result = pages.getContent().stream().map(orderEntity -> DeliveryStatusView.of(orderEntity)).collect(Collectors.toList());
+
+        return DeliveryStatusResponse.builder()
+                .isFirst(pages.isFirst())
+                .isLast(pages.isLast())
+                .deliveryStatusViewList(result)
+                .build();
+    };
 
     // 주문 배송상태 바꾸기
     @Override

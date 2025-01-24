@@ -22,6 +22,8 @@ public interface OrderRepositoryInterface {
     void deleteOrderByOrderId(Long orderId);
     List<DeliveryStatusView> findAllDeliveryStatusView();
     List<DeliveryStatusView> findAllDeliveryStatusViewByOrderStatus(OrderStatus orderStatus);
+    Page<OrderEntity> findAllDeliveryStatusViewWithPagination(LocalDateTime datetime, Pageable pageable);
+    Page<OrderEntity> findAllDeliveryStatusViewWithPagination(LocalDateTime datetime, OrderStatus orderStatus, Pageable pageable);
     PointEntity savePoint(PointEntity point);
     List<BookCartInfoView> findAllBookCartInfoByUser(UserEntity user);
     Integer saveAllOrderBook(List<OrderBookEntity> orderBookList);
