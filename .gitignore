@@ -1,19 +1,10 @@
-HELP.md
 .gradle
 build/
 db/
 gradle/
 **/src/main/**/build/
 **/src/main/resources/
-**/src/test/**/build/
 docker-compose.yml
-.gitattributes
-build.gradle
-gradlew
-gradlew.bat
-settings.gradle
-**/src/main/java/study/back/controller/TestController.java
-test/
 
 
 ### STS ###
@@ -35,7 +26,7 @@ bin/
 *.ipr
 out/
 **/src/main/**/out/
-**/src/test/**/out/
+**/src/test/
 
 ### NetBeans ###
 /nbproject/private/
