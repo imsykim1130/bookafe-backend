@@ -17,7 +17,6 @@ docker-compose.yml
 .sts4-cache
 bin/
 **/src/main/**/bin/
-**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
 .idea
@@ -26,7 +25,7 @@ bin/
 *.ipr
 out/
 **/src/main/**/out/
-**/src/test/
+**/src/test/**
 
 ### NetBeans ###
 /nbproject/private/
