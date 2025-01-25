@@ -8,7 +8,7 @@ import study.back.entity.BookEntity;
 import study.back.entity.RecommendBookEntity;
 import study.back.exception.AlreadyRecommendedBookException;
 import study.back.exception.NoMoreRecommendBookException;
-import study.back.exception.NotExistBookException;
+import study.back.exception.NotFoundBookException;
 import study.back.repository.origin.BookRepository;
 import study.back.repository.origin.RecommendBookRepository;
 import study.back.repository.resultSet.RecommendBookView;
@@ -30,7 +30,7 @@ public class RecommendServiceImpl implements RecommendBookService {
     @Override
     public Boolean registerRecommendBook(String isbn) {
         // 책 여부 검증
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
 
         // 추천 여부 검증
         if(recommendBookRepository.existsByBook(book)) {
@@ -56,7 +56,7 @@ public class RecommendServiceImpl implements RecommendBookService {
     // 책 추천 취소하기
     @Override
     public Boolean deleteRecommendBook(String isbn) {
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
         recommendBookRepository.deleteByBook(book);
         return true;
     }
@@ -70,7 +70,7 @@ public class RecommendServiceImpl implements RecommendBookService {
     // 추천 여부 가져오기
     @Override
     public Boolean confirmRecommendBook(String isbn) {
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
         return recommendBookRepository.existsByBook(book);
     }
 }

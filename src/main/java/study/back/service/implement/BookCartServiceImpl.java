@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
+import study.back.exception.NotFoundBookException;
 import study.back.user.entity.UserEntity;
-import study.back.exception.NotExistBookException;
 import study.back.repository.BookCartRepositoryInterface;
 import study.back.repository.impl.BookCartRepoImpl;
 import study.back.repository.origin.BookCartRepository;
@@ -31,7 +31,7 @@ public class BookCartServiceImpl implements BookCartService {
     public void putBookToCart(UserEntity user, String isbn) {
         System.out.println("장바구니 담기");
         // 책 여부 검증
-        repository.getBookByIsbn(isbn).orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+        repository.getBookByIsbn(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
 
         // 장바구니 여부 검증
         boolean isAlreadyCartBook = repository.existsByIsbn(isbn);
