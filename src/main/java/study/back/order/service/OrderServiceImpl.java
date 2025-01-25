@@ -38,12 +38,10 @@ import java.util.stream.Collectors;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
     private static final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
     private OrderRepositoryInterface repository;
 
-    @Autowired
     public OrderServiceImpl(OrderRepository orderRepository, UserJpaRepository userJpaRepository, PointRepository pointRepository, OrderBookRepository orderBookRepository, UserCouponRepository userCouponRepository, EntityManager em) {
         this.repository = new OrderRepoImpl(orderRepository, userJpaRepository, pointRepository, orderBookRepository, userCouponRepository, em);
     }
@@ -56,10 +54,12 @@ public class OrderServiceImpl implements OrderService {
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
 
+        // 주소 검증
         if(address == null || address.isEmpty()) {
             throw new InvalidAddressException("주소는 필수 입력사항입니다");
         }
 
+        // 휴대폰 번호 검증
         if(!Pattern.matches(PHONE_NUMBER_REGEX, phoneNumber)) {
             throw new InvalidPhoneNumberException("올바르지 않은 휴대폰 번호 형식입니다");
         }
@@ -68,10 +68,12 @@ public class OrderServiceImpl implements OrderService {
         boolean isCouponUsed = requestDto.getCouponId() != null;
         boolean isPointUsed = requestDto.getUsedPoint() != null;
 
+        // 쿠폰과 포인트 동시 사용 불가
         if(isCouponUsed && isPointUsed) {
             throw new PointAndCouponConflictException("쿠폰과 포인트는 동시에 사용할 수 없습니다");
         }
 
+        // 할인 여부
         Boolean isDiscounted = isPointUsed || isCouponUsed;
 
         // 장바구니에서 책의 필요한 정보 가져오기
@@ -225,7 +227,9 @@ public class OrderServiceImpl implements OrderService {
         if(!order.getOrderStatus().equals(OrderStatus.READY)) {
             throw new OrderCancellationNotAllowedException("배송이 시작된 주문은 취소가 불가능합니다");
         }
+        // 주문 책 삭제
         repository.deleteOrderBookByOrderId(orderId);
+        // 주문 삭제
         repository.deleteOrderByOrderId(orderId);
     }
 
