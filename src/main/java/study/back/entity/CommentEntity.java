@@ -6,7 +6,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.back.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
 
@@ -24,6 +23,9 @@ public class CommentEntity {
     private LocalDateTime writeDate;
     private String emoji;
     private Boolean isDeleted;
+    
+    @Column(name = "user_id")
+    private Long userId;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
@@ -32,14 +34,8 @@ public class CommentEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
-
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_comment_id")
     private CommentEntity parent;
-
 
     @Builder
     public CommentEntity (String content,
@@ -48,7 +44,7 @@ public class CommentEntity {
                           Boolean isDeleted,
                           CommentEntity parent,
                           BookEntity book,
-                          UserEntity user){
+                          Long userId){
 
         this.content = content;
         this.writeDate = writeDate;
@@ -56,7 +52,7 @@ public class CommentEntity {
         this.isDeleted = isDeleted;
         this.parent = parent;
         this.book = book;
-        this.user = user;
+        this.userId = userId;
     }
 
 }
