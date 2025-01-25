@@ -2,7 +2,6 @@ package study.back.service.implement;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CommentItem;
 import study.back.dto.request.ModifyCommentRequestDto;
@@ -25,9 +24,8 @@ import java.util.Optional;
 @Service
 @Transactional
 public class CommentServiceImpl implements CommentService {
-    private CommentRepositoryInterface repository;
+    private final CommentRepositoryInterface repository;
 
-    @Autowired
     public CommentServiceImpl(CommentRepository commentRepository, BookRepository bookRepository, EntityManager em) {
         this.repository = new CommentRepoImpl(commentRepository, bookRepository, em);
     }
@@ -51,8 +49,7 @@ public class CommentServiceImpl implements CommentService {
         }
 
         // 책 여부 확인
-        BookEntity book = repository.findBookById(isbn)
-                .orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+        BookEntity book = findBook(isbn);
 
         // 리플인 경우 부모 댓글 여부 확인
         CommentEntity parent = null;
@@ -71,7 +68,7 @@ public class CommentServiceImpl implements CommentService {
                 .parent(parent)
                 .book(book)
                 .emoji(emoji)
-                .user(user)
+                .userId(user.getId())
                 .build();
 
         result = repository.saveComment(comment);
@@ -85,13 +82,12 @@ public class CommentServiceImpl implements CommentService {
         System.out.println("댓글 가져오기");
         List<CommentItem> commentList;
 
-        // 책 여부 확인
-        BookEntity book = repository.findBookById(isbn)
-                .orElseThrow(() -> new NotExistBookException("책이 존재하지 않습니다"));
+       // 책 여부 확인
+        BookEntity book = findBook(isbn);
 
         // 댓글 가져오기
         commentList = repository.findAllCommentItemByIsbn(isbn);
-
+      
         return commentList;
     }
 
@@ -179,5 +175,10 @@ public class CommentServiceImpl implements CommentService {
     public Long countCommentFavorite(Long commentId) {
         Long result = repository.countCommentFavorite(commentId);
         return result;
+    }
+
+    private BookEntity findBook(String isbn) {
+        return repository.findBookById(isbn)
+                .orElseThrow(() -> new NotFoundBookException("해당하는 책을 찾을 수 없습니다."));
     }
 }

@@ -1,6 +1,7 @@
 package study.back.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 @Getter
 @NoArgsConstructor
+@Builder
 @AllArgsConstructor
 public class ResponseDto {
     String code;

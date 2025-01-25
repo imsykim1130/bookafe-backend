@@ -1,12 +1,15 @@
 package study.back.controller;
 
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.CommentItem;
 import study.back.dto.request.ModifyCommentRequestDto;
 import study.back.dto.request.PostCommentRequestDto;
+import study.back.dto.response.ResponseDto;
 import study.back.user.entity.UserEntity;
 import study.back.service.CommentService;
 
@@ -21,10 +24,11 @@ public class CommentController {
 
     // 댓글 작성
     @PostMapping("")
-    public ResponseEntity postComment(@RequestBody PostCommentRequestDto requestDto,
+    public ResponseEntity<ResponseDto> postComment(@RequestBody PostCommentRequestDto requestDto,
                                          @AuthenticationPrincipal UserEntity user) {
         commentService.postComment(requestDto, user);
-        return ResponseEntity.ok().build();
+        ResponseDto result = ResponseDto.builder().code("SU").message("댓글 작성 성공").build();
+        return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
     // 댓글 가져오기

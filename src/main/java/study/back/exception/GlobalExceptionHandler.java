@@ -5,9 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import study.back.dto.response.ResponseDto;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(DeliveryAlreadyDoneException.class)
     public ResponseEntity<ResponseDto> handleDeliveryAlreadyDoneException(DeliveryAlreadyDoneException e) {
@@ -31,6 +35,22 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto> handlePointAndCouponConflictException(PointAndCouponConflictException e) {
         ResponseDto responseDto = new ResponseDto("PCC", e.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(NoCommentContentException.class)
+    public ResponseEntity<ResponseDto> handleNoCommentContentException(NoCommentContentException e) {
+        ResponseDto responseDto = new ResponseDto("NCC", e.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
+    }
+
+    @ExceptionHandler(NotFoundBookException.class)
+    public ResponseEntity<ResponseDto> handleNotFoundBookException(NotFoundBookException e) {
+        log.error("NotFoundBookException: {}", e.getMessage());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(ResponseDto.builder()
+                        .code("NFB")
+                        .message(e.getMessage())
+                        .build());
     }
 
     @ExceptionHandler(RuntimeException.class)
