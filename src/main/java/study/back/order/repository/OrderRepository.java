@@ -1,12 +1,12 @@
-package study.back.repository.origin;
+package study.back.order.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import study.back.entity.OrderEntity;
-import study.back.entity.OrderStatus;
+import study.back.order.entity.OrderEntity;
+import study.back.order.entity.OrderStatus;
 import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.OrderView;
 
@@ -21,8 +21,19 @@ public interface OrderRepository extends JpaRepository<OrderEntity, Long> {
             "from OrderEntity o " +
             "where o.user = :user " +
             "and " +
-            "function('date_format', o.orderDatetime, '%Y-%m-%d') between function('date_format', :start, '%Y-%m-%d') and function('date_format', :end, '%Y-%m-%d')")
+            "o.orderDatetime >= :start and o.orderDatetime < :end")
     Page<OrderView> getOrderViewList(Pageable pageable, @Param("user") UserEntity user, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+    @Query("select " +
+            "o.id as orderId, " +
+            "o.orderDatetime as orderDatetime, " +
+            "o.orderStatus as orderStatus " +
+            "from OrderEntity o " +
+            "where o.user = :user " +
+            "and " +
+            "o.orderDatetime >= :start and o.orderDatetime < :end " +
+            "and o.orderStatus = :status")
+    Page<OrderView> getOrderViewList(Pageable pageable, @Param("user") UserEntity user, @Param("start") LocalDateTime start, @Param("end") LocalDateTime end, @Param("status") OrderStatus status);
 
     @Query("select o "+
             "from OrderEntity o " +

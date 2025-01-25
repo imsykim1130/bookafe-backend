@@ -1,4 +1,4 @@
-package study.back.controller;
+package study.back.order.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -8,15 +8,11 @@ import org.springframework.web.bind.annotation.*;
 import study.back.dto.request.ChangeDeliveryStatusRequestDto;
 import study.back.dto.request.CreateOrderRequestDto;
 import study.back.dto.response.DeliveryStatusResponse;
-import study.back.dto.response.OrderDetail;
 import study.back.dto.response.ResponseDto;
-import study.back.entity.OrderStatus;
+import study.back.order.entity.OrderStatus;
+import study.back.order.dto.GetOrderDetailListResponseDto;
 import study.back.user.entity.UserEntity;
-import study.back.service.implement.OrderServiceImpl;
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import study.back.order.service.OrderServiceImpl;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,17 +29,17 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     };
 
-    // 주문 상세정보 가져오기
+    // 주문 상세정보 리스트 가져오기
     @GetMapping("/details")
-    public ResponseEntity<List<OrderDetail>> getOrderDetailList(@AuthenticationPrincipal UserEntity user,
-                                                                @RequestParam(name = "start") String start,
-                                                                @RequestParam(name = "end") String end) {
+    public ResponseEntity<GetOrderDetailListResponseDto> getOrderDetailList(@AuthenticationPrincipal UserEntity user,
+                                                                            @RequestParam(name = "start") String start,
+                                                                            @RequestParam(name = "end") String end,
+                                                                            @RequestParam(name = "orderStatus") String orderStatus,
+                                                                            @RequestParam(name = "page") Integer page) {
 
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDatetime = LocalDateTime.parse(start, formatter);
-        LocalDateTime endDatetime = LocalDateTime.parse(end, formatter);
+        GetOrderDetailListResponseDto result = orderService.getOrderDetailList(user, start, end, orderStatus, page);
 
-        return ResponseEntity.status(HttpStatus.OK).body(orderService.getOrderDetailList(user, startDatetime, endDatetime));
+        return ResponseEntity.ok(result);
     }
 
     // 주문 취소하기
@@ -58,10 +54,8 @@ public class OrderController {
     public ResponseEntity<DeliveryStatusResponse> getDeliveryStatusList(@RequestParam(name = "orderStatus", required = false) String orderStatus,
                                                                         @RequestParam(name = "datetime", required = false) String datetime,
                                                                         @RequestParam(name = "page") Integer page) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime parsedDatetime = LocalDateTime.parse(datetime, formatter);
 
-        DeliveryStatusResponse result = orderService.getDeliveryStatusListWithPagination(orderStatus, parsedDatetime, page);
+        DeliveryStatusResponse result = orderService.getDeliveryStatusListWithPagination(orderStatus, datetime, page);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

@@ -1,4 +1,4 @@
-package study.back.repository.impl;
+package study.back.order.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -6,7 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import study.back.dto.item.OrderBookView;
 import study.back.entity.*;
-import study.back.repository.OrderRepositoryInterface;
+import study.back.order.entity.OrderEntity;
+import study.back.order.entity.OrderStatus;
 import study.back.repository.origin.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
@@ -40,8 +41,11 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
     }
 
     @Override
-    public Page<OrderView> findAllOrderViewByUserAndDateWithPagination(UserEntity user, LocalDateTime start, LocalDateTime end, Pageable pageable) {
-        return orderRepository.getOrderViewList(pageable, user, start, end);
+    public Page<OrderView> findAllOrderViewWithPagination(UserEntity user, LocalDateTime start, LocalDateTime end, OrderStatus status, Pageable pageable) {
+        if(status == null) {
+            return orderRepository.getOrderViewList(pageable, user, start, end);
+        }
+        return orderRepository.getOrderViewList(pageable, user, start, end, status);
     }
 
     // OrderBookView

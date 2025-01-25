@@ -1,8 +1,6 @@
 package study.back.dto.response;
 
 import lombok.*;
-import org.springframework.http.ResponseEntity;
-import study.back.entity.OrderEntity;
 
 @Getter
 public class CreateOrderResponseDto extends ResponseDto {

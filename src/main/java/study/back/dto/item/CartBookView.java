@@ -5,7 +5,7 @@ public interface CartBookView {
     String getIsbn();
     String getTitle();
     String getAuthor();
-    String getImg();
+    String getBookImg();
     Integer getCount();
     Integer getPrice();
     Integer getDiscountPercent();

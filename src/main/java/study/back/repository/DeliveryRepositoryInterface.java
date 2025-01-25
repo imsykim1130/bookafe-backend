@@ -1,6 +1,6 @@
 package study.back.repository;
 
-import study.back.entity.OrderEntity;
+import study.back.order.entity.OrderEntity;
 
 import java.util.Optional;
 

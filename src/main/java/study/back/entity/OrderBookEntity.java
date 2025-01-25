@@ -3,6 +3,7 @@ package study.back.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import lombok.*;
+import study.back.order.entity.OrderEntity;
 
 @Entity
 @Getter

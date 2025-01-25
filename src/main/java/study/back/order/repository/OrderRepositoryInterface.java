@@ -1,9 +1,11 @@
-package study.back.repository;
+package study.back.order.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import study.back.dto.item.OrderBookView;
 import study.back.entity.*;
+import study.back.order.entity.OrderEntity;
+import study.back.order.entity.OrderStatus;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.repository.resultSet.OrderView;
@@ -16,7 +18,7 @@ import java.util.Optional;
 public interface OrderRepositoryInterface {
     Optional<UserEntity> findUserByUserId(Long userId);
     OrderEntity saveOrder(OrderEntity order);
-    Page<OrderView> findAllOrderViewByUserAndDateWithPagination(UserEntity user, LocalDateTime start, LocalDateTime end, Pageable pageable);
+    Page<OrderView> findAllOrderViewWithPagination(UserEntity user, LocalDateTime start, LocalDateTime end, OrderStatus status, Pageable pageable);
     List<OrderBookView> findAllOrderBookViewByOrderId(Long orderId);
     Optional<OrderEntity> findOrderByOrderId(Long orderId);
     void deleteOrderBookByOrderId(Long orderId);

@@ -1,4 +1,4 @@
-package study.back.service.implement;
+package study.back.order.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -10,8 +10,12 @@ import org.springframework.stereotype.Service;
 import study.back.dto.request.CreateOrderRequestDto;
 import study.back.dto.response.DeliveryStatusResponse;
 import study.back.entity.*;
-import study.back.repository.OrderRepositoryInterface;
-import study.back.repository.impl.OrderRepoImpl;
+import study.back.order.dto.GetOrderDetailListResponseDto;
+import study.back.order.entity.OrderEntity;
+import study.back.order.entity.OrderStatus;
+import study.back.order.repository.OrderRepository;
+import study.back.order.repository.OrderRepositoryInterface;
+import study.back.order.repository.OrderRepoImpl;
 import study.back.repository.origin.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
@@ -19,11 +23,12 @@ import study.back.dto.item.OrderBookView;
 import study.back.dto.response.OrderDetail;
 import study.back.exception.*;
 import study.back.repository.resultSet.OrderView;
-import study.back.service.OrderService;
 import study.back.user.entity.UserEntity;
 import study.back.user.repository.UserJpaRepository;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -147,14 +152,27 @@ public class OrderServiceImpl implements OrderService {
     }
 
 
-    // 주문 정보 가져오기
+    // 주문 상세 정보 리스트 가져오기
     @Override
-    public List<OrderDetail> getOrderDetailList(UserEntity user, LocalDateTime startDate, LocalDateTime endDate) {
+    public GetOrderDetailListResponseDto getOrderDetailList(UserEntity user, String start, String end, String searchOrderStatus, Integer page) {
         List<OrderDetail> result = new ArrayList<>();
 
+        // 날짜 타입 변경
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime startDatetime = LocalDateTime.parse(start, formatter);
+        LocalDateTime endDatetime = LocalDateTime.parse(end, formatter);
+
+        LocalDate startLocalDate = LocalDate.of(startDatetime.getYear(), startDatetime.getMonthValue(), startDatetime.getDayOfMonth());
+        LocalDate endLocalDate = LocalDate.of(endDatetime.getYear(), endDatetime.getMonthValue(), endDatetime.getDayOfMonth());
+
+        LocalDateTime startOfDay = startLocalDate.atStartOfDay(); // 시작 날의 0시 0분 0초
+        LocalDateTime endOfDay = endLocalDate.plusDays(1).atStartOfDay(); // 마지막 날 다음날의 0시 0분 0초
+
         // pagination
-        PageRequest pageRequest = PageRequest.of(0, 10);
-        Page<OrderView> orderViewList = repository.findAllOrderViewByUserAndDateWithPagination(user, startDate, endDate, pageRequest);
+        int pageSize = 3;
+
+        PageRequest pageRequest = PageRequest.of(page, pageSize);
+        Page<OrderView> orderViewList = repository.findAllOrderViewWithPagination(user, startOfDay, endOfDay, OrderStatus.getOrderStatus(searchOrderStatus), pageRequest);
 
         orderViewList
                 .stream()
@@ -162,6 +180,7 @@ public class OrderServiceImpl implements OrderService {
                     Long orderId = orderView.getOrderId();
                     LocalDateTime orderDatetime = orderView.getOrderDatetime();
                     String orderStatus = null;
+
                     // order status 한글로 변경
                     switch (orderView.getOrderStatus()) {
                         case OrderStatus.READY :
@@ -175,7 +194,6 @@ public class OrderServiceImpl implements OrderService {
                             break;
                     }
 
-
                     List<OrderBookView> orderBookViewList = repository.findAllOrderBookViewByOrderId(orderId);
 
                     OrderDetail orderDetail = OrderDetail.builder()
@@ -187,7 +205,12 @@ public class OrderServiceImpl implements OrderService {
 
                     result.add(orderDetail);
         });
-        return result;
+
+        return GetOrderDetailListResponseDto.builder()
+                .isStart(orderViewList.isFirst())
+                .isEnd(orderViewList.isLast())
+                .orderDetailList(result)
+                .build();
     }
 
     // 주문 취소
@@ -224,16 +247,19 @@ public class OrderServiceImpl implements OrderService {
 
     // 배송정보 리스트 페이지네이션 적용후 가져오기
     @Override
-    public DeliveryStatusResponse getDeliveryStatusListWithPagination(String orderStatus, LocalDateTime datetime, int page) {
+    public DeliveryStatusResponse getDeliveryStatusListWithPagination(String orderStatus, String datetime, int page) {
         Page<OrderEntity> pages;
         List<DeliveryStatusView> result;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime parsedDatetime = LocalDateTime.parse(datetime, formatter);
 
         PageRequest pageRequest = PageRequest.of(page, 10); // 한 페이지 당 10개의 데이터 보내기
 
         if(orderStatus.equals("전체")) {
-            pages = repository.findAllDeliveryStatusViewWithPagination(datetime, pageRequest);
+            pages = repository.findAllDeliveryStatusViewWithPagination(parsedDatetime, pageRequest);
         } else {
-            pages =  repository.findAllDeliveryStatusViewWithPagination(datetime, OrderStatus.getOrderStatus(orderStatus), pageRequest);
+            pages =  repository.findAllDeliveryStatusViewWithPagination(parsedDatetime, OrderStatus.getOrderStatus(orderStatus), pageRequest);
         }
 
         result = pages.getContent().stream().map(orderEntity -> DeliveryStatusView.of(orderEntity)).collect(Collectors.toList());

@@ -6,8 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import study.back.entity.OrderEntity;
-import study.back.entity.OrderStatus;
+import study.back.order.entity.OrderEntity;
+import study.back.order.entity.OrderStatus;
 
 @Getter
 @NoArgsConstructor

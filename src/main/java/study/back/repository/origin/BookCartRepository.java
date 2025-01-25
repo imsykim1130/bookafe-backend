@@ -17,7 +17,7 @@ public interface BookCartRepository extends JpaRepository<BookCartEntity, Long> 
     @Query("select bc from BookCartEntity bc inner join BookEntity b on b.isbn = bc.isbn where b = :book and bc.user = :user")
     Optional<BookCartEntity> findByUserAndBook(@Param("user") UserEntity user, @Param("book") BookEntity book);
 
-    @Query("select bc.id as id, b.isbn as isbn, b.title as title, b.author as author, b.bookImg as img, bc.count as count, b.price as price, b.discountPercent as discountPercent from BookCartEntity bc " +
+    @Query("select bc.id as id, b.isbn as isbn, b.title as title, b.author as author, b.bookImg as bookImg, bc.count as count, b.price as price, b.discountPercent as discountPercent from BookCartEntity bc " +
             "inner join BookEntity b on b.isbn = bc.isbn " +
             "where bc.user = :user")
     List<CartBookView> findCartBookViewByUser(@Param("user") UserEntity user);

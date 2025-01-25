@@ -1,9 +1,9 @@
 package study.back.repository.impl;
 
 import lombok.RequiredArgsConstructor;
-import study.back.entity.OrderEntity;
+import study.back.order.entity.OrderEntity;
 import study.back.repository.DeliveryRepositoryInterface;
-import study.back.repository.origin.OrderRepository;
+import study.back.order.repository.OrderRepository;
 
 import java.util.Optional;
 

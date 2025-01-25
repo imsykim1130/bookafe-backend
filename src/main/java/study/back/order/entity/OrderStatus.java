@@ -1,4 +1,4 @@
-package study.back.entity;
+package study.back.order.entity;
 
 import lombok.Getter;
 

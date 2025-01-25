@@ -1,6 +1,6 @@
 package study.back.repository.resultSet;
 
-import study.back.entity.OrderStatus;
+import study.back.order.entity.OrderStatus;
 
 import java.time.LocalDateTime;
 
