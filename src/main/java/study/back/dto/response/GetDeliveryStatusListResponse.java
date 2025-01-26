@@ -10,7 +10,7 @@ import java.util.List;
 @Getter
 @Builder
 @AllArgsConstructor
-public class DeliveryStatusResponse {
+public class GetDeliveryStatusListResponse {
     private Boolean isFirst;
     private Boolean isLast;
     private List<DeliveryStatusView> deliveryStatusViewList;

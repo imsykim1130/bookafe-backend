@@ -7,7 +7,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.request.ChangeDeliveryStatusRequestDto;
 import study.back.dto.request.CreateOrderRequestDto;
-import study.back.dto.response.DeliveryStatusResponse;
+import study.back.dto.response.GetDeliveryStatusListResponse;
 import study.back.dto.response.ResponseDto;
 import study.back.order.entity.OrderStatus;
 import study.back.order.dto.GetOrderDetailListResponseDto;
@@ -51,11 +51,11 @@ public class OrderController {
 
     // 배송정보 리스트 가져오기
     @GetMapping("/delivery-status-list")
-    public ResponseEntity<DeliveryStatusResponse> getDeliveryStatusList(@RequestParam(name = "orderStatus", required = false) String orderStatus,
-                                                                        @RequestParam(name = "datetime", required = false) String datetime,
-                                                                        @RequestParam(name = "page") Integer page) {
+    public ResponseEntity<GetDeliveryStatusListResponse> getDeliveryStatusList(@RequestParam(name = "orderStatus", required = false) String orderStatus,
+                                                                               @RequestParam(name = "datetime", required = false) String datetime,
+                                                                               @RequestParam(name = "page") Integer page) {
 
-        DeliveryStatusResponse result = orderService.getDeliveryStatusListWithPagination(orderStatus, datetime, page);
+        GetDeliveryStatusListResponse result = orderService.getDeliveryStatusListWithPagination(orderStatus, datetime, page);
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 

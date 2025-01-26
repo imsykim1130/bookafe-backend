@@ -2,13 +2,11 @@ package study.back.order.service;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import study.back.dto.request.CreateOrderRequestDto;
-import study.back.dto.response.DeliveryStatusResponse;
+import study.back.dto.response.GetDeliveryStatusListResponse;
 import study.back.entity.*;
 import study.back.order.dto.GetOrderDetailListResponseDto;
 import study.back.order.entity.OrderEntity;
@@ -251,7 +249,7 @@ public class OrderServiceImpl implements OrderService {
 
     // 배송정보 리스트 페이지네이션 적용후 가져오기
     @Override
-    public DeliveryStatusResponse getDeliveryStatusListWithPagination(String orderStatus, String datetime, int page) {
+    public GetDeliveryStatusListResponse getDeliveryStatusListWithPagination(String orderStatus, String datetime, int page) {
         Page<OrderEntity> pages;
         List<DeliveryStatusView> result;
 
@@ -268,7 +266,7 @@ public class OrderServiceImpl implements OrderService {
 
         result = pages.getContent().stream().map(orderEntity -> DeliveryStatusView.of(orderEntity)).collect(Collectors.toList());
 
-        return DeliveryStatusResponse.builder()
+        return GetDeliveryStatusListResponse.builder()
                 .isFirst(pages.isFirst())
                 .isLast(pages.isLast())
                 .deliveryStatusViewList(result)
