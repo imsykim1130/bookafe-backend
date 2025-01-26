@@ -2,9 +2,11 @@ package study.back.service.implement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.UserItem;
@@ -43,10 +45,6 @@ public class AuthServiceImpl implements AuthService {
             // 유저 가입 유무 확인
             UserEntity user = userDetailsService.loadUserByUsername(email);
 
-            if (user == null) {
-                return ResponseDto.notFoundUser();
-            }
-
             // 비밀번호 일치 여부 확인
             if (!passwordEncoder.matches(password, user.getPassword())) {
                 return ResponseDto.authFail();
@@ -64,7 +62,13 @@ public class AuthServiceImpl implements AuthService {
             // jwt 생성에 사용한 키에 문제 있을 때 발생
             System.out.println("Invalid key");
             return ResponseDto.internalServerError();
-        } catch (Exception e) {
+        }
+        catch (UsernameNotFoundException e) {
+            // 가입되지 않은 유저
+            ResponseDto response = ResponseDto.builder().code("NEU").message("가입되지 않은 회원입니다. 회원가입이 필요합니다.").build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return ResponseDto.internalServerError();
         }
