@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.dto.item.UserManagementInfo;
 import study.back.dto.response.GetUserResponseDto;
+import study.back.dto.response.ResponseDto;
 import study.back.user.entity.UserEntity;
 import study.back.user.service.UserServiceImpl;
 
@@ -38,10 +39,18 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
+    // 유저 검색
     @GetMapping("/search")
     public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord) {
         List<UserManagementInfo> result = userService.getSearchUserList(searchWord);
         return ResponseEntity.ok().body(result);
+    }
+
+    // 유저 삭제
+    @DeleteMapping("")
+    public ResponseEntity<ResponseDto> deleteUser(@AuthenticationPrincipal UserEntity user) {
+        userService.deleteUser(user);
+        return ResponseEntity.ok(ResponseDto.builder().code("SU").message("유저 탈퇴 성공").build());
     }
 
 }

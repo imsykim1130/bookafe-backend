@@ -14,4 +14,5 @@ public interface UserService {
     ResponseEntity<? super GetUserOrderInfoResponseDto> getUserOrderInfo(UserEntity user);
     String changeProfileImage(UserEntity user, MultipartFile file);
     List<UserManagementInfo> getSearchUserList(String searchWord);
+    void deleteUser(UserEntity user);
 }

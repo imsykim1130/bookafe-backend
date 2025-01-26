@@ -69,4 +69,18 @@ public class UserServiceImpl implements UserService {
                     .build();
         }).toList();
     }
+
+    // 유저 탈퇴
+    @Override
+    public void deleteUser(UserEntity user) {
+        // 유저 관련 데이터 삭제
+        repository.deleteUserDependencyData(user);
+        
+        // 유저 삭제
+        int result = repository.deleteUser(user);
+        
+        if(result == 0) {
+            throw new RuntimeException("유저 삭제 실패");
+        }
+    }
 }

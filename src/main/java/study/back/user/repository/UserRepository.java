@@ -9,4 +9,6 @@ public interface UserRepository {
     Long findUserTotalPoint(UserEntity user);
     Long findUserCommentCount(UserEntity user);
     List<UserEntity> findAllUserBySearchWord(String searchWord);
+    int deleteUser(UserEntity user);
+    void deleteUserDependencyData(UserEntity user);
 }
