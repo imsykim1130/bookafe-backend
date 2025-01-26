@@ -2,7 +2,6 @@ package study.back.service.implement;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
@@ -20,9 +19,8 @@ import java.util.List;
 @Service
 @Transactional
 public class BookCartServiceImpl implements BookCartService {
-    private BookCartRepositoryInterface repository;
+    private final BookCartRepositoryInterface repository;
 
-    @Autowired
     public BookCartServiceImpl(BookRepository bookRepository, BookCartRepository bookCartRepository, EntityManager em) {
         this.repository = new BookCartRepoImpl(bookRepository, bookCartRepository, em);
     }
