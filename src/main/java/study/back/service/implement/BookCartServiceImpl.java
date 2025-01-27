@@ -5,7 +5,9 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
+import study.back.entity.BookEntity;
 import study.back.exception.NotFoundBookException;
+import study.back.service.BookService;
 import study.back.user.entity.UserEntity;
 import study.back.repository.BookCartRepositoryInterface;
 import study.back.repository.impl.BookCartRepoImpl;
@@ -20,16 +22,22 @@ import java.util.List;
 @Transactional
 public class BookCartServiceImpl implements BookCartService {
     private final BookCartRepositoryInterface repository;
+    private final BookService bookService;
 
-    public BookCartServiceImpl(BookRepository bookRepository, BookCartRepository bookCartRepository, EntityManager em) {
+    public BookCartServiceImpl(BookRepository bookRepository, BookCartRepository bookCartRepository, EntityManager em, BookService bookService) {
         this.repository = new BookCartRepoImpl(bookRepository, bookCartRepository, em);
+        this.bookService = bookService;
     }
 
     // 장바구니 담기
     public void putBookToCart(UserEntity user, String isbn) {
         System.out.println("장바구니 담기");
+
         // 책 여부 검증
-        repository.getBookByIsbn(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookService.getBookIfExistOrElseNull(isbn);
+        if(book == null) {
+            throw new NotFoundBookException("책이 존재하지 않습니다");
+        }
 
         // 장바구니 여부 검증
         boolean isAlreadyCartBook = repository.existsByIsbn(isbn);

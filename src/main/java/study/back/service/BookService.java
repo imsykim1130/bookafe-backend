@@ -31,7 +31,7 @@ public class BookService {
     }
 
     @Value("${kakao-authorization}")
-    private String kakaoAuthorization;
+    private static String kakaoAuthorization;
 
     @Value("${recommend-book-max-count}")
     private int recommendBookMaxCount;
@@ -93,7 +93,7 @@ public class BookService {
     // 책 정보 가져오기
     // db, 카카오 api 에 모두 찾는 책 정보가 없으면 null 반환
     // db 에 데이터가 없으면 카카오 api 에서 정보를 찾은 뒤 db 에 넣어준다
-    private BookEntity getBookIfExistOrElseNull(String isbn) {
+    public BookEntity getBookIfExistOrElseNull(String isbn) {
         BookEntity book = null;
         Optional<BookEntity> bookOptional = repository.findBookByIsbn(isbn);
         if (bookOptional.isPresent()) {
