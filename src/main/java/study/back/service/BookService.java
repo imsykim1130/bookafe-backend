@@ -31,7 +31,7 @@ public class BookService {
     }
 
     @Value("${kakao-authorization}")
-    private static String kakaoAuthorization;
+    private String kakaoAuthorization;
 
     @Value("${recommend-book-max-count}")
     private int recommendBookMaxCount;
