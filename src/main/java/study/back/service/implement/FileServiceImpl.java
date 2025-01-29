@@ -15,7 +15,7 @@ import java.util.UUID;
 @Service
 @Transactional
 public class FileServiceImpl implements FileService {
-    private final String uploadDir = "/Users/gimsoyeong/Desktop/all/toy-project/bookafe/back/src/main/resources/static/image/";
+    private final String uploadDir = "/Users/gimsoyeong/Desktop/all/toy-project/bookafe/bookafe-back/src/main/resources/static/image/";
 
     // 이미지 업로드
     // 입력: 이미지 파일
