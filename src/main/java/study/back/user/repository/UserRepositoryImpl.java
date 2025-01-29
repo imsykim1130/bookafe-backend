@@ -38,8 +38,8 @@ public class UserRepositoryImpl implements UserRepository {
     // 유저의 댓글 개수 얻기
     @Override
     public Long findUserCommentCount(UserEntity user) {
-        return em.createQuery("select count(c) from CommentEntity c where c.user = :user", Long.class)
-                .setParameter("user", user)
+        return em.createQuery("select count(c) from CommentEntity c where c.userId = :userId", Long.class)
+                .setParameter("userId", user.getId())
                 .getSingleResult();
     }
 
