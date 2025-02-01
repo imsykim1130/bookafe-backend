@@ -1,14 +1,15 @@
 package study.back.dto.response;
 
-import lombok.Builder;
+import lombok.Getter;
 import study.back.dto.item.RecommendBookView;
 
+@Getter
 public class GetRecommendBookResponseDto extends ResponseDto {
     private RecommendBookView todayBook;
 
-    @Builder
     public GetRecommendBookResponseDto(String code, String message, RecommendBookView todayBook) {
-        super(code, message);
+        this.code = code;
+        this.message = message;
         this.todayBook = todayBook;
     }
 }

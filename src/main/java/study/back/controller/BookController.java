@@ -40,11 +40,8 @@ public class BookController {
     @GetMapping("/book/recommend")
     public ResponseEntity<GetRecommendBookResponseDto> getRecommendBook() {
         RecommendBookView result = bookService.getRecommendBook();
-        GetRecommendBookResponseDto responseDto = GetRecommendBookResponseDto.builder()
-                .code("SU")
-                .message("추천책 가져오기 성공")
-                .todayBook(result)
-                .build();
+        GetRecommendBookResponseDto responseDto =
+                new GetRecommendBookResponseDto("SU", "추천책 가져오기 성공", result);
         return ResponseEntity.ok(responseDto);
     }
 
