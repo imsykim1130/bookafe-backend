@@ -1,6 +1,7 @@
 package study.back.repository.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import study.back.dto.item.RecommendBookView;
 import study.back.entity.BookEntity;
@@ -29,12 +30,15 @@ public class BookRepositoryImpl implements BookRepositoryInterface {
     // title, author, isbn, bookImg, favoriteComment
     @Override
     public RecommendBookView findRecommendBook(int recommendBookMaxCount) {
-        Random random = new Random();
-        Long randomRecommendBookId = random.nextLong(recommendBookMaxCount) + 1L;
-
-        return em.createQuery("select rb.book.title as title, rb.book.author as author, rb.book.isbn as isbn, rb.book.bookImg as bookImg, (select cf.comment.content from CommentFavoriteEntity cf where cf.comment.book = rb.book group by cf.comment order by count(cf) desc limit 1) as favoriteComment from RecommendBookEntity rb order by function('RAND') limit 1", RecommendBookView.class)
-                .getSingleResult();
-    }
+        RecommendBookView result;
+        try {
+            result = em.createQuery("select rb.book.title as title, rb.book.author as author, rb.book.isbn as isbn, rb.book.bookImg as bookImg, (select cf.comment.content from CommentFavoriteEntity cf where cf.comment.book = rb.book group by cf.comment order by count(cf) desc limit 1) as favoriteComment from RecommendBookEntity rb order by function('RAND') limit 1", RecommendBookView.class)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            result = null;
+        }
+        return result;
+    };
 
     public RecommendBookEntity test() {
         return em.createQuery("select rb from RecommendBookEntity rb order by function('RAND') limit 1", RecommendBookEntity.class)
