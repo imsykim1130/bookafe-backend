@@ -11,8 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import study.back.dto.item.UserItem;
 
-import java.text.SimpleDateFormat;
-import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
@@ -33,7 +33,7 @@ public class UserEntity implements UserDetails {
     private String addressDetail;
     private String phoneNumber;
     private boolean googleAuth;
-    private String createDate;
+    private LocalDateTime createDate;
     @Enumerated(EnumType.STRING)
     private RoleName role;
 
@@ -45,9 +45,7 @@ public class UserEntity implements UserDetails {
                                       String addressDetail,
                                       String phoneNumber,
                                       RoleName role) {
-        Date now = Date.from(Instant.now());
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        String datetime = simpleDateFormat.format(now);
+        LocalDateTime now = LocalDateTime.now();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(password);
@@ -60,13 +58,15 @@ public class UserEntity implements UserDetails {
         userEntity.addressDetail = addressDetail;
         userEntity.phoneNumber = phoneNumber;
         userEntity.googleAuth = false;
-        userEntity.createDate = datetime;
+        userEntity.createDate = now;
         userEntity.role = role;
         return userEntity;
     }
 
     public UserItem toItem() {
-        return new UserItem(this.id, this.email, this.nickname, this.profileImg, this.createDate, this.role.toString());
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        String createDate = this.createDate.format(formatter);
+        return new UserItem(this.id, this.email, this.nickname, this.profileImg, createDate, this.role.toString());
     }
 
     @Override

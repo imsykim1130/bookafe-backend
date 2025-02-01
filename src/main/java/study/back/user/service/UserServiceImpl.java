@@ -12,6 +12,7 @@ import study.back.user.entity.UserEntity;
 import study.back.service.FileService;
 import study.back.user.repository.UserRepository;
 
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Service
@@ -59,11 +60,13 @@ public class UserServiceImpl implements UserService {
             // 각 유저의 댓글 작성 개수 가져오기
             Long commentCount = repository.findUserCommentCount(user);
 
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+
             // dto 로 변환
             return UserManagementInfo.builder()
                     .id(user.getId())
                     .email(user.getEmail())
-                    .datetime(user.getCreateDate())
+                    .datetime(user.getCreateDate().format(formatter))
                     .point(totalPoint)
                     .commentCount(commentCount)
                     .build();
