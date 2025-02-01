@@ -55,7 +55,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseDto> CustomRuntimeException(RuntimeException e) {
-        ResponseDto responseDto = new ResponseDto("ERR", e.getMessage());
+        ResponseDto responseDto = new ResponseDto("ISE", e.getMessage());
         e.printStackTrace();
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
     }
