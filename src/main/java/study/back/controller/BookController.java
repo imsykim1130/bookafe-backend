@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.item.RecommendBookView;
+import study.back.dto.response.GetRecommendBookResponseDto;
 import study.back.service.BookService;
 
 @RestController
@@ -37,9 +38,14 @@ public class BookController {
 
     // 추천책 가져오기
     @GetMapping("/book/recommend")
-    public ResponseEntity<RecommendBookView> getRecommendBook() {
+    public ResponseEntity<GetRecommendBookResponseDto> getRecommendBook() {
         RecommendBookView result = bookService.getRecommendBook();
-        return ResponseEntity.ok(result);
+        GetRecommendBookResponseDto responseDto = GetRecommendBookResponseDto.builder()
+                .code("SU")
+                .message("추천책 가져오기 성공")
+                .todayBook(result)
+                .build();
+        return ResponseEntity.ok(responseDto);
     }
 
 }
