@@ -23,7 +23,7 @@ import java.util.Optional;
 @Service
 public class BookService {
 
-    private BookRepositoryInterface repository;
+    private final BookRepositoryInterface repository;
 
     @Autowired
     public BookService(BookRepository bookRepository, EntityManager em) {
