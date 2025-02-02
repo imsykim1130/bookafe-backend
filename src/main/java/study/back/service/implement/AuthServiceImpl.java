@@ -1,7 +1,6 @@
 package study.back.service.implement;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -9,8 +8,8 @@ import org.springframework.stereotype.Service;
 import study.back.dto.item.UserItem;
 import study.back.dto.request.SignInRequestDto;
 import study.back.dto.request.SignUpRequestDto;
-import study.back.dto.response.ResponseDto;
 import study.back.dto.response.SignInResponseDto;
+import study.back.dto.response.SignUpResponseDto;
 import study.back.exception.Conflict.ConflictEmailException;
 import study.back.exception.Conflict.ConflictNicknameException;
 import study.back.exception.Conflict.ConflictUserException;
@@ -31,7 +30,7 @@ public class AuthServiceImpl implements AuthService {
 
     // 로그인
     @Override
-    public ResponseEntity<SignInResponseDto> signIn(SignInRequestDto signInRequestDto) {
+    public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
         String email = signInRequestDto.getEmail();
         String password = signInRequestDto.getPassword();
 
@@ -58,12 +57,12 @@ public class AuthServiceImpl implements AuthService {
         userItem = user.toItem();
 
         // 로그인 성공
-        return SignInResponseDto.signInSuccess(jwt, userItem);
+        return new SignInResponseDto(jwt, userItem);
     }
 
     // 회원가입
     @Override
-    public ResponseEntity<ResponseDto> signUp(SignUpRequestDto signUpRequestDto) {
+    public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
 
         // todo
         //  지금처럼 쿼리문 두개를 보내서 어떤 항목이 중복인지 알려주는게 좋은지
@@ -113,6 +112,6 @@ public class AuthServiceImpl implements AuthService {
         userJpaRepository.save(newUser);
 
         // 회원가입 성공
-        return ResponseDto.success("회원가입 성공");
+        return new SignUpResponseDto("SU", "회원가입 성공");
     }
 }
