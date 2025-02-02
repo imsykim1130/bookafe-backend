@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.back.dto.request.SignInRequestDto;
 import study.back.dto.request.SignUpRequestDto;
-import study.back.dto.response.SignUpResponseDto;
+import study.back.dto.response.ResponseDto;
 import study.back.service.implement.AuthServiceImpl;
 
 @RestController
@@ -19,7 +19,7 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/sign-up")
-    public ResponseEntity<? super SignUpResponseDto> signUp(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<ResponseDto> signUp(@RequestBody SignUpRequestDto requestDto) {
         return authService.signUp(requestDto);
     }
     // 로그인
