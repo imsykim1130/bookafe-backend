@@ -25,6 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import study.back.dto.response.ResponseDto;
 import study.back.security.JwtFilter;
 import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;
@@ -32,8 +33,6 @@ import study.back.security.UserDetailsServiceImpl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -66,7 +65,7 @@ public class WebSecurityConfig {
         return authProvider;
     }
 
-//    시큐리티 필터 무시하기
+//    시큐리티 필터 무시할 요청
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {
 //        return web -> {
@@ -101,6 +100,7 @@ public class WebSecurityConfig {
         return source;
     }
 
+    // 시큐리티 필터 체인 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
@@ -120,25 +120,25 @@ public class WebSecurityConfig {
                 auth
                         .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
                         .requestMatchers(HttpMethod.GET, "/api/v1/book/**","/api/v1/books", "/api/v1/books/**", "/api/v1/comment/**", "/image/**", "/api/v1/favorite/top10").permitAll()
+                        .requestMatchers("api/v1/admin/**").hasRole("ADMIN") // 인가
                         .anyRequest().authenticated()
 
         );
-        http.authenticationProvider(daoAuthenticationProvider());
+        http.authenticationProvider(daoAuthenticationProvider()); // db 의 유저 정보와 입력된 유저 정보 비교
         http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
+    // 인증, 인가 실패 시
     static class CustomExceptionEntryPoint implements AuthenticationEntryPoint {
 
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-            Map<String, Object > responseBody = new HashMap<>();
-            responseBody.put("code", "UA");
-            responseBody.put("message", "시큐리티 인증 실패");
+            ResponseDto responseDto = new ResponseDto("UA", "권한이 없습니다");
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
-            response.getWriter().write(new ObjectMapper().writeValueAsString(responseBody));
+            response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
         }
     }
 
