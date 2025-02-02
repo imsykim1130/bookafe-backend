@@ -12,7 +12,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import study.back.user.entity.UserEntity;
 
-import java.security.InvalidKeyException;
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
