@@ -219,7 +219,7 @@ public class OrderServiceImpl implements OrderService {
         System.out.println("주문취소");
         Optional<OrderEntity> orderOpt = repository.findOrderByOrderId(orderId);
         if(orderOpt.isEmpty()) {
-            throw new NotExistOrderException("해당 주문이 존재하지 않습니다");
+            throw new NotExistOrderException();
         }
         OrderEntity order = orderOpt.get();
         if(!order.getOrderStatus().equals(OrderStatus.READY)) {
@@ -278,7 +278,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderStatus changeOrderStatus(Long orderId, String orderStatus) {
         // 주문 여부 검증
         OrderEntity order = repository.findOrderByOrderId(orderId)
-                .orElseThrow(() -> new NotExistOrderException("주문이 존재하지 않습니다"));
+                .orElseThrow(() -> new NotExistOrderException());
         // 주문 상태 변경
         OrderStatus changedOrderStatus = order.changeOrderStatus(OrderStatus.getOrderStatus(orderStatus));
         repository.saveOrder(order);

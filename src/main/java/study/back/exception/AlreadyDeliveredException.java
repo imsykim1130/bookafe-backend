@@ -1,7 +1,9 @@
 package study.back.exception;
 
-public class AlreadyDeliveredException extends RuntimeException {
-    public AlreadyDeliveredException(String message) {
-        super(message);
+import study.back.exception.errors.BadRequestException;
+
+public class AlreadyDeliveredException extends BadRequestException {
+    public AlreadyDeliveredException() {
+        super("이미 배송 완료된 주문입니다.");
     }
 }

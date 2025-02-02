@@ -24,7 +24,7 @@ public class DeliveryServiceImpl implements DeliveryService {
     public void changeOrderStatusToDelivering(Long orderId) {
         // 주문 여부 확인
         OrderEntity order = repository.findOrderByOrderId(orderId)
-                .orElseThrow(() -> new NotExistOrderException("해당 주문이 존재하지 않습니다"));
+                .orElseThrow(() -> new NotExistOrderException());
 
         // 배송 상태 확인
         if(order.getOrderStatus().equals(OrderStatus.DELIVERING)) {
@@ -39,11 +39,11 @@ public class DeliveryServiceImpl implements DeliveryService {
     @Override
     public void changeOrderStatusToDelivered(Long orderId) {
         OrderEntity order = repository.findOrderByOrderId(orderId)
-                .orElseThrow(() -> new NotExistOrderException("해당 주문이 존재하지 않습니다"));
+                .orElseThrow(() -> new NotExistOrderException());
 
         // 배송 상태 확인
         if(order.getOrderStatus().equals(OrderStatus.DELIVERED)) {
-            throw new AlreadyDeliveredException("이미 배송 완료된 주문입니다");
+            throw new AlreadyDeliveredException();
         }
 
         if(order.getOrderStatus().equals(OrderStatus.READY)) {
