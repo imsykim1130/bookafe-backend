@@ -19,7 +19,6 @@ import study.back.user.entity.RoleName;
 import study.back.user.entity.UserEntity;
 import study.back.user.repository.UserJpaRepository;
 import study.back.security.JwtUtils;
-import study.back.security.UserDetailsServiceImpl;
 import study.back.service.AuthService;
 
 import java.security.InvalidKeyException;
@@ -30,7 +29,6 @@ public class AuthServiceImpl implements AuthService {
     private final UserJpaRepository userJpaRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtils jwtUtils;
-    private final UserDetailsServiceImpl userDetailsService;
 
     // 로그인
     @Override
@@ -43,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
 
         try {
             // 유저 가입 유무 확인
-            UserEntity user = userDetailsService.loadUserByUsername(email);
+            UserEntity user = userJpaRepository.findByEmail(email);
 
             // 비밀번호 일치 여부 확인
             if (!passwordEncoder.matches(password, user.getPassword())) {
