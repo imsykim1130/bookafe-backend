@@ -9,8 +9,14 @@ import study.back.dto.request.PostCommentRequestDto;
 import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.CommentFavoriteEntity;
+import study.back.exception.BadRequest.AlreadyFavoriteCommentException;
+import study.back.exception.BadRequest.NoCommentContentException;
+import study.back.exception.Forbidden.CommentAuthorMismatchException;
+import study.back.exception.NotFound.NoParentCommentException;
+import study.back.exception.NotFound.NotExistCommentException;
+import study.back.exception.NotFound.NotFoundBookException;
+import study.back.exception.NotFound.UserNotFoundException;
 import study.back.user.entity.UserEntity;
-import study.back.exception.*;
 import study.back.repository.CommentRepositoryInterface;
 import study.back.repository.impl.CommentRepoImpl;
 import study.back.repository.origin.BookRepository;
@@ -45,7 +51,7 @@ public class CommentServiceImpl implements CommentService {
 
         // 댓글 내용 여부 확인
         if(content == null || content.isBlank()) {
-            throw new NoCommentContentException("댓글 내용이 없습니다");
+            throw new NoCommentContentException();
         }
 
         // 책 여부 확인
@@ -56,7 +62,7 @@ public class CommentServiceImpl implements CommentService {
 
         if(parentId != null) {
             parent = repository.findCommentById(parentId).orElseThrow(()->{
-                throw new NoParentCommentException("리뷰가 삭제되어 리플 작성이 불가능합니다");
+                throw new NoParentCommentException();
             });
         }
 
@@ -112,7 +118,7 @@ public class CommentServiceImpl implements CommentService {
         Optional<UserEntity> commentUser = repository.findUserByCommentId(commentId);
 
         if(!user.getEmail().equals(commentUser.get().getEmail())) {
-            throw new CommentAuthorMismatchException("댓글 수정 권한이 없습니다");
+            throw new CommentAuthorMismatchException();
         }
 
         repository.updateCommentContent(commentId, content);
@@ -123,10 +129,10 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public Boolean deleteComment(Long commentId, UserEntity user) {
         // 로그인 유저와 댓글 작성자 동일 여부 검증
-        UserEntity commentUser = repository.findUserByCommentId(commentId).orElseThrow(() -> new UserNotFoundException("유저가 존재하지 않습니다"));
+        UserEntity commentUser = repository.findUserByCommentId(commentId).orElseThrow(() -> new UserNotFoundException());
 
         if(!commentUser.getEmail().equals(user.getEmail())) {
-            throw new CommentAuthorMismatchException("댓글 삭제 권한이 없습니다");
+            throw new CommentAuthorMismatchException();
         }
 
         Boolean result = repository.updateCommentToDeleted(commentId);
@@ -179,6 +185,6 @@ public class CommentServiceImpl implements CommentService {
 
     private BookEntity findBook(String isbn) {
         return repository.findBookById(isbn)
-                .orElseThrow(() -> new NotFoundBookException("해당하는 책을 찾을 수 없습니다."));
+                .orElseThrow(() -> new NotFoundBookException());
     }
 }

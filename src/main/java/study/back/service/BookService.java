@@ -1,7 +1,6 @@
 package study.back.service;
 
 import jakarta.persistence.EntityManager;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
@@ -11,7 +10,7 @@ import org.springframework.web.client.RestClient;
 import study.back.dto.item.*;
 import study.back.dto.response.*;
 import study.back.entity.BookEntity;
-import study.back.exception.KakaoAuthorizationException;
+import study.back.exception.InternalServerError.KakaoAuthorizationException;
 import study.back.repository.BookRepositoryInterface;
 import study.back.repository.impl.BookRepositoryImpl;
 import study.back.repository.origin.BookRepository;

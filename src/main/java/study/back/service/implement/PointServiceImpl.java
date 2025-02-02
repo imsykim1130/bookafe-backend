@@ -8,10 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import study.back.dto.response.GetPointLogResponse;
 import study.back.entity.PointEntity;
 import study.back.user.entity.UserEntity;
-import study.back.exception.NotEnoughPointsException;
-import study.back.exception.UnUsablePointsException;
-import study.back.exception.UserNotFoundException;
-import study.back.exception.ZeroPointsException;
+import study.back.exception.BadRequest.NotEnoughPointsException;
+import study.back.exception.BadRequest.UnUsablePointsException;
+import study.back.exception.NotFound.UserNotFoundException;
 import study.back.repository.origin.PointRepository;
 import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.PointLogView;
@@ -31,13 +30,13 @@ public class PointServiceImpl implements PointService {
     private void minusPointValidation(Integer totalPoint, Integer usedPoints) {
         // 전체 포인트가 차감할 포인트보다 작으면 에러 발생
         if(totalPoint < Math.abs(usedPoints)){
-            throw new NotEnoughPointsException("잔여 포인트가 부족합니다");
+            throw new NotEnoughPointsException();
         }
 
         // 사용 포인트가 100 단위가 아닐 시 에러 발생
         boolean isPossibleToUse = usedPoints % 100 == 0;
         if(!isPossibleToUse){
-            throw new UnUsablePointsException("포인트는 100 단위로만 사용 가능합니다");
+            throw new UnUsablePointsException();
         }
     }
 
@@ -53,7 +52,7 @@ public class PointServiceImpl implements PointService {
         PointEntity point = null;
 
         if(points == 0) {
-            throw new ZeroPointsException("적립할 포인트가 없습니다");
+            throw new UnUsablePointsException();
         }
 
         // 포인트 음수일 때 포인트 차감
@@ -92,7 +91,7 @@ public class PointServiceImpl implements PointService {
         List<PointLogView> pointLogViews;
 
         if(!userJpaRepository.existsById(user.getId())) {
-            throw new UserNotFoundException("해당 유저가 존재하지 않습니다");
+            throw new UserNotFoundException();
         }
 
         // 페이지네이션

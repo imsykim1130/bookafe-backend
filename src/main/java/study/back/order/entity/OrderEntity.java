@@ -2,7 +2,7 @@ package study.back.order.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-import study.back.exception.DeliveryAlreadyDoneException;
+import study.back.exception.BadRequest.DeliveryAlreadyDoneException;
 import study.back.user.entity.UserEntity;
 
 import java.time.LocalDateTime;
@@ -45,7 +45,7 @@ public class OrderEntity {
     // 배송상태 변경
     public OrderStatus changeOrderStatus(OrderStatus orderStatus) {
         if (this.orderStatus.equals(OrderStatus.DELIVERED)) {
-            throw new DeliveryAlreadyDoneException("이미 배송이 완료된 주문입니다");
+            throw new DeliveryAlreadyDoneException();
         }
         this.orderStatus = orderStatus;
         return this.orderStatus;

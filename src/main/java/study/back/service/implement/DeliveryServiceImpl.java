@@ -3,9 +3,12 @@ package study.back.service.implement;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import study.back.exception.BadRequest.AlreadyDeliveredException;
+import study.back.exception.BadRequest.AlreadyDeliveringException;
+import study.back.exception.BadRequest.NotDeliveringOrderException;
+import study.back.exception.NotFound.NotExistOrderException;
 import study.back.order.entity.OrderEntity;
 import study.back.order.entity.OrderStatus;
-import study.back.exception.*;
 import study.back.repository.DeliveryRepositoryInterface;
 import study.back.repository.impl.DeliveryRepoImpl;
 import study.back.service.DeliveryService;
@@ -28,7 +31,7 @@ public class DeliveryServiceImpl implements DeliveryService {
 
         // 배송 상태 확인
         if(order.getOrderStatus().equals(OrderStatus.DELIVERING)) {
-            throw new AlreadyDeliveringException("이미 배송중인 주문입니다");
+            throw new AlreadyDeliveringException();
         }
 
         // 배송 상태 변경
@@ -47,7 +50,7 @@ public class DeliveryServiceImpl implements DeliveryService {
         }
 
         if(order.getOrderStatus().equals(OrderStatus.READY)) {
-            throw new NotDeliveringOrderException("배송전 주문입니다");
+            throw new NotDeliveringOrderException();
         }
 
         // 배송 상태 변경

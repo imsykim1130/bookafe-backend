@@ -8,8 +8,7 @@ import study.back.dto.response.GetUserCouponListResponseDto;
 import study.back.dto.response.ResponseDto;
 import study.back.entity.UserCouponEntity;
 import study.back.user.entity.UserEntity;
-import study.back.exception.CouponNotFoundException;
-import study.back.exception.DeleteCouponFailException;
+import study.back.exception.NotFound.CouponNotFoundException;
 import study.back.repository.origin.UserCouponRepository;
 import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.UserCouponView;
@@ -40,7 +39,7 @@ public class UserCouponService {
     public UserCouponEntity updateUserCouponPending(Long userCouponId) {
         Optional<UserCouponEntity> userCouponOpt = userCouponRepository.findById(userCouponId);
         if (userCouponOpt.isEmpty()) {
-            throw new CouponNotFoundException("쿠폰이 존재하지 않습니다");
+            throw new CouponNotFoundException();
         }
         UserCouponEntity userCoupon = userCouponOpt.get();
         userCoupon.updatePending();
@@ -50,15 +49,10 @@ public class UserCouponService {
     public void deleteUserCoupon(Long userCouponId) {
         UserCouponEntity userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
         if (userCoupon == null) {
-            throw new CouponNotFoundException("쿠폰이 존재하지 않습니다");
+            throw new CouponNotFoundException();
         }
 
         userCouponRepository.delete(userCoupon);
-        userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
-
-        if(userCoupon != null) {
-            throw new DeleteCouponFailException("쿠폰 삭제 실패");
-        }
     }
 
     public UserCouponEntity getUserCoupon(Long couponId) {

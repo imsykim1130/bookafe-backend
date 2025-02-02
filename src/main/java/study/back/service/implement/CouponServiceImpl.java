@@ -3,7 +3,7 @@ package study.back.service.implement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.back.user.entity.UserEntity;
-import study.back.exception.UserNotFoundException;
+import study.back.exception.NotFound.UserNotFoundException;
 import study.back.repository.origin.UserCouponRepository;
 import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.UserCouponView;
@@ -21,7 +21,7 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public List<UserCouponView> getCouponList(UserEntity user) {
         if(!userJpaRepository.existsById(user.getId())) {
-            throw new UserNotFoundException("해당 유저가 존재하지 않습니다");
+            throw new UserNotFoundException();
         }
         return userCouponRepository.findAllByUser(user);
     }

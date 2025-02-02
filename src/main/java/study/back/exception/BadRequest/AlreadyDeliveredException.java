@@ -1,4 +1,4 @@
-package study.back.exception;
+package study.back.exception.BadRequest;
 
 import study.back.exception.errors.BadRequestException;
 

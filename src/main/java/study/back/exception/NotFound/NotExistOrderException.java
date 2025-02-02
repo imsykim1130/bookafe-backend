@@ -1,4 +1,4 @@
-package study.back.exception;
+package study.back.exception.NotFound;
 
 import study.back.exception.errors.NotFoundException;
 

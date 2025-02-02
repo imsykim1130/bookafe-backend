@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
-import study.back.exception.NotFoundBookException;
+import study.back.exception.NotFound.NotFoundBookException;
 import study.back.service.BookService;
 import study.back.user.entity.UserEntity;
 import study.back.repository.BookCartRepositoryInterface;
@@ -36,7 +36,7 @@ public class BookCartServiceImpl implements BookCartService {
         // 책 여부 검증
         BookEntity book = bookService.getBookIfExistOrElseNull(isbn);
         if(book == null) {
-            throw new NotFoundBookException("책이 존재하지 않습니다");
+            throw new NotFoundBookException();
         }
 
         // 장바구니 여부 검증

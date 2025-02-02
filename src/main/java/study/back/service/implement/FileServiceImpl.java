@@ -3,7 +3,7 @@ package study.back.service.implement;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-import study.back.exception.UploadFailException;
+import study.back.exception.InternalServerError.UploadFailException;
 import study.back.service.FileService;
 
 import java.io.File;
@@ -46,7 +46,7 @@ public class FileServiceImpl implements FileService {
             file.transferTo(path.toFile());
         } catch (IOException e) {
             e.printStackTrace();
-            throw new UploadFailException("파일 업로드 실패");
+            throw new UploadFailException();
         }
 
         return uniqueFileName;

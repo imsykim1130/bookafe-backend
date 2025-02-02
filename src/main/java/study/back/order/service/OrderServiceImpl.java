@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import study.back.dto.request.CreateOrderRequestDto;
 import study.back.dto.response.GetDeliveryStatusListResponse;
 import study.back.entity.*;
+import study.back.exception.BadRequest.*;
+import study.back.exception.NotFound.NotExistOrderException;
 import study.back.order.dto.GetOrderDetailListResponseDto;
 import study.back.order.entity.OrderEntity;
 import study.back.order.entity.OrderStatus;
@@ -19,7 +21,6 @@ import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.dto.item.OrderBookView;
 import study.back.dto.response.OrderDetail;
-import study.back.exception.*;
 import study.back.repository.resultSet.OrderView;
 import study.back.user.entity.UserEntity;
 import study.back.user.repository.UserJpaRepository;
@@ -54,12 +55,12 @@ public class OrderServiceImpl implements OrderService {
 
         // 주소 검증
         if(address == null || address.isEmpty()) {
-            throw new InvalidAddressException("주소는 필수 입력사항입니다");
+            throw new InvalidAddressException();
         }
 
         // 휴대폰 번호 검증
         if(!Pattern.matches(PHONE_NUMBER_REGEX, phoneNumber)) {
-            throw new InvalidPhoneNumberException("올바르지 않은 휴대폰 번호 형식입니다");
+            throw new InvalidPhoneNumberException();
         }
 
         // 할인 여부
@@ -68,7 +69,7 @@ public class OrderServiceImpl implements OrderService {
 
         // 쿠폰과 포인트 동시 사용 불가
         if(isCouponUsed && isPointUsed) {
-            throw new PointAndCouponConflictException("쿠폰과 포인트는 동시에 사용할 수 없습니다");
+            throw new PointAndCouponConflictException();
         }
 
         // 할인 여부
@@ -101,7 +102,7 @@ public class OrderServiceImpl implements OrderService {
             // 포인트 사용 가능 여부 검증
             Long totalPoint = repository.findTotalPointByUser(user);
             if(totalPoint - requestDto.getUsedPoint() < 0) {
-                throw new NotEnoughPointsException("보유하신 포인트가 부족합니다");
+                throw new NotEnoughPointsException();
             }
             // 포인트 변경 내역 저장
             PointEntity point = PointEntity.builder()
@@ -223,7 +224,7 @@ public class OrderServiceImpl implements OrderService {
         }
         OrderEntity order = orderOpt.get();
         if(!order.getOrderStatus().equals(OrderStatus.READY)) {
-            throw new OrderCancellationNotAllowedException("배송이 시작된 주문은 취소가 불가능합니다");
+            throw new OrderCancellationNotAllowedException();
         }
         // 주문 책 삭제
         repository.deleteOrderBookByOrderId(orderId);

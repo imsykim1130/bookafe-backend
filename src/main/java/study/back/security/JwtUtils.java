@@ -23,7 +23,7 @@ public class JwtUtils {
     private String jwtSecret;
 
     // 토큰 생성
-    public String generateToken(Authentication authentication) throws InvalidKeyException {
+    public String generateToken(Authentication authentication) {
         UserEntity principal = (UserEntity) authentication.getPrincipal();
         List<String> roles = principal.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 

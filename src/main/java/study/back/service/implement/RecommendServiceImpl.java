@@ -6,9 +6,9 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import study.back.entity.BookEntity;
 import study.back.entity.RecommendBookEntity;
-import study.back.exception.AlreadyRecommendedBookException;
-import study.back.exception.NoMoreRecommendBookException;
-import study.back.exception.NotFoundBookException;
+import study.back.exception.BadRequest.AlreadyRecommendedBookException;
+import study.back.exception.BadRequest.NoMoreRecommendBookException;
+import study.back.exception.NotFound.NotFoundBookException;
 import study.back.repository.origin.BookRepository;
 import study.back.repository.origin.RecommendBookRepository;
 import study.back.repository.resultSet.RecommendBookView;
@@ -30,18 +30,18 @@ public class RecommendServiceImpl implements RecommendBookService {
     @Override
     public Boolean registerRecommendBook(String isbn) {
         // 책 여부 검증
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException());
 
         // 추천 여부 검증
         if(recommendBookRepository.existsByBook(book)) {
-           throw new AlreadyRecommendedBookException("이미 추천된 책입니다.");
+           throw new AlreadyRecommendedBookException();
         }
 
         // 추천 책 개수 제한 검증
         long count = recommendBookRepository.count();
 
         if(count >= recommendBookMaxCount) {
-            throw new NoMoreRecommendBookException("이미 책 추천이 모두 완료되었습니다");
+            throw new NoMoreRecommendBookException();
         }
 
         RecommendBookEntity recommendBookEntity = RecommendBookEntity.builder()
@@ -56,7 +56,7 @@ public class RecommendServiceImpl implements RecommendBookService {
     // 책 추천 취소하기
     @Override
     public Boolean deleteRecommendBook(String isbn) {
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException());
         recommendBookRepository.deleteByBook(book);
         return true;
     }
@@ -70,7 +70,7 @@ public class RecommendServiceImpl implements RecommendBookService {
     // 추천 여부 가져오기
     @Override
     public Boolean confirmRecommendBook(String isbn) {
-        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException("책이 존재하지 않습니다"));
+        BookEntity book = bookRepository.findById(isbn).orElseThrow(() -> new NotFoundBookException());
         return recommendBookRepository.existsByBook(book);
     }
 }

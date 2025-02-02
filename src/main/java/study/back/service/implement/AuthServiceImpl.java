@@ -2,11 +2,9 @@ package study.back.service.implement;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.OptimisticLockingFailureException;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import study.back.dto.item.UserItem;
@@ -15,13 +13,14 @@ import study.back.dto.request.SignUpRequestDto;
 import study.back.dto.response.ResponseDto;
 import study.back.dto.response.SignInResponseDto;
 import study.back.dto.response.SignUpResponseDto;
+import study.back.exception.NotFound.UserNotFoundException;
+import study.back.exception.errors.UnauthorizedException;
 import study.back.user.entity.RoleName;
 import study.back.user.entity.UserEntity;
 import study.back.user.repository.UserJpaRepository;
 import study.back.security.JwtUtils;
 import study.back.service.AuthService;
 
-import java.security.InvalidKeyException;
 
 @RequiredArgsConstructor
 @Service
@@ -32,44 +31,31 @@ public class AuthServiceImpl implements AuthService {
 
     // 로그인
     @Override
-    public ResponseEntity<? super SignInResponseDto> signIn(SignInRequestDto signInRequestDto) {
+    public ResponseEntity<SignInResponseDto> signIn(SignInRequestDto signInRequestDto) {
         String email = signInRequestDto.getEmail();
         String password = signInRequestDto.getPassword();
 
         String jwt;
         UserItem userItem;
 
-        try {
-            // 유저 가입 유무 확인
-            UserEntity user = userJpaRepository.findByEmail(email);
+        // 유저 가입 유무 확인
+        UserEntity user = userJpaRepository.findByEmail(email);
 
-            // 비밀번호 일치 여부 확인
-            if (!passwordEncoder.matches(password, user.getPassword())) {
-                return ResponseDto.authFail();
-            }
-
-            // 토큰 생성
-            Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-            jwt = jwtUtils.generateToken(authentication);
-
-            // 유저 정보
-            userItem = user.toItem();
-
-        } catch (InvalidKeyException e) {
-            // InvalidKeyException
-            // jwt 생성에 사용한 키에 문제 있을 때 발생
-            System.out.println("Invalid key");
-            return ResponseDto.internalServerError();
+        if(user == null) {
+            throw new UserNotFoundException();
         }
-        catch (UsernameNotFoundException e) {
-            // 가입되지 않은 유저
-            ResponseDto response = ResponseDto.builder().code("NEU").message("가입되지 않은 회원입니다. 회원가입이 필요합니다.").build();
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+
+        // 비밀번호 일치 여부 확인
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new UnauthorizedException("로그인 실패");
         }
-        catch (Exception e) {
-            e.printStackTrace();
-            return ResponseDto.internalServerError();
-        }
+
+        // 토큰 생성
+        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        jwt = jwtUtils.generateToken(authentication);
+
+        // 유저 정보
+        userItem = user.toItem();
 
         // 로그인 성공
         return SignInResponseDto.signInSuccess(jwt, userItem);
