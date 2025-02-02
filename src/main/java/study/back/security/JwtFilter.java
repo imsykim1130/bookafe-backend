@@ -27,7 +27,7 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             // 헤더에서 jwt 추출
-            String jwt = parseJwt(request);
+            String jwt = jwtUtils.parseJwt(request);
 
             // 헤더에 토큰 없으면 다음 필터로 넘어감
             if(!StringUtils.hasText(jwt)) {
@@ -60,16 +60,4 @@ public class JwtFilter extends OncePerRequestFilter {
 
         filterChain.doFilter(request, response);
     }
-
-    // 헤더에서 jwt 추출
-    // 헤더에 jwt 가 있으면 순수 jwt 추출하여 반환
-    // 헤더에 jwt 가 없거나 원하는 형식(Bearer)이 아닐 경우 null 반환
-    private String parseJwt(HttpServletRequest request) {
-        String headerAuth = request.getHeader("Authorization");
-        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
-            return headerAuth.substring(7);
-        }
-        return null;
-    }
-
 }

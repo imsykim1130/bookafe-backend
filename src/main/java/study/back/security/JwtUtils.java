@@ -4,10 +4,12 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SignatureException;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import study.back.user.entity.UserEntity;
 
 import java.security.InvalidKeyException;
@@ -57,6 +59,17 @@ public class JwtUtils {
         } catch (ExpiredJwtException | UnsupportedJwtException | MalformedJwtException | SignatureException | IllegalArgumentException e) {
             throw new JwtException(e.getMessage());
         }
+    }
+
+    // 헤더에서 jwt 추출
+    // 헤더에 jwt 가 있으면 순수 jwt 추출하여 반환
+    // 헤더에 jwt 가 없거나 원하는 형식(Bearer)이 아닐 경우 null 반환
+    public String parseJwt(HttpServletRequest request) {
+        String headerAuth = request.getHeader("Authorization");
+        if(StringUtils.hasText(headerAuth) && headerAuth.startsWith("Bearer ")) {
+            return headerAuth.substring(7);
+        }
+        return null;
     }
 
 }
