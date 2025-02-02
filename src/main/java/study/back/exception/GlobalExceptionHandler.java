@@ -14,41 +14,6 @@ public class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-//    @ExceptionHandler(DeliveryAlreadyDoneException.class)
-//    public ResponseEntity<ResponseDto> handleDeliveryAlreadyDoneException(DeliveryAlreadyDoneException e) {
-//        ResponseDto responseDto = new ResponseDto("DAD", e.getMessage());
-//        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(responseDto);
-//    }
-//
-//    @ExceptionHandler(PointAndCouponConflictException.class)
-//    public ResponseEntity<ResponseDto> handlePointAndCouponConflictException(PointAndCouponConflictException e) {
-//        ResponseDto responseDto = new ResponseDto("PCC", e.getMessage());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
-//    }
-//
-//    @ExceptionHandler(NoCommentContentException.class)
-//    public ResponseEntity<ResponseDto> handleNoCommentContentException(NoCommentContentException e) {
-//        ResponseDto responseDto = new ResponseDto("NCC", e.getMessage());
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseDto);
-//    }
-//
-//    @ExceptionHandler(NotFoundBookException.class)
-//    public ResponseEntity<ResponseDto> handleNotFoundBookException(NotFoundBookException e) {
-//        log.error("NotFoundBookException: {}", e.getMessage());
-//        return ResponseEntity.status(HttpStatus.NOT_FOUND)
-//                .body(ResponseDto.builder()
-//                        .code("NFB")
-//                        .message(e.getMessage())
-//                        .build());
-//    }
-//
-//    @ExceptionHandler(RuntimeException.class)
-//    public ResponseEntity<ResponseDto> CustomRuntimeException(RuntimeException e) {
-//        ResponseDto responseDto = new ResponseDto("ISE", e.getMessage());
-//        e.printStackTrace();
-//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(responseDto);
-//    }
-
     // 400 Bad Request
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ResponseDto> handleBadRequestException(BadRequestException e) {
@@ -77,6 +42,14 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseDto> handleNotFoundException(NotFoundException e) {
         HttpStatus status = HttpStatus.NOT_FOUND;
+        ResponseDto responseDto = ResponseDto.builder().code(String.valueOf(status)).message(e.getMessage()).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 409
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ResponseDto> handleConflictException(ConflictException e) {
+        HttpStatus status = HttpStatus.CONFLICT;
         ResponseDto responseDto = ResponseDto.builder().code(String.valueOf(status)).message(e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
