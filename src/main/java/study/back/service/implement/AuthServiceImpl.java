@@ -57,7 +57,7 @@ public class AuthServiceImpl implements AuthService {
         userItem = user.toItem();
 
         // 로그인 성공
-        return new SignInResponseDto(jwt, userItem);
+        return new SignInResponseDto("SU", "로그인 성공", jwt, userItem);
     }
 
     // 회원가입
