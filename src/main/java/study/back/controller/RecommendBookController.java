@@ -1,6 +1,5 @@
 package study.back.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -9,11 +8,6 @@ import study.back.service.RecommendBookService;
 
 import java.util.List;
 
-@Getter
-class RegisterRecommendBookRequest {
-    private String isbn;
-}
-
 @RestController
 @RequestMapping("/api/v1/recommend-book")
 @RequiredArgsConstructor
@@ -21,9 +15,9 @@ public class RecommendBookController {
     private final RecommendBookService recommendBookService;
 
     // 책 추천
-    @PostMapping("")
-    public ResponseEntity<Boolean> registerRecommendBook(@RequestBody RegisterRecommendBookRequest request) {
-        Boolean result = recommendBookService.registerRecommendBook(request.getIsbn());
+    @PostMapping("/{isbn}")
+    public ResponseEntity<Boolean> registerRecommendBook(@PathVariable(name = "isbn") String isbn) {
+        Boolean result = recommendBookService.registerRecommendBook(isbn);
         return ResponseEntity.ok(result);
     }
 
