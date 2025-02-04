@@ -6,25 +6,24 @@ import lombok.RequiredArgsConstructor;
 import study.back.dto.item.RecommendBookView;
 import study.back.entity.BookEntity;
 import study.back.entity.RecommendBookEntity;
-import study.back.repository.BookRepositoryInterface;
-import study.back.repository.origin.BookRepository;
+import study.back.repository.BookRepository;
+import study.back.repository.jpa.BookJpaRepository;
 
 import java.util.Optional;
-import java.util.Random;
 
 @RequiredArgsConstructor
-public class BookRepositoryImpl implements BookRepositoryInterface {
-    private final BookRepository bookRepository;
+public class BookRepositoryImpl implements BookRepository {
+    private final BookJpaRepository bookJpaRepository;
     private final EntityManager em;
 
     @Override
     public Optional<BookEntity> findBookByIsbn(String isbn) {
-        return bookRepository.findById(isbn);
+        return bookJpaRepository.findById(isbn);
     }
 
     @Override
     public BookEntity saveBook(BookEntity book) {
-        return bookRepository.save(book);
+        return bookJpaRepository.save(book);
     }
 
     // title, author, isbn, bookImg, favoriteComment

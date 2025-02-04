@@ -11,9 +11,9 @@ import study.back.dto.item.*;
 import study.back.dto.response.*;
 import study.back.entity.BookEntity;
 import study.back.exception.InternalServerError.KakaoAuthorizationException;
-import study.back.repository.BookRepositoryInterface;
+import study.back.repository.BookRepository;
 import study.back.repository.impl.BookRepositoryImpl;
-import study.back.repository.origin.BookRepository;
+import study.back.repository.jpa.BookJpaRepository;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +22,11 @@ import java.util.Optional;
 @Service
 public class BookService {
 
-    private final BookRepositoryInterface repository;
+    private final BookRepository repository;
 
     @Autowired
-    public BookService(BookRepository bookRepository, EntityManager em) {
-        this.repository = new BookRepositoryImpl(bookRepository, em);
+    public BookService(BookJpaRepository bookJpaRepository, EntityManager em) {
+        this.repository = new BookRepositoryImpl(bookJpaRepository, em);
     }
 
     @Value("${kakao-authorization}")

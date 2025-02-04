@@ -17,10 +17,10 @@ import study.back.exception.NotFound.NotExistCommentException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.exception.NotFound.UserNotFoundException;
 import study.back.user.entity.UserEntity;
-import study.back.repository.CommentRepositoryInterface;
+import study.back.repository.CommentRepository;
 import study.back.repository.impl.CommentRepoImpl;
-import study.back.repository.origin.BookRepository;
-import study.back.repository.origin.CommentRepository;
+import study.back.repository.jpa.BookJpaRepository;
+import study.back.repository.jpa.CommentJpaRepository;
 import study.back.service.CommentService;
 
 import java.time.LocalDateTime;
@@ -30,10 +30,10 @@ import java.util.Optional;
 @Service
 @Transactional
 public class CommentServiceImpl implements CommentService {
-    private final CommentRepositoryInterface repository;
+    private final CommentRepository repository;
 
-    public CommentServiceImpl(CommentRepository commentRepository, BookRepository bookRepository, EntityManager em) {
-        this.repository = new CommentRepoImpl(commentRepository, bookRepository, em);
+    public CommentServiceImpl(CommentJpaRepository commentJpaRepository, BookJpaRepository bookJpaRepository, EntityManager em) {
+        this.repository = new CommentRepoImpl(commentJpaRepository, bookJpaRepository, em);
     }
 
     // 댓글 달기

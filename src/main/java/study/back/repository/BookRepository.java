@@ -5,7 +5,7 @@ import study.back.entity.BookEntity;
 
 import java.util.Optional;
 
-public interface BookRepositoryInterface {
+public interface BookRepository {
     Optional<BookEntity> findBookByIsbn(String isbn);
     BookEntity saveBook(BookEntity book);
     RecommendBookView findRecommendBook(int recommendBookMaxCount);

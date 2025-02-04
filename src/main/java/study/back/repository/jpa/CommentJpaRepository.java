@@ -1,4 +1,4 @@
-package study.back.repository.origin;
+package study.back.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -9,7 +9,7 @@ import study.back.repository.resultSet.CommentResultSet;
 import java.util.List;
 
 
-public interface CommentRepository extends JpaRepository<CommentEntity, Long> {
+public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long> {
 
     @Query(value = "select\n" +
             "    comment_id as id, isbn, content, write_date as writeDate, emoji\n " +

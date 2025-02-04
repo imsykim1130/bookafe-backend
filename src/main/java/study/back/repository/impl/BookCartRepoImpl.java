@@ -6,37 +6,37 @@ import study.back.dto.item.CartBookView;
 import study.back.entity.BookCartEntity;
 import study.back.entity.BookEntity;
 import study.back.user.entity.UserEntity;
-import study.back.repository.BookCartRepositoryInterface;
-import study.back.repository.origin.BookCartRepository;
-import study.back.repository.origin.BookRepository;
+import study.back.repository.BookCartRepository;
+import study.back.repository.jpa.BookCartJpaRepository;
+import study.back.repository.jpa.BookJpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class BookCartRepoImpl implements BookCartRepositoryInterface {
-    private final BookRepository bookRepository;
-    private final BookCartRepository bookCartRepository;
+public class BookCartRepoImpl implements BookCartRepository {
+    private final BookJpaRepository bookJpaRepository;
+    private final BookCartJpaRepository bookCartJpaRepository;
     private final EntityManager em;
 
     @Override
     public Optional<BookEntity> getBookByIsbn(String isbn) {
-        return bookRepository.findById(isbn);
+        return bookJpaRepository.findById(isbn);
     }
 
     @Override
     public Boolean existsByIsbn(String isbn) {
-        return bookCartRepository.existsByIsbn(isbn);
+        return bookCartJpaRepository.existsByIsbn(isbn);
     }
 
     @Override
     public void save(BookCartEntity bookCart) {
-        bookCartRepository.save(bookCart);
+        bookCartJpaRepository.save(bookCart);
     }
 
     @Override
     public Optional<BookCartEntity> findByIsbn(String isbn) {
-        return bookCartRepository.findByIsbn(isbn);
+        return bookCartJpaRepository.findByIsbn(isbn);
     }
 
     @Override
@@ -49,12 +49,12 @@ public class BookCartRepoImpl implements BookCartRepositoryInterface {
 
     @Override
     public void delete(BookCartEntity bookCart) {
-        bookCartRepository.delete(bookCart);
+        bookCartJpaRepository.delete(bookCart);
     }
 
     @Override
     public List<CartBookView> findCartBookViewListByUser(UserEntity user) {
-        return bookCartRepository.findCartBookViewByUser(user);
+        return bookCartJpaRepository.findCartBookViewByUser(user);
     }
 
     @Override

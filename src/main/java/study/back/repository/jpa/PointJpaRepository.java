@@ -1,4 +1,4 @@
-package study.back.repository.origin;
+package study.back.repository.jpa;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-public interface PointRepository extends JpaRepository<PointEntity, Long> {
+public interface PointJpaRepository extends JpaRepository<PointEntity, Long> {
     @Query("select sum(p.changedPoint) from PointEntity p where p.user = ?1")
     Optional<Integer> getTotalPointByUser(UserEntity user);
 

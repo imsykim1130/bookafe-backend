@@ -11,7 +11,7 @@ import study.back.user.entity.UserEntity;
 import study.back.exception.BadRequest.NotEnoughPointsException;
 import study.back.exception.BadRequest.UnUsablePointsException;
 import study.back.exception.NotFound.UserNotFoundException;
-import study.back.repository.origin.PointRepository;
+import study.back.repository.jpa.PointJpaRepository;
 import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.PointLogView;
 import study.back.service.PointService;
@@ -23,7 +23,7 @@ import java.util.List;
 @Transactional
 @RequiredArgsConstructor
 public class PointServiceImpl implements PointService {
-    private final PointRepository pointRepository;
+    private final PointJpaRepository pointJpaRepository;
     private final UserJpaRepository userJpaRepository;
 
     // 포인트 차감시 검증 로직
@@ -43,7 +43,7 @@ public class PointServiceImpl implements PointService {
     // 유저의 총 보유 포인트
     @Override
     public int getTotalPoint(UserEntity user) {
-        return pointRepository.getTotalPointByUser(user).orElse(0);
+        return pointJpaRepository.getTotalPointByUser(user).orElse(0);
     }
 
     // 포인트 로그 저장
@@ -58,7 +58,7 @@ public class PointServiceImpl implements PointService {
         // 포인트 음수일 때 포인트 차감
         if(points < 0){
             // 보유 포인트 가져오기
-            Integer totalPoints = pointRepository.getTotalPointByUser(user).orElse(0);
+            Integer totalPoints = pointJpaRepository.getTotalPointByUser(user).orElse(0);
             // 포인트 차감 가능 검증
             minusPointValidation(totalPoints, points);
             // 포인트 차감 로그 저장
@@ -81,7 +81,7 @@ public class PointServiceImpl implements PointService {
                     .build();
         }
 
-        return pointRepository.save(point);
+        return pointJpaRepository.save(point);
     }
 
     // 포인트 내역 불러오기
@@ -99,10 +99,10 @@ public class PointServiceImpl implements PointService {
         PageRequest pageRequest = PageRequest.of(pageNumber, 10);
 
         if(type.equals("전체")) {
-            pointLogPage = pointRepository.findAll(user, start, end, pageRequest);
+            pointLogPage = pointJpaRepository.findAll(user, start, end, pageRequest);
 
         } else {
-            pointLogPage = pointRepository.findAll(user, start, end, type, pageRequest);
+            pointLogPage = pointJpaRepository.findAll(user, start, end, type, pageRequest);
         }
 
         pointLogViews = pointLogPage.stream().map(pointEntity -> {

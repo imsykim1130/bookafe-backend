@@ -7,33 +7,33 @@ import study.back.entity.BookEntity;
 import study.back.entity.CommentEntity;
 import study.back.entity.CommentFavoriteEntity;
 import study.back.user.entity.UserEntity;
-import study.back.repository.CommentRepositoryInterface;
-import study.back.repository.origin.BookRepository;
-import study.back.repository.origin.CommentRepository;
+import study.back.repository.CommentRepository;
+import study.back.repository.jpa.BookJpaRepository;
+import study.back.repository.jpa.CommentJpaRepository;
 
 import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class CommentRepoImpl implements CommentRepositoryInterface {
-    private final CommentRepository commentRepository;
-    private final BookRepository bookRepository;
+public class CommentRepoImpl implements CommentRepository {
+    private final CommentJpaRepository commentJpaRepository;
+    private final BookJpaRepository bookJpaRepository;
 
     private final EntityManager em;
 
     @Override
     public CommentEntity saveComment(CommentEntity comment) {
-        return commentRepository.save(comment);
+        return commentJpaRepository.save(comment);
     }
 
     @Override
     public Optional<CommentEntity> findCommentById(Long parentId) {
-        return commentRepository.findById(parentId);
+        return commentJpaRepository.findById(parentId);
     }
 
     @Override
     public Optional<BookEntity> findBookById(String isbn) {
-        return bookRepository.findById(isbn);
+        return bookJpaRepository.findById(isbn);
     }
 
     @Override

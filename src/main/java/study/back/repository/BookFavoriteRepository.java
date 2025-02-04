@@ -9,7 +9,7 @@ import study.back.repository.resultSet.Top10View;
 import java.util.List;
 import java.util.Optional;
 
-public interface BookFavoriteRepositoryInterface {
+public interface BookFavoriteRepository {
     Boolean existsBookFavoriteByUserAndIsbn(UserEntity user, String isbn);
 
     Optional<BookEntity> findBookByIsbn(String isbn);

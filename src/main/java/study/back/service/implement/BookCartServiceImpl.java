@@ -9,10 +9,10 @@ import study.back.entity.BookEntity;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.service.BookService;
 import study.back.user.entity.UserEntity;
-import study.back.repository.BookCartRepositoryInterface;
+import study.back.repository.BookCartRepository;
 import study.back.repository.impl.BookCartRepoImpl;
-import study.back.repository.origin.BookCartRepository;
-import study.back.repository.origin.BookRepository;
+import study.back.repository.jpa.BookCartJpaRepository;
+import study.back.repository.jpa.BookJpaRepository;
 import study.back.service.BookCartService;
 
 import java.util.List;
@@ -21,11 +21,11 @@ import java.util.List;
 @Service
 @Transactional
 public class BookCartServiceImpl implements BookCartService {
-    private final BookCartRepositoryInterface repository;
+    private final BookCartRepository repository;
     private final BookService bookService;
 
-    public BookCartServiceImpl(BookRepository bookRepository, BookCartRepository bookCartRepository, EntityManager em, BookService bookService) {
-        this.repository = new BookCartRepoImpl(bookRepository, bookCartRepository, em);
+    public BookCartServiceImpl(BookJpaRepository bookJpaRepository, BookCartJpaRepository bookCartJpaRepository, EntityManager em, BookService bookService) {
+        this.repository = new BookCartRepoImpl(bookJpaRepository, bookCartJpaRepository, em);
         this.bookService = bookService;
     }
 

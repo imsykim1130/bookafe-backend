@@ -1,4 +1,4 @@
-package study.back.repository.origin;
+package study.back.repository.jpa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -7,7 +7,7 @@ import study.back.user.entity.UserEntity;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<BookEntity, String> {
+public interface BookJpaRepository extends JpaRepository<BookEntity, String> {
     @Query("select bf from BookFavoriteEntity bf inner join BookEntity b on b.isbn = bf.isbn where bf.user = :user")
     List<BookEntity> findFavoriteBookListByUser(@Param("user")UserEntity user);
 

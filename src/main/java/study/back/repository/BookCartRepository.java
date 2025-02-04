@@ -8,7 +8,7 @@ import study.back.user.entity.UserEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface BookCartRepositoryInterface {
+public interface BookCartRepository {
     Optional<BookEntity> getBookByIsbn(String isbn);
     Boolean existsByIsbn(String isbn);
     void save(BookCartEntity bookCart);

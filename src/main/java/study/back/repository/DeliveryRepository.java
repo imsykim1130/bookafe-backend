@@ -4,6 +4,6 @@ import study.back.order.entity.OrderEntity;
 
 import java.util.Optional;
 
-public interface DeliveryRepositoryInterface {
+public interface DeliveryRepository {
     Optional<OrderEntity> findOrderByOrderId(Long orderId);
 }

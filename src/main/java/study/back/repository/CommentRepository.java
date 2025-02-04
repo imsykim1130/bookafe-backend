@@ -9,7 +9,7 @@ import study.back.user.entity.UserEntity;
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentRepositoryInterface {
+public interface CommentRepository {
 
     CommentEntity saveComment(CommentEntity comment);
     Optional<CommentEntity> findCommentById(Long parentId);

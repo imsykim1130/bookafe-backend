@@ -8,10 +8,10 @@ import study.back.entity.BookEntity;
 import study.back.entity.BookFavoriteEntity;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.user.entity.UserEntity;
-import study.back.repository.BookFavoriteRepositoryInterface;
+import study.back.repository.BookFavoriteRepository;
 import study.back.repository.impl.BookFavoriteRepoImpl;
-import study.back.repository.origin.BookFavoriteRepository;
-import study.back.repository.origin.BookRepository;
+import study.back.repository.jpa.BookFavoriteJpaRepository;
+import study.back.repository.jpa.BookJpaRepository;
 import study.back.repository.resultSet.FavoriteBookView;
 import study.back.repository.resultSet.Top10View;
 import study.back.service.BookFavoriteService;
@@ -21,11 +21,11 @@ import java.util.List;
 @Service
 @Transactional
 public class BookFavoriteServiceImpl implements BookFavoriteService {
-    private BookFavoriteRepositoryInterface repository;
+    private BookFavoriteRepository repository;
 
     @Autowired
-    public BookFavoriteServiceImpl(BookFavoriteRepository bookFavoriteRepository, BookRepository bookRepository, EntityManager em) {
-        this.repository = new BookFavoriteRepoImpl(bookFavoriteRepository, bookRepository, em);
+    public BookFavoriteServiceImpl(BookFavoriteJpaRepository bookFavoriteJpaRepository, BookJpaRepository bookJpaRepository, EntityManager em) {
+        this.repository = new BookFavoriteRepoImpl(bookFavoriteJpaRepository, bookJpaRepository, em);
     }
 
     @Override

@@ -5,9 +5,9 @@ import lombok.RequiredArgsConstructor;
 import study.back.entity.BookEntity;
 import study.back.entity.BookFavoriteEntity;
 import study.back.user.entity.UserEntity;
-import study.back.repository.BookFavoriteRepositoryInterface;
-import study.back.repository.origin.BookFavoriteRepository;
-import study.back.repository.origin.BookRepository;
+import study.back.repository.BookFavoriteRepository;
+import study.back.repository.jpa.BookFavoriteJpaRepository;
+import study.back.repository.jpa.BookJpaRepository;
 import study.back.repository.resultSet.FavoriteBookView;
 import study.back.repository.resultSet.Top10View;
 
@@ -15,35 +15,35 @@ import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
-public class BookFavoriteRepoImpl implements BookFavoriteRepositoryInterface {
-    private final BookFavoriteRepository bookFavoriteRepository;
-    private final BookRepository bookRepository;
+public class BookFavoriteRepoImpl implements BookFavoriteRepository {
+    private final BookFavoriteJpaRepository bookFavoriteJpaRepository;
+    private final BookJpaRepository bookJpaRepository;
     private final EntityManager em;
 
     @Override
     public Boolean existsBookFavoriteByUserAndIsbn(UserEntity user, String isbn) {
-        return bookFavoriteRepository.existsByUserAndIsbn(user, isbn);
+        return bookFavoriteJpaRepository.existsByUserAndIsbn(user, isbn);
     }
 
     @Override
     public Optional<BookEntity> findBookByIsbn(String isbn) {
-        return bookRepository.findById(isbn);
+        return bookJpaRepository.findById(isbn);
     }
 
     @Override
     public void saveBookFavorite(BookFavoriteEntity bookFavorite) {
-        bookFavoriteRepository.save(bookFavorite);
+        bookFavoriteJpaRepository.save(bookFavorite);
     }
 
     @Override
 
     public Optional<BookFavoriteEntity> findBookFavoriteByUserAndIsbn(UserEntity user, String isbn) {
-        return bookFavoriteRepository.findByUserAndIsbn(user, isbn);
+        return bookFavoriteJpaRepository.findByUserAndIsbn(user, isbn);
     }
 
     @Override
     public void deleteBookFavorite(BookFavoriteEntity bookFavorite) {
-        bookFavoriteRepository.delete(bookFavorite);
+        bookFavoriteJpaRepository.delete(bookFavorite);
     }
 
     @Override

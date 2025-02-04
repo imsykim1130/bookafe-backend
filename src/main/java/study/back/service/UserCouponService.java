@@ -9,7 +9,7 @@ import study.back.dto.response.ResponseDto;
 import study.back.entity.UserCouponEntity;
 import study.back.user.entity.UserEntity;
 import study.back.exception.NotFound.CouponNotFoundException;
-import study.back.repository.origin.UserCouponRepository;
+import study.back.repository.jpa.UserCouponJpaRepository;
 import study.back.user.repository.UserJpaRepository;
 import study.back.repository.resultSet.UserCouponView;
 
@@ -20,7 +20,7 @@ import java.util.Optional;
 @Transactional
 @RequiredArgsConstructor
 public class UserCouponService {
-    private final UserCouponRepository userCouponRepository;
+    private final UserCouponJpaRepository userCouponJpaRepository;
     private final UserJpaRepository userJpaRepository;
 
     public ResponseEntity<? super GetUserCouponListResponseDto> getCouponList(UserEntity user) {
@@ -29,7 +29,7 @@ public class UserCouponService {
             if(!userJpaRepository.existsById(user.getId())) {
                 return ResponseDto.notFoundUser();
             }
-            couponList = userCouponRepository.findAllByUser(user);
+            couponList = userCouponJpaRepository.findAllByUser(user);
         } catch (Exception e) {
             return ResponseDto.internalServerError();
         }
@@ -37,25 +37,25 @@ public class UserCouponService {
     }
 
     public UserCouponEntity updateUserCouponPending(Long userCouponId) {
-        Optional<UserCouponEntity> userCouponOpt = userCouponRepository.findById(userCouponId);
+        Optional<UserCouponEntity> userCouponOpt = userCouponJpaRepository.findById(userCouponId);
         if (userCouponOpt.isEmpty()) {
             throw new CouponNotFoundException();
         }
         UserCouponEntity userCoupon = userCouponOpt.get();
         userCoupon.updatePending();
-        return userCouponRepository.save(userCoupon);
+        return userCouponJpaRepository.save(userCoupon);
     }
 
     public void deleteUserCoupon(Long userCouponId) {
-        UserCouponEntity userCoupon = userCouponRepository.findById(userCouponId).orElse(null);
+        UserCouponEntity userCoupon = userCouponJpaRepository.findById(userCouponId).orElse(null);
         if (userCoupon == null) {
             throw new CouponNotFoundException();
         }
 
-        userCouponRepository.delete(userCoupon);
+        userCouponJpaRepository.delete(userCoupon);
     }
 
     public UserCouponEntity getUserCoupon(Long couponId) {
-        return userCouponRepository.findById(couponId).orElse(null);
+        return userCouponJpaRepository.findById(couponId).orElse(null);
     }
 }

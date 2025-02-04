@@ -9,7 +9,7 @@ import study.back.exception.BadRequest.NotDeliveringOrderException;
 import study.back.exception.NotFound.NotExistOrderException;
 import study.back.order.entity.OrderEntity;
 import study.back.order.entity.OrderStatus;
-import study.back.repository.DeliveryRepositoryInterface;
+import study.back.repository.DeliveryRepository;
 import study.back.repository.impl.DeliveryRepoImpl;
 import study.back.service.DeliveryService;
 
@@ -17,7 +17,7 @@ import study.back.service.DeliveryService;
 @Transactional
 @RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService {
-    private DeliveryRepositoryInterface repository;
+    private DeliveryRepository repository;
 
     public DeliveryServiceImpl(DeliveryRepoImpl repository) {
         this.repository = repository;

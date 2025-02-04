@@ -16,7 +16,7 @@ import study.back.order.entity.OrderStatus;
 import study.back.order.repository.OrderRepository;
 import study.back.order.repository.OrderRepositoryInterface;
 import study.back.order.repository.OrderRepoImpl;
-import study.back.repository.origin.*;
+import study.back.repository.jpa.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.dto.item.OrderBookView;
@@ -41,8 +41,8 @@ public class OrderServiceImpl implements OrderService {
     private static final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
     private OrderRepositoryInterface repository;
 
-    public OrderServiceImpl(OrderRepository orderRepository, UserJpaRepository userJpaRepository, PointRepository pointRepository, OrderBookRepository orderBookRepository, UserCouponRepository userCouponRepository, EntityManager em) {
-        this.repository = new OrderRepoImpl(orderRepository, userJpaRepository, pointRepository, orderBookRepository, userCouponRepository, em);
+    public OrderServiceImpl(OrderRepository orderRepository, UserJpaRepository userJpaRepository, PointJpaRepository pointJpaRepository, OrderBookJpaRepository orderBookJpaRepository, UserCouponJpaRepository userCouponJpaRepository, EntityManager em) {
+        this.repository = new OrderRepoImpl(orderRepository, userJpaRepository, pointJpaRepository, orderBookJpaRepository, userCouponJpaRepository, em);
     }
 
     // 주문 생성

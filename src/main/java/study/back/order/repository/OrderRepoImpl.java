@@ -8,7 +8,7 @@ import study.back.dto.item.OrderBookView;
 import study.back.entity.*;
 import study.back.order.entity.OrderEntity;
 import study.back.order.entity.OrderStatus;
-import study.back.repository.origin.*;
+import study.back.repository.jpa.*;
 import study.back.repository.resultSet.BookCartInfoView;
 import study.back.repository.resultSet.DeliveryStatusView;
 import study.back.repository.resultSet.OrderView;
@@ -24,9 +24,9 @@ import java.util.Optional;
 public class OrderRepoImpl implements OrderRepositoryInterface {
     private final OrderRepository orderRepository;
     private final UserJpaRepository userJpaRepository;
-    private final PointRepository pointRepository;
-    private final OrderBookRepository orderBookRepository;
-    private final UserCouponRepository userCouponRepository;
+    private final PointJpaRepository pointJpaRepository;
+    private final OrderBookJpaRepository orderBookJpaRepository;
+    private final UserCouponJpaRepository userCouponJpaRepository;
     private final EntityManager em;
 
 
@@ -128,7 +128,7 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
 
     @Override
     public PointEntity savePoint(PointEntity point) {
-        return pointRepository.save(point);
+        return pointJpaRepository.save(point);
     }
 
     // count, discountedPrice, isbn
@@ -141,7 +141,7 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
     @Override
     public Integer saveAllOrderBook(List<OrderBookEntity> orderBookList) {
         // todo: 쿼리 개수 확인 필요
-        List<OrderBookEntity> savedOrderBookList = orderBookRepository.saveAll(orderBookList);
+        List<OrderBookEntity> savedOrderBookList = orderBookJpaRepository.saveAll(orderBookList);
         return savedOrderBookList.size();
     }
 
@@ -156,7 +156,7 @@ public class OrderRepoImpl implements OrderRepositoryInterface {
     // 출력: Optional 유저 쿠폰 엔티티
     @Override
     public Optional<UserCouponEntity> findUserCouponByUserCouponId(Long userCouponId) {
-        return userCouponRepository.findById(userCouponId);
+        return userCouponJpaRepository.findById(userCouponId);
     }
 
     // 전체 보유 포인트
