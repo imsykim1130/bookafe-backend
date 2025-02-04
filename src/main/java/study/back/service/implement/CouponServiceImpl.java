@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.back.entity.CouponEntity;
+import study.back.exception.BadRequest.InvalidCouponNameException;
 import study.back.exception.errors.InternalServerErrorException;
 import study.back.repository.CouponRepository;
 import study.back.user.entity.UserEntity;
@@ -36,6 +37,10 @@ public class CouponServiceImpl implements CouponService {
     // 새로운 쿠폰 등록하기
     @Override
     public CouponEntity registerCoupon(String name, Integer discountPercent) {
+        if(name == null || name.isBlank()) {
+            throw new InvalidCouponNameException();
+        }
+
         CouponEntity newCoupon = CouponEntity.builder()
                 .name(name)
                 .discountPercent(discountPercent)
