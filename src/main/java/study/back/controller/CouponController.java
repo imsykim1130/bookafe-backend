@@ -23,7 +23,7 @@ public class CouponController {
         return ResponseEntity.ok(couponList);
     }
 
-    // 새로운 쿠폰 등록하기
+    // 새로운 쿠폰 등록하기(관리자)
     /**
      * [requestBody]
      {
@@ -37,4 +37,10 @@ public class CouponController {
         return ResponseEntity.ok().build();
     }
 
+    // 쿠폰 삭제하기(관리자)
+    @DeleteMapping("/{couponId}")
+    public ResponseEntity deleteCoupon(@PathVariable(name = "couponId") Long couponId) {
+        couponService.deleteCoupon(couponId);
+        return ResponseEntity.noContent().build(); // 204: 작업이 수행되었고 반환할 것이 없을 때
+    }
 }

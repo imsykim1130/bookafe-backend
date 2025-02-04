@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import study.back.entity.CouponEntity;
+import study.back.exception.errors.InternalServerErrorException;
 import study.back.repository.CouponRepository;
 import study.back.user.entity.UserEntity;
 import study.back.exception.NotFound.UserNotFoundException;
@@ -21,6 +22,7 @@ public class CouponServiceImpl implements CouponService {
     private final UserCouponJpaRepository userCouponJpaRepository;
     private final CouponRepository repository;
     private final UserJpaRepository userJpaRepository;
+    private final CouponRepository couponRepository;
 
     // 보유 쿠폰 리스트 가져오기
     @Override
@@ -40,5 +42,14 @@ public class CouponServiceImpl implements CouponService {
                 .build();
         CouponEntity savedCoupon = repository.saveCoupon(newCoupon);
         return savedCoupon;
+    }
+
+    // 쿠폰 삭제하기
+    @Override
+    public void deleteCoupon(Long couponId) {
+        Boolean isDeleteSuccess = couponRepository.deleteCoupon(couponId);
+        if(!isDeleteSuccess) {
+            throw new InternalServerErrorException("쿠폰 삭제 실패");
+        }
     }
 }

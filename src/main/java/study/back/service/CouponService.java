@@ -11,4 +11,7 @@ public interface CouponService {
 
     // 새로운 쿠폰 등록하기
     CouponEntity registerCoupon(String name, Integer discountPercent);
+
+    // 쿠폰 삭제하기
+    void deleteCoupon(Long couponId);
 }
