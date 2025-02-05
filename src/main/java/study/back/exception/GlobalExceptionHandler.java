@@ -96,11 +96,11 @@ public class GlobalExceptionHandler {
     }
 
     // path variable 없음
-    // MP
+    // MPV
     @ExceptionHandler(MissingPathVariableException.class)
     public ResponseEntity<ResponseDto> handleMissingPathVariableException(MissingPathVariableException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ResponseDto responseDto = ResponseDto.builder().code("MP").message(e.getMessage()).build();
+        ResponseDto responseDto = ResponseDto.builder().code("MPV").message(e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
