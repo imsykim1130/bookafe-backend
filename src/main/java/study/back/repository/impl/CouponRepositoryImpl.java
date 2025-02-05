@@ -7,6 +7,8 @@ import study.back.entity.CouponEntity;
 import study.back.repository.CouponRepository;
 import study.back.repository.jpa.CouponJpaRepository;
 
+import java.util.Optional;
+
 @Component
 @RequiredArgsConstructor
 public class CouponRepositoryImpl implements CouponRepository {
@@ -29,5 +31,17 @@ public class CouponRepositoryImpl implements CouponRepository {
             return true;
         }
         return false;
+    }
+
+    // 쿠폰 여부 확인
+    @Override
+    public Boolean existsCoupon(Long couponId) {
+        return couponJpaRepository.existsById(couponId);
+    }
+
+    // 쿠폰 id 로 쿠폰 찾기
+    @Override
+    public Optional<CouponEntity> findCoupon(Long couponId) {
+        return couponJpaRepository.findById(couponId);
     }
 }

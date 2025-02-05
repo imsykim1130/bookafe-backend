@@ -8,6 +8,6 @@ public class InvalidCouponNameException extends BadRequestException {
     }
 
     public InvalidCouponNameException() {
-        super("잘못된 쿠폰 이름입니다.");
+        super("ICN 잘못된 쿠폰 이름입니다.");
     }
 }

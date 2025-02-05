@@ -52,6 +52,7 @@ public class JwtFilter extends OncePerRequestFilter {
 
           // 서버 에러
         } catch(Exception e) {
+            e.printStackTrace();
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             ResponseDto responseDto = ResponseDto.builder().code("ISE").message("서버 에러").build();
             response.getWriter().write(objectMapper.writeValueAsString(responseDto));

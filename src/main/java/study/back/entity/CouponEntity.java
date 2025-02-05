@@ -22,4 +22,18 @@ public class CouponEntity {
         this.name = name;
         this.discountPercent = discountPercent;
     }
+
+
+    // business logic
+    // 쿠폰 이름 변경
+    public String modifyName(String newName) {
+        this.name = newName;
+        return this.name;
+    }
+
+    // 쿠폰 할인율 변경
+    public Integer modifyDiscountPercent(Integer newDiscountPercent) {
+        this.discountPercent = newDiscountPercent;
+        return this.discountPercent;
+    }
 }
