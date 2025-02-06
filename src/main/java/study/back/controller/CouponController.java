@@ -8,12 +8,14 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.dto.request.ModifyCouponRequestDto;
 import study.back.dto.request.RegisterCouponRequestDto;
+import study.back.dto.response.GetUserCouponListRequestDto;
 import study.back.dto.response.ResponseDto;
 import study.back.user.entity.UserEntity;
 import study.back.repository.resultSet.UserCouponView;
 import study.back.service.CouponService;
 
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +25,10 @@ public class CouponController {
 
     // 유저의 보유 쿠폰 가져오기
     @GetMapping("/all")
-    public ResponseEntity<?> getUserCouponList(@AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<GetUserCouponListRequestDto> getUserCouponList(@AuthenticationPrincipal UserEntity user) {
         List<UserCouponView> couponList = couponService.getCouponList(user);
-        return ResponseEntity.ok(couponList);
+        GetUserCouponListRequestDto requestDto = new GetUserCouponListRequestDto("SU", "유저 보유 쿠폰 가져오기 성공", couponList);
+        return ResponseEntity.ok(requestDto);
     }
 
     // 새로운 쿠폰 등록하기(관리자)
