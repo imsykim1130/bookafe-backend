@@ -44,13 +44,15 @@ public class UserEntity implements UserDetails {
                                       String address,
                                       String addressDetail,
                                       String phoneNumber,
-                                      RoleName role) {
+                                      RoleName role,
+                                      Long id) {
         LocalDateTime now = LocalDateTime.now();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         String encodedPassword = encoder.encode(password);
 
         UserEntity userEntity = new UserEntity();
+        userEntity.id = id;
         userEntity.email = email;
         userEntity.password = encodedPassword;
         userEntity.nickname = nickname;
