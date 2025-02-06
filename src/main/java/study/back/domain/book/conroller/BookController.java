@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.back.domain.book.dto.response.GetRecommendBookResponseDto;
 import study.back.service.BookService;
+import study.back.utils.item.TodayBookView;
 
 @RestController
 @RequiredArgsConstructor
@@ -38,7 +39,7 @@ public class BookController {
     // 추천책 가져오기
     @GetMapping("/book/recommend")
     public ResponseEntity<GetRecommendBookResponseDto> getRecommendBook() {
-        RecommendBookView result = bookService.getRecommendBook();
+        TodayBookView result = bookService.getRecommendBook();
         GetRecommendBookResponseDto responseDto =
                 new GetRecommendBookResponseDto("SU", "추천책 가져오기 성공", result);
         return ResponseEntity.ok(responseDto);

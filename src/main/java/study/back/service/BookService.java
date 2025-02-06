@@ -138,9 +138,8 @@ public class BookService {
     }
 
     // 추천 책 가져오기
-    public RecommendBookView getRecommendBook() {
+    public TodayBookView getRecommendBook() {
         // todo
-        RecommendBookView result = repository.findRecommendBook(recommendBookMaxCount);
-        return result;
+        return repository.findRecommendBook(recommendBookMaxCount);
     }
 }
