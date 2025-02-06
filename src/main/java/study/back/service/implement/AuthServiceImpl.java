@@ -5,19 +5,19 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import study.back.dto.item.UserItem;
-import study.back.dto.request.SignInRequestDto;
-import study.back.dto.request.SignUpRequestDto;
-import study.back.dto.response.SignInResponseDto;
-import study.back.dto.response.SignUpResponseDto;
+import study.back.utils.item.UserItem;
+import study.back.domain.user.dto.request.SignInRequestDto;
+import study.back.domain.user.dto.request.SignUpRequestDto;
+import study.back.domain.user.dto.response.SignInResponseDto;
+import study.back.domain.user.dto.response.SignUpResponseDto;
 import study.back.exception.Conflict.ConflictEmailException;
 import study.back.exception.Conflict.ConflictNicknameException;
 import study.back.exception.Conflict.ConflictUserException;
 import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.exception.errors.UnauthorizedException;
-import study.back.user.entity.RoleName;
-import study.back.user.entity.UserEntity;
-import study.back.user.repository.UserJpaRepository;
+import study.back.domain.user.entity.RoleName;
+import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.repository.UserJpaRepository;
 import study.back.security.JwtUtils;
 import study.back.service.AuthService;
 

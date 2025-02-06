@@ -12,7 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
-import study.back.dto.response.ResponseDto;
+import study.back.utils.ResponseDto;
 
 import java.io.IOException;
 

@@ -8,7 +8,7 @@ import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import study.back.dto.response.ResponseDto;
+import study.back.utils.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import study.back.exception.errors.*;

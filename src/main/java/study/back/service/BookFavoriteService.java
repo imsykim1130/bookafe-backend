@@ -1,8 +1,8 @@
 package study.back.service;
 
-import study.back.user.entity.UserEntity;
-import study.back.repository.resultSet.FavoriteBookView;
-import study.back.repository.resultSet.Top10View;
+import study.back.domain.user.entity.UserEntity;
+import study.back.utils.item.FavoriteBookView;
+import study.back.utils.item.Top10View;
 
 import java.util.List;
 

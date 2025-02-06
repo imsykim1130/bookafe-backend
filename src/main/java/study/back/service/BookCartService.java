@@ -1,7 +1,7 @@
 package study.back.service;
 
-import study.back.dto.item.CartBookView;
-import study.back.user.entity.UserEntity;
+import study.back.utils.item.CartBookView;
+import study.back.domain.user.entity.UserEntity;
 
 import java.util.List;
 

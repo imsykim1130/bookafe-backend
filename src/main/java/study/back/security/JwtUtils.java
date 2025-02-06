@@ -10,7 +10,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import study.back.user.entity.UserEntity;
+import study.back.domain.user.entity.UserEntity;
 
 import java.security.Key;
 import java.util.Date;

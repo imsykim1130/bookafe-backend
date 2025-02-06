@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import study.back.user.entity.UserEntity;
-import study.back.user.repository.UserJpaRepository;
+import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.repository.UserJpaRepository;
 
 import java.util.Optional;
 

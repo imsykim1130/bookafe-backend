@@ -25,7 +25,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
-import study.back.dto.response.ResponseDto;
+import study.back.utils.ResponseDto;
 import study.back.security.JwtFilter;
 import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;

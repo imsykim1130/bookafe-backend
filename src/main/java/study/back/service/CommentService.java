@@ -1,10 +1,10 @@
 package study.back.service;
 
-import study.back.dto.item.CommentItem;
-import study.back.dto.request.ModifyCommentRequestDto;
-import study.back.dto.request.PostCommentRequestDto;
-import study.back.entity.CommentEntity;
-import study.back.user.entity.UserEntity;
+import study.back.utils.item.CommentItem;
+import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
+import study.back.domain.comment.dto.request.PostCommentRequestDto;
+import study.back.domain.comment.entity.CommentEntity;
+import study.back.domain.user.entity.UserEntity;
 
 import java.util.List;
 

@@ -1,6 +1,6 @@
 package study.back.service;
 
-import study.back.repository.resultSet.RecommendBookView;
+import study.back.utils.item.RecommendBookView;
 
 import java.util.List;
 

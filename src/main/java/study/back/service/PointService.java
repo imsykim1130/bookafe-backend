@@ -1,8 +1,8 @@
 package study.back.service;
 
-import study.back.dto.response.GetPointLogResponse;
-import study.back.entity.PointEntity;
-import study.back.user.entity.UserEntity;
+import study.back.domain.point.dto.response.GetPointLogResponse;
+import study.back.domain.point.entity.PointEntity;
+import study.back.domain.user.entity.UserEntity;
 import java.time.LocalDateTime;
 
 public interface PointService {
