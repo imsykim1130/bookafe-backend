@@ -16,11 +16,17 @@ import java.util.List;
 public class GetCartBookListResponseDto extends ResponseDto {
     private List<BookCart> bookList = new ArrayList<>();
 
+    public GetCartBookListResponseDto(String code, String message, List<BookCart> bookList) {
+        super(code, message);
+        this.bookList = bookList;
+    }
+
     public static ResponseEntity<GetCartBookListResponseDto> success(List<BookCart> bookCartList) {
-        GetCartBookListResponseDto responseBody = new GetCartBookListResponseDto();
-        responseBody.code = "SU";
-        responseBody.message = "장바구니 책 리스트 가져오기 성공";
-        responseBody.bookList = bookCartList;
+        GetCartBookListResponseDto responseBody = new GetCartBookListResponseDto(
+                "SU",
+                "장바구니 책 가져오기 성공",
+                bookCartList
+        );
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }

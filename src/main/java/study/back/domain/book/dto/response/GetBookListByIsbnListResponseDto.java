@@ -14,11 +14,18 @@ import java.util.List;
 public class GetBookListByIsbnListResponseDto extends ResponseDto {
     private List<BookCart> bookList;
 
+    public GetBookListByIsbnListResponseDto(String code, String message, List<BookCart> bookList) {
+        super(code, message);
+        this.bookList = bookList;
+    }
+
     public static ResponseEntity<GetBookListByIsbnListResponseDto> success(List<BookCart> bookList) {
-        GetBookListByIsbnListResponseDto responseDto = new GetBookListByIsbnListResponseDto();
-        responseDto.code = "SU";
-        responseDto.message = "isbn 리스트로 책 정보 가져오기 성공";
-        responseDto.bookList = bookList;
+        GetBookListByIsbnListResponseDto responseDto = new GetBookListByIsbnListResponseDto(
+                "SU",
+                "isbn 리스트로 책 정보 가져오기 성공",
+                bookList
+        );
+
         return ResponseEntity.ok(responseDto);
     }
 

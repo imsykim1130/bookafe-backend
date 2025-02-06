@@ -18,13 +18,20 @@ public class GetBookListResponseDto extends ResponseDto {
     private Meta meta;
     private List<BookPrev> bookList;
 
+    public GetBookListResponseDto(String code, String message, Meta meta, List<BookPrev> bookList) {
+        super(code, message);
+        this.meta = meta;
+        this.bookList = bookList;
+    }
+
     public static ResponseEntity<GetBookListResponseDto> success(Meta meta, List<BookPrev> BookPrevList) {
 
-        GetBookListResponseDto responseBody = new GetBookListResponseDto();
-        responseBody.code = "SU";
-        responseBody.message = "책 검색 성공";
-        responseBody.meta = meta;
-        responseBody.bookList = BookPrevList;
+        GetBookListResponseDto responseBody = new GetBookListResponseDto(
+                "SU",
+                "책 검색 성공",
+                meta,
+                BookPrevList
+        );
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 

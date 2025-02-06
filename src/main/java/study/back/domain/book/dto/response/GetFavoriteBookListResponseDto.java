@@ -16,11 +16,17 @@ import java.util.List;
 public class GetFavoriteBookListResponseDto extends ResponseDto {
     List<BookPrev> bookList = new ArrayList<>();
 
+    public GetFavoriteBookListResponseDto(String code, String message, List<BookPrev> bookList) {
+        super(code, message);
+        this.bookList = bookList;
+    }
+
     public static ResponseEntity<GetFavoriteBookListResponseDto> success(List<BookPrev> bookPrevList) {
-        GetFavoriteBookListResponseDto responseBody = new GetFavoriteBookListResponseDto();
-        responseBody.code = "SU";
-        responseBody.message = "책 좋아요 리스트 가져오기 성공";
-        responseBody.bookList = bookPrevList;
+        GetFavoriteBookListResponseDto responseBody = new GetFavoriteBookListResponseDto(
+                "SU",
+                "책 좋아요 가져오기 성공",
+                bookPrevList
+        );
         return ResponseEntity.status(HttpStatus.OK).body(responseBody);
     }
 }
