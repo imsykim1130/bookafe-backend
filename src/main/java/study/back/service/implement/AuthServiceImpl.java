@@ -13,7 +13,7 @@ import study.back.dto.response.SignUpResponseDto;
 import study.back.exception.Conflict.ConflictEmailException;
 import study.back.exception.Conflict.ConflictNicknameException;
 import study.back.exception.Conflict.ConflictUserException;
-import study.back.exception.NotFound.UserNotFoundException;
+import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.exception.errors.UnauthorizedException;
 import study.back.user.entity.RoleName;
 import study.back.user.entity.UserEntity;

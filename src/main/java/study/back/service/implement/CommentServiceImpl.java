@@ -15,7 +15,7 @@ import study.back.exception.Forbidden.CommentAuthorMismatchException;
 import study.back.exception.NotFound.NoParentCommentException;
 import study.back.exception.NotFound.NotExistCommentException;
 import study.back.exception.NotFound.NotFoundBookException;
-import study.back.exception.NotFound.UserNotFoundException;
+import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.user.entity.UserEntity;
 import study.back.repository.CommentRepository;
 import study.back.repository.impl.CommentRepoImpl;
