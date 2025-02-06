@@ -51,7 +51,7 @@ public class CommentRepoImpl implements CommentRepository {
 
     @Override
     public Optional<UserEntity> findUserByCommentId(Long commentId) {
-        UserEntity user = em.createQuery("select c.user from CommentEntity c where c.id = :commentId", UserEntity.class)
+        UserEntity user = em.createQuery("select u from CommentEntity c join UserEntity u on u.id = c.userId where c.id = :commentId", UserEntity.class)
                 .setParameter("commentId", commentId)
                 .getSingleResult();
         return Optional.ofNullable(user);
