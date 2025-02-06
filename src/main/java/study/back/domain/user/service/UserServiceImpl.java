@@ -5,11 +5,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.domain.file.FileService;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserOrderInfoResponseDto;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.service.FileService;
 import study.back.domain.user.repository.UserRepository;
 
 import java.time.format.DateTimeFormatter;

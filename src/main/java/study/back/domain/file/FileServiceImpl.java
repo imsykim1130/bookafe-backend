@@ -1,10 +1,9 @@
-package study.back.service.implement;
+package study.back.domain.file;
 
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.exception.InternalServerError.UploadFailException;
-import study.back.service.FileService;
 
 import java.io.File;
 import java.io.IOException;

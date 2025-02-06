@@ -1,4 +1,4 @@
-package study.back.service;
+package study.back.domain.file;
 
 import org.springframework.web.multipart.MultipartFile;
 
