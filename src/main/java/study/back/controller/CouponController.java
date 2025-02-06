@@ -23,7 +23,7 @@ public class CouponController {
 
     // 유저의 보유 쿠폰 가져오기
     @GetMapping("/all")
-    public ResponseEntity<?> getCouponList(@AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<?> getUserCouponList(@AuthenticationPrincipal UserEntity user) {
         List<UserCouponView> couponList = couponService.getCouponList(user);
         return ResponseEntity.ok(couponList);
     }
