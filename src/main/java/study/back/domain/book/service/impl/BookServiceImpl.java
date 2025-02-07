@@ -58,15 +58,15 @@ public class BookServiceImpl implements BookService {
     @Override
     public ResponseEntity<? super GetBookListResponseDto> getBookList(String query,
                                                                       String sort,
-                                                                      String page,
-                                                                      String size,
+                                                                      Integer page,
+                                                                      Integer size,
                                                                       String target) {
         // 카카오 api 를 통해 받은 데이터 형태
         OriginBookItem result;
 
         try {
             // kakao api 에서 책 정보 받기
-            result = kakaoService.getBookDataFromKakaoApi(query, sort, page, size, target);
+            result = kakaoService.getBookDataFromKakaoApi(query, sort, page.toString(), size.toString(), target);
 
         }
         catch (Exception e) {

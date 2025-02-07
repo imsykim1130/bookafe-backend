@@ -10,8 +10,8 @@ import study.back.utils.item.*;
 public interface BookService {
     ResponseEntity<? super GetBookListResponseDto> getBookList(String query,
                                                                String sort,
-                                                               String page,
-                                                               String size,
+                                                               Integer page,
+                                                               Integer size,
                                                                String target);
 
     ResponseEntity<GetBookDetailResponseDto> getBookDetail (String isbn);

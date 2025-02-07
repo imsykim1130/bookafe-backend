@@ -22,11 +22,12 @@ public class BookController {
     // size : 한 페이지 당 검색 결과 개수. 기본 10개
     // target : 책 제목, 저자, 춢판사
     @GetMapping("/books/search")
-    public ResponseEntity<?> getBookSearchList(@RequestParam(name = "query") String query,
-                                     @RequestParam(name = "sort") String sort,
-                                     @RequestParam(name = "page") String page,
-                                     @RequestParam(name = "size", required = false) String size,
-                                     @RequestParam(name = "target") String target
+    public ResponseEntity<?> getBookSearchList(
+            @RequestParam(name = "query") String query,
+            @RequestParam(name = "sort", defaultValue = "accuracy", required = false) String sort,
+            @RequestParam(name = "page", defaultValue = "0", required = false) Integer page,
+            @RequestParam(name = "size", required = false) Integer size,
+            @RequestParam(name = "target", defaultValue = "title", required = false) String target
                                      ) {
         return bookService.getBookList(query, sort, page, size, target);
     }
