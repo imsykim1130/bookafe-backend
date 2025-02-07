@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.back.domain.book.dto.response.GetBookDetailResponseDto;
+import study.back.domain.book.dto.response.GetBookListResponseDto;
 import study.back.domain.book.dto.response.GetRecommendBookResponseDto;
 import study.back.domain.book.service.BookService;
 import study.back.utils.item.TodayBookView;
@@ -22,11 +23,11 @@ public class BookController {
     // size : 한 페이지 당 검색 결과 개수. 기본 10개
     // target : 책 제목, 저자, 춢판사
     @GetMapping("/books/search")
-    public ResponseEntity<?> getBookSearchList(
+    public ResponseEntity<GetBookListResponseDto> getBookSearchList(
             @RequestParam(name = "query") String query,
             @RequestParam(name = "sort", defaultValue = "accuracy", required = false) String sort,
             @RequestParam(name = "page", defaultValue = "0", required = false) Integer page,
-            @RequestParam(name = "size", required = false) Integer size,
+            @RequestParam(name = "size", defaultValue = "10", required = false) Integer size,
             @RequestParam(name = "target", defaultValue = "title", required = false) String target
                                      ) {
         return bookService.getBookList(query, sort, page, size, target);

@@ -8,7 +8,7 @@ import study.back.utils.item.*;
 
 
 public interface BookService {
-    ResponseEntity<? super GetBookListResponseDto> getBookList(String query,
+    ResponseEntity<GetBookListResponseDto> getBookList(String query,
                                                                String sort,
                                                                Integer page,
                                                                Integer size,

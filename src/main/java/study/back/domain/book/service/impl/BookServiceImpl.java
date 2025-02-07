@@ -56,7 +56,7 @@ public class BookServiceImpl implements BookService {
 
     // 책 검색 리스트 가져오기
     @Override
-    public ResponseEntity<? super GetBookListResponseDto> getBookList(String query,
+    public ResponseEntity<GetBookListResponseDto> getBookList(String query,
                                                                       String sort,
                                                                       Integer page,
                                                                       Integer size,
@@ -64,28 +64,16 @@ public class BookServiceImpl implements BookService {
         // 카카오 api 를 통해 받은 데이터 형태
         OriginBookItem result;
 
-        try {
-            // kakao api 에서 책 정보 받기
-            result = kakaoService.getBookDataFromKakaoApi(query, sort, page.toString(), size.toString(), target);
 
-        }
-        catch (Exception e) {
-            // 서버 에러
-            e.printStackTrace();
-            return ResponseDto.internalServerError();
-        }
-        // 가져온 데이터 db 에 저장하기
-        List<BookEntity> bookEntityList = result.getDocuments()
+        // kakao api 에서 책 정보 받기
+        result = kakaoService.getBookDataFromKakaoApi(query, sort, page.toString(), size.toString(), target);
+
+        List<BookSearchItem> bookSearchList = result.getDocuments()
                 .stream()
-                .map(bookItem -> BookEntity.toEntity(bookItem))
+                .map(BookSearchItem::toBookSearchItem)
                 .toList();
 
-        // 검색 성공
-        List<BookPrev> bookPrevList = bookEntityList
-                .stream()
-                .map(BookPrev::createBookPrev)
-                .toList();
-        return GetBookListResponseDto.success(result.getMeta(), bookPrevList);
+        return GetBookListResponseDto.success(result.getMeta(), bookSearchList);
     }
 
 
