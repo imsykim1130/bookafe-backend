@@ -14,6 +14,8 @@ import study.back.exception.InternalServerError.KakaoAuthorizationException;
 import study.back.domain.book.repository.BookRepository;
 import study.back.domain.book.repository.BookRepositoryImpl;
 import study.back.domain.book.repository.BookJpaRepository;
+import study.back.exception.NotFound.NotFoundBookException;
+import study.back.exception.errors.InternalServerErrorException;
 import study.back.utils.ResponseDto;
 import study.back.utils.item.*;
 
@@ -97,6 +99,7 @@ public class BookService {
     public BookEntity getBookIfExistOrElseNull(String isbn) {
         BookEntity book = null;
         Optional<BookEntity> bookOptional = repository.findBookByIsbn(isbn);
+
         if (bookOptional.isPresent()) {
             book = bookOptional.get();
         }
@@ -110,29 +113,26 @@ public class BookService {
                 repository.saveBook(book);
             }
         }
+
         return book;
     }
 
     // 책 상세 정보 가져오기
-    public ResponseEntity<? super GetBookDetailResponseDto> getBookDetail (String isbn) {
+    public ResponseEntity<GetBookDetailResponseDto> getBookDetail (String isbn) {
         BookDetail bookDetail = null;
-        
-        try {
-            // 책 유무 확인
-            BookEntity book = getBookIfExistOrElseNull(isbn);
 
-            if(book != null) {
-                bookDetail = BookDetail.createBookDetail(book);
-            }
-            // 두 경우 다 책을 찾을 수 없을 때
-            if(bookDetail == null) {
-                return GetBookDetailResponseDto.notFoundBook();
-            }
-        } catch (Exception e) {
-            // 서버 에러
-            e.printStackTrace();
-            return ResponseDto.internalServerError();
+        // 책 유무 확인
+        BookEntity book = getBookIfExistOrElseNull(isbn);
+
+        if(book != null) {
+            bookDetail = BookDetail.createBookDetail(book);
         }
+
+        // db, 카카오 api 두 경우 다 책을 찾을 수 없을 때
+        if(bookDetail == null) {
+            throw new NotFoundBookException();
+        }
+
         // 책 정보 찾기 성공
         return GetBookDetailResponseDto.success(bookDetail);
     }

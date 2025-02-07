@@ -114,11 +114,11 @@ public class GlobalExceptionHandler {
     }
 
     // 500 Internal Server Error
-    // IS
+    // ISE
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ResponseDto> handleInternalServerErrorException(InternalServerErrorException e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ResponseDto responseDto = ResponseDto.builder().code("IS").message(e.getMessage()).build();
+        ResponseDto responseDto = ResponseDto.builder().code("ISE").message(e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 }

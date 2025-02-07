@@ -3,6 +3,7 @@ package study.back.domain.book.conroller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import study.back.domain.book.dto.response.GetBookDetailResponseDto;
 import study.back.domain.book.dto.response.GetRecommendBookResponseDto;
 import study.back.service.BookService;
 import study.back.utils.item.TodayBookView;
@@ -32,7 +33,7 @@ public class BookController {
 
     // 책 상세정보
     @GetMapping("/book/detail/{isbn}")
-    public ResponseEntity<?> getBookDetail(@PathVariable(name = "isbn") String isbn) {
+    public ResponseEntity<GetBookDetailResponseDto> getBookDetail(@PathVariable(name = "isbn") String isbn) {
         return bookService.getBookDetail(isbn);
     }
 
