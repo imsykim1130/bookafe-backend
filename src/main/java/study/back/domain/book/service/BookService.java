@@ -1,4 +1,4 @@
-package study.back.service;
+package study.back.domain.book.service;
 
 import jakarta.persistence.EntityManager;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import study.back.domain.book.repository.BookRepository;
 import study.back.domain.book.repository.BookRepositoryImpl;
 import study.back.domain.book.repository.BookJpaRepository;
 import study.back.exception.NotFound.NotFoundBookException;
-import study.back.exception.errors.InternalServerErrorException;
 import study.back.utils.ResponseDto;
 import study.back.utils.item.*;
 

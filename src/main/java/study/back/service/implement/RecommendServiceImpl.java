@@ -12,7 +12,7 @@ import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.book.repository.BookJpaRepository;
 import study.back.domain.book.repository.RecommendBookJpaRepository;
 import study.back.utils.item.RecommendBookView;
-import study.back.service.BookService;
+import study.back.domain.book.service.BookService;
 import study.back.service.RecommendBookService;
 
 import java.util.List;

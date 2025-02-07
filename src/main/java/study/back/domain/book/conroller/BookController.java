@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.back.domain.book.dto.response.GetBookDetailResponseDto;
 import study.back.domain.book.dto.response.GetRecommendBookResponseDto;
-import study.back.service.BookService;
+import study.back.domain.book.service.BookService;
 import study.back.utils.item.TodayBookView;
 
 @RestController

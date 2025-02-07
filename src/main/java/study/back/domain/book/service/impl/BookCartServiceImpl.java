@@ -1,4 +1,4 @@
-package study.back.service.implement;
+package study.back.domain.book.service.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -7,13 +7,13 @@ import study.back.utils.item.CartBookView;
 import study.back.domain.book.entity.BookCartEntity;
 import study.back.domain.book.entity.BookEntity;
 import study.back.exception.NotFound.NotFoundBookException;
-import study.back.service.BookService;
+import study.back.domain.book.service.BookService;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.book.repository.BookCartRepository;
 import study.back.domain.book.repository.BookCartRepoImpl;
 import study.back.domain.book.repository.BookCartJpaRepository;
 import study.back.domain.book.repository.BookJpaRepository;
-import study.back.service.BookCartService;
+import study.back.domain.book.service.BookCartService;
 
 import java.util.List;
 

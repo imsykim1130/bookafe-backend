@@ -1,4 +1,4 @@
-package study.back.service.implement;
+package study.back.domain.book.service.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
@@ -14,7 +14,7 @@ import study.back.domain.book.repository.BookFavoriteJpaRepository;
 import study.back.domain.book.repository.BookJpaRepository;
 import study.back.utils.item.FavoriteBookView;
 import study.back.utils.item.Top10View;
-import study.back.service.BookFavoriteService;
+import study.back.domain.book.service.BookFavoriteService;
 
 import java.util.List;
 

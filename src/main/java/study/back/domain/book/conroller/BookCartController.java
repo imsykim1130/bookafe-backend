@@ -8,7 +8,7 @@ import study.back.utils.item.CartBookView;
 import study.back.domain.book.dto.request.ChangeCountRequestDto;
 import study.back.domain.book.dto.request.DeleteCartBookListRequestDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.service.BookCartService;
+import study.back.domain.book.service.BookCartService;
 
 import java.util.List;
 

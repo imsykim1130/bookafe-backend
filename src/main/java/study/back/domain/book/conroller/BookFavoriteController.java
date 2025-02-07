@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.FavoriteBookView;
 import study.back.utils.item.Top10View;
-import study.back.service.BookFavoriteService;
+import study.back.domain.book.service.BookFavoriteService;
 
 import java.util.List;
 
