@@ -24,7 +24,7 @@ public class BookCartServiceImpl implements BookCartService {
     private final BookCartRepository repository;
     private final BookService bookService;
 
-    public BookCartServiceImpl(BookJpaRepository bookJpaRepository, BookCartJpaRepository bookCartJpaRepository, EntityManager em, BookService bookService) {
+    public BookCartServiceImpl(BookJpaRepository bookJpaRepository, BookCartJpaRepository bookCartJpaRepository, EntityManager em, BookServiceImpl bookService) {
         this.repository = new BookCartRepoImpl(bookJpaRepository, bookCartJpaRepository, em);
         this.bookService = bookService;
     }
