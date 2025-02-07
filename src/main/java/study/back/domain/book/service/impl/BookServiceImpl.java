@@ -11,8 +11,8 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.BookRepository;
 import study.back.domain.book.service.BookService;
 import study.back.domain.book.service.KakaoService;
+import study.back.exception.BadRequest.InvalidQueryException;
 import study.back.exception.NotFound.NotFoundBookException;
-import study.back.utils.ResponseDto;
 import study.back.utils.item.*;
 
 import java.util.List;
@@ -56,11 +56,16 @@ public class BookServiceImpl implements BookService {
 
     // 책 검색 리스트 가져오기
     @Override
-    public ResponseEntity<GetBookListResponseDto> getBookList(String query,
-                                                                      String sort,
-                                                                      Integer page,
-                                                                      Integer size,
-                                                                      String target) {
+    public GetBookListResponseDto getBookList(String query,
+                                              String sort,
+                                              Integer page,
+                                              Integer size,
+                                              String target) {
+        // 검색어 여부 검증
+        if(query.isBlank()) {
+            throw new InvalidQueryException();
+        }
+
         // 카카오 api 를 통해 받은 데이터 형태
         OriginBookItem result;
 
@@ -73,7 +78,7 @@ public class BookServiceImpl implements BookService {
                 .map(BookSearchItem::toBookSearchItem)
                 .toList();
 
-        return GetBookListResponseDto.success(result.getMeta(), bookSearchList);
+        return new GetBookListResponseDto(result.getMeta(), bookSearchList);
     }
 
 
