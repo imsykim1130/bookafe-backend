@@ -1,7 +1,10 @@
-package study.back.domain.book.repository;
+package study.back.domain.book.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import study.back.domain.book.repository.BookCartRepository;
+import study.back.domain.book.repository.jpa.BookCartJpaRepository;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.utils.item.CartBookView;
 import study.back.domain.book.entity.BookCartEntity;
 import study.back.domain.book.entity.BookEntity;

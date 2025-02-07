@@ -7,7 +7,7 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.book.repository.BookJpaRepository;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 
 import java.util.List;
 import java.util.Optional;

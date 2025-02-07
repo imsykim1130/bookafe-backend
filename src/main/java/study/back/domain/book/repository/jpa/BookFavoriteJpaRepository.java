@@ -1,4 +1,4 @@
-package study.back.domain.book.repository;
+package study.back.domain.book.repository.jpa;
 
 
 import org.springframework.data.jpa.repository.JpaRepository;

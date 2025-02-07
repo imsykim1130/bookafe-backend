@@ -10,9 +10,9 @@ import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.book.service.BookService;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.book.repository.BookCartRepository;
-import study.back.domain.book.repository.BookCartRepoImpl;
-import study.back.domain.book.repository.BookCartJpaRepository;
-import study.back.domain.book.repository.BookJpaRepository;
+import study.back.domain.book.repository.impl.BookCartRepoImpl;
+import study.back.domain.book.repository.jpa.BookCartJpaRepository;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.book.service.BookCartService;
 
 import java.util.List;

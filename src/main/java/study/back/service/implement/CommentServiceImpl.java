@@ -19,7 +19,7 @@ import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.comment.repository.CommentRepository;
 import study.back.domain.comment.repository.CommentRepoImpl;
-import study.back.domain.book.repository.BookJpaRepository;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.comment.repository.CommentJpaRepository;
 import study.back.service.CommentService;
 

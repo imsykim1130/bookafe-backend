@@ -1,10 +1,12 @@
-package study.back.domain.book.repository;
+package study.back.domain.book.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.RecommendBookEntity;
+import study.back.domain.book.repository.BookRepository;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.utils.item.TodayBookView;
 
 import java.util.Optional;

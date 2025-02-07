@@ -1,9 +1,12 @@
-package study.back.domain.book.repository;
+package study.back.domain.book.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
+import study.back.domain.book.repository.BookFavoriteRepository;
+import study.back.domain.book.repository.jpa.BookFavoriteJpaRepository;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.FavoriteBookView;
 import study.back.utils.item.Top10View;
