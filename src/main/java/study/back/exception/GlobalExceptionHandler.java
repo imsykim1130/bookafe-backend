@@ -121,4 +121,13 @@ public class GlobalExceptionHandler {
         ResponseDto responseDto = ResponseDto.builder().code("ISE").message(e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
+
+    // 그 외 런타임 오류
+    // RT
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ResponseDto> handleRuntimeException(RuntimeException e) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ResponseDto responseDto = ResponseDto.builder().code("RT").message(e.getMessage()).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
 }

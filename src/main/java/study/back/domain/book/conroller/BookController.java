@@ -5,7 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.back.domain.book.dto.response.GetBookDetailResponseDto;
 import study.back.domain.book.dto.response.GetBookListResponseDto;
-import study.back.domain.book.dto.response.GetRecommendBookResponseDto;
+import study.back.domain.book.dto.response.GetTodayBookResponseDto;
 import study.back.domain.book.service.BookService;
 import study.back.utils.item.TodayBookView;
 
@@ -30,7 +30,8 @@ public class BookController {
             @RequestParam(name = "size", defaultValue = "10", required = false) Integer size,
             @RequestParam(name = "target", defaultValue = "title", required = false) String target
                                      ) {
-        return bookService.getBookList(query, sort, page, size, target);
+        GetBookListResponseDto responseBody = bookService.getBookList(query, sort, page, size, target);
+        return ResponseEntity.ok(responseBody);
     }
 
     // 책 상세정보
@@ -39,12 +40,12 @@ public class BookController {
         return bookService.getBookDetail(isbn);
     }
 
-    // 추천책 가져오기
-    @GetMapping("/book/recommend")
-    public ResponseEntity<GetRecommendBookResponseDto> getRecommendBook() {
+    // 오늘의 책 가져오기
+    @GetMapping("/book/today")
+    public ResponseEntity<GetTodayBookResponseDto> getRecommendBook() {
         TodayBookView result = bookService.getRecommendBook();
-        GetRecommendBookResponseDto responseDto =
-                new GetRecommendBookResponseDto("SU", "추천책 가져오기 성공", result);
+        GetTodayBookResponseDto responseDto =
+                new GetTodayBookResponseDto(result);
         return ResponseEntity.ok(responseDto);
     }
 

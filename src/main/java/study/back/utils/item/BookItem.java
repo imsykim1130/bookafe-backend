@@ -1,8 +1,12 @@
 package study.back.utils.item;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
+@Builder
+@AllArgsConstructor
 public class BookItem {
     private String[] authors;
     private String[] translators;
