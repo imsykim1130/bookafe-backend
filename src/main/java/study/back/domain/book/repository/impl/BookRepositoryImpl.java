@@ -3,6 +3,7 @@ package study.back.domain.book.repository.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.RecommendBookEntity;
 import study.back.domain.book.repository.BookRepository;
@@ -12,6 +13,7 @@ import study.back.utils.item.TodayBookView;
 import java.util.Optional;
 
 @RequiredArgsConstructor
+@Repository
 public class BookRepositoryImpl implements BookRepository {
     private final BookJpaRepository bookJpaRepository;
     private final EntityManager em;
