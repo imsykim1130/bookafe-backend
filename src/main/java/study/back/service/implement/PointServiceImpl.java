@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import study.back.domain.point.dto.response.GetPointLogResponse;
 import study.back.domain.point.entity.PointEntity;
+import study.back.domain.point.entity.PointType;
 import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.domain.user.entity.UserEntity;
 import study.back.exception.BadRequest.NotEnoughPointsException;
@@ -64,7 +65,7 @@ public class PointServiceImpl implements PointService {
             // 포인트 차감 로그 저장
             point = PointEntity.builder()
                     .user(user)
-                    .type("사용")
+                    .type(PointType.USE)
                     .pointDatetime(dateTime)
                     .changedPoint(points)
                     .build();
@@ -75,7 +76,7 @@ public class PointServiceImpl implements PointService {
             // 포인트 적립 로그 저장
             point = PointEntity.builder()
                     .user(user)
-                    .type("적립")
+                    .type(PointType.EARN)
                     .pointDatetime(dateTime)
                     .changedPoint(points)
                     .build();
@@ -86,7 +87,7 @@ public class PointServiceImpl implements PointService {
 
     // 포인트 내역 불러오기
     @Override
-    public GetPointLogResponse getPointList(UserEntity user, LocalDateTime start, LocalDateTime end, int pageNumber, String type) {
+    public GetPointLogResponse getPointList(UserEntity user, LocalDateTime start, LocalDateTime end, int pageNumber, PointType type) {
         Page<PointEntity> pointLogPage;
         List<PointLogView> pointLogViews;
 
@@ -95,10 +96,14 @@ public class PointServiceImpl implements PointService {
         }
 
         // 페이지네이션
-        // 한 페이지당 ? 개의 데이터 반환
+        // 한 페이지당 10 개의 데이터 반환
         PageRequest pageRequest = PageRequest.of(pageNumber, 10);
 
-        if(type.equals("전체")) {
+        // 시간에 상관없이 날짜로만 필터링 하기 위해 변경
+        start = start.withHour(0).withMinute(0).withSecond(0).withNano(0);
+        end = end.plusDays(1).withHour(0).withMinute(0).withSecond(0).withNano(0);
+
+        if(type.getText().equals("전체")) {
             pointLogPage = pointJpaRepository.findAll(user, start, end, pageRequest);
 
         } else {
@@ -106,7 +111,7 @@ public class PointServiceImpl implements PointService {
         }
 
         pointLogViews = pointLogPage.stream().map(pointEntity -> {
-            return new PointLogView(pointEntity.getType(), pointEntity.getChangedPoint());
+            return new PointLogView(pointEntity.getType().getText(), pointEntity.getChangedPoint());
         }).toList();
 
         return new GetPointLogResponse(pointLogPage.isFirst(), pointLogPage.isLast(), pointLogViews);

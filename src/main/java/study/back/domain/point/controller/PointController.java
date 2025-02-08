@@ -1,15 +1,16 @@
 package study.back.domain.point.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.domain.point.dto.response.GetPointLogResponse;
+import study.back.domain.point.entity.PointType;
 import study.back.domain.user.entity.UserEntity;
 import study.back.service.PointService;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,16 +28,13 @@ public class PointController {
     // 포인트 변경 내역 가져오기
     @GetMapping("/point/history")
     public ResponseEntity<GetPointLogResponse> getHistoryPoint(@AuthenticationPrincipal UserEntity user,
-                                                               @RequestParam(name = "start") String start,
-                                                               @RequestParam(name = "end") String end,
+                                                               @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
+                                                               @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
                                                                @RequestParam(name = "pageNumber") int pageNumber,
-                                                               @RequestParam(name = "type") String type
+                                                               @RequestParam(name = "type") PointType type
     ) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-        LocalDateTime startDatetime = LocalDateTime.parse(start, formatter);
-        LocalDateTime endDatetime = LocalDateTime.parse(end, formatter);
 
-        GetPointLogResponse result = pointService.getPointList(user, startDatetime, endDatetime, pageNumber, type);
+        GetPointLogResponse result = pointService.getPointList(user, start, end, pageNumber, type);
 
         return ResponseEntity.ok(result);
     }

@@ -10,6 +10,7 @@ import study.back.domain.coupon.repository.UserCouponJpaRepository;
 import study.back.domain.order.entity.OrderBookEntity;
 import study.back.domain.order.repository.OrderBookJpaRepository;
 import study.back.domain.point.entity.PointEntity;
+import study.back.domain.point.entity.PointType;
 import study.back.domain.point.repository.PointJpaRepository;
 import study.back.domain.order.dto.request.CreateOrderRequestDto;
 import study.back.domain.order.dto.response.GetDeliveryStatusListResponse;
@@ -113,7 +114,7 @@ public class OrderServiceImpl implements OrderService {
                     .pointDatetime(now)
                     .changedPoint(-requestDto.getUsedPoint())
                     .user(user)
-                    .type("사용")
+                    .type(PointType.USE)
                     .build();
             repository.savePoint(point);
 

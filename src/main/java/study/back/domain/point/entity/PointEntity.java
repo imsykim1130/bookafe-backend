@@ -17,14 +17,15 @@ public class PointEntity {
     private Long id;
     private Integer changedPoint;
     private LocalDateTime pointDatetime;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private PointType type;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private UserEntity user;
 
     @Builder
-    public PointEntity(int changedPoint, String type, LocalDateTime pointDatetime, UserEntity user) {
+    public PointEntity(int changedPoint, PointType type, LocalDateTime pointDatetime, UserEntity user) {
         this.changedPoint = changedPoint;
         this.pointDatetime = pointDatetime;
         this.type = type;
