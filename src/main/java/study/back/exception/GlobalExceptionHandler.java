@@ -1,5 +1,6 @@
 package study.back.exception;
 
+import org.springframework.context.MessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -7,13 +8,15 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import study.back.utils.ResponseDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import study.back.exception.errors.*;
 
-import java.util.Objects;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -75,23 +78,32 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(responseDto);
     }
 
-    // 유효성 검증 실패
-    // default MANV
+    // @requestBody validation 실패
+    // default RBVF
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
-        FieldError fieldError = e.getBindingResult().getFieldError();
-
-        String message;
-        if(Objects.isNull(fieldError)) {
-            message = "MANV 유효성 검증 실패";
-        } else {
-            message = fieldError.getDefaultMessage() != null ? fieldError.getDefaultMessage() : "MANV 유효성 검증 실패" ; // validation 에서 설정한 message
-        }
-
-        String code = message.split(" ")[0];
+        // 모든 검증 메시지를 문자열로 변환하여 합치기
+        String message = e.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage) // 각 필드의 검증 실패 메시지 가져오기
+                .collect(Collectors.joining(", ")); // 콤마(,)로 메시지 합치기
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        ResponseDto responseDto = ResponseDto.builder().code("RBVF").message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // @requestParam validation 실패
+    // 스프링부트 3.x.x 부터 해당 예외로 변경됨. 2.x.x 는 ConstraintViolationException 예외 발생.
+    @ExceptionHandler(HandlerMethodValidationException.class)
+    public ResponseEntity<ResponseDto> handleMethodValidationException(HandlerMethodValidationException e) {
+        // 모든 검증 메시지를 문자열로 변환하여 합치기
+        String message = e.getAllValidationResults().stream()
+                .flatMap(result -> result.getResolvableErrors().stream())
+                .map(MessageSourceResolvable::getDefaultMessage)  // 각 필드의 검증 실패 메시지 가져오기
+                .collect(Collectors.joining(", "));  // 콤마(,)로 메시지 합치기
+
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ResponseDto responseDto = ResponseDto.builder().code("RPVF").message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
