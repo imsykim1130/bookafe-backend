@@ -10,8 +10,8 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 public class GetPointLogResponse extends ResponseDto {
-    private boolean isFirst;
-    private boolean isLast;
+    private Boolean isFirst;
+    private Boolean isLast;
     private List<PointLogView> pointLogList;
 
     public GetPointLogResponse(boolean isFirst, boolean isLast, List<PointLogView> pointLogList) {
