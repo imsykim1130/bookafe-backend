@@ -1,5 +1,6 @@
 package study.back.domain.point.controller;
 
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
@@ -30,8 +31,8 @@ public class PointController {
     public ResponseEntity<GetPointLogResponse> getHistoryPoint(@AuthenticationPrincipal UserEntity user,
                                                                @RequestParam(name = "start") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start,
                                                                @RequestParam(name = "end") @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end,
-                                                               @RequestParam(name = "pageNumber") int pageNumber,
-                                                               @RequestParam(name = "type") PointType type
+                                                               @RequestParam(name = "pageNumber") @Min(value = 0, message = "IPN 페이지는 0 이상이어야 합니다.") int pageNumber,
+                                                               @RequestParam(name = "type", defaultValue = "전체") PointType type
     ) {
 
         GetPointLogResponse result = pointService.getPointList(user, start, end, pageNumber, type);
