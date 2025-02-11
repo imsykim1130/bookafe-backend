@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.Builder;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.UserEntity;
+import study.back.utils.item.UserOrderInfo;
 
 import java.util.List;
 
@@ -106,5 +107,38 @@ public class UserRepositoryImpl implements UserRepository {
         return em.createQuery("delete from UserEntity u where u.id = :id")
                 .setParameter("id", user.getId())
                 .executeUpdate();
+    }
+
+    // 유저 기본 배송정보 가져오기
+    @Override
+    public UserOrderInfo findUserDefaultOrderInfo(UserEntity user) {
+//        return em.createQuery("select a.name as name, " +
+//                        "case " +
+//                        "when a.id = u.defaultAddressId then true " +
+//                        "else false end as isDefault, " +
+//                        "a.receiver as receiver, " +
+//                        "a.receiverPhoneNumber as receiverPhoneNumber, " +
+//                        "a.address as address, " +
+//                        "a.addressDetail as addressDetail " +
+//                        "from AddressEntity a " +
+//                        "join UserEntity u on u.id = a.userId " +
+//                        "where a.userId = :userId", UserOrderInfo.class)
+//                .setParameter("userId", userId)
+//                .getSingleResult();
+        if(user.getDefaultAddressId() == null) {
+            return null;
+        }
+
+        return em.createQuery("select a.name as name, " +
+                        "cast((1) as boolean ) as isDefault, " +
+                        "a.receiver as receiver, " +
+                        "a.receiverPhoneNumber as receiverPhoneNumber, " +
+                        "a.address as address, " +
+                        "a.addressDetail as addressDetail " +
+                        "from DeliveryInfoEntity a " +
+                        "join UserEntity u on u.id = a.userId " +
+                        "where a.userId = :userId and a.id = u.defaultAddressId", UserOrderInfo.class)
+                .setParameter("userId", user.getId())
+                .getSingleResult();
     }
 }

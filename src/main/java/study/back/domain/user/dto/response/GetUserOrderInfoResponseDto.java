@@ -2,29 +2,25 @@ package study.back.domain.user.dto.response;
 
 import lombok.Getter;
 import org.springframework.http.ResponseEntity;
-import study.back.domain.user.entity.UserEntity;
 import study.back.utils.ResponseDto;
+import study.back.utils.item.UserOrderInfo;
 
 @Getter
 public class GetUserOrderInfoResponseDto extends ResponseDto {
-    private String address;
-    private String addressDetail;
-    private String phoneNumber;
+    private UserOrderInfo userOrderInfo;
 
-    public GetUserOrderInfoResponseDto(String code, String message, String address, String addressDetail, String phoneNumber) {
+    public GetUserOrderInfoResponseDto(String code, String message, UserOrderInfo userOrderInfo) {
         super(code, message);
-        this.address = address;
-        this.addressDetail = addressDetail;
-        this.phoneNumber = phoneNumber;
+        this.userOrderInfo = userOrderInfo;
     }
 
-    public static ResponseEntity<GetUserOrderInfoResponseDto> success(UserEntity userEntity) {
+    public static ResponseEntity<GetUserOrderInfoResponseDto> success(
+            UserOrderInfo userOrderInfo
+    ) {
         GetUserOrderInfoResponseDto responseBody = new GetUserOrderInfoResponseDto(
                 "SU",
                 "유저 배송 정보 가져오기 성공",
-                userEntity.getAddress(),
-                userEntity.getAddressDetail(),
-                userEntity.getPhoneNumber()
+                userOrderInfo
         );
         return ResponseEntity.ok(responseBody);
     }

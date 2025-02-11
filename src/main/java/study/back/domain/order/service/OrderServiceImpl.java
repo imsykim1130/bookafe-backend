@@ -37,7 +37,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,21 +51,8 @@ public class OrderServiceImpl implements OrderService {
 
     // 주문 생성
     public void createOrder(UserEntity user, CreateOrderRequestDto requestDto) {
-        // 필수 입력사항 검증
-        String address = user.getAddress();
-        String phoneNumber = user.getPhoneNumber();
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime now = LocalDateTime.now();
-
-        // 주소 검증
-        if(address == null || address.isEmpty()) {
-            throw new InvalidAddressException();
-        }
-
-        // 휴대폰 번호 검증
-        if(!Pattern.matches(PHONE_NUMBER_REGEX, phoneNumber)) {
-            throw new InvalidPhoneNumberException();
-        }
 
         // 할인 여부
         boolean isCouponUsed = requestDto.getCouponId() != null;
@@ -132,9 +118,9 @@ public class OrderServiceImpl implements OrderService {
                 .totalPrice(totalPrice.get())
                 .orderDatetime(now)
                 .user(user)
-                .address(user.getAddress())
-                .addressDetail(user.getAddressDetail())
-                .phoneNumber(user.getPhoneNumber())
+                .address(requestDto.getAddress())
+                .addressDetail(requestDto.getAddressDetail())
+                .phoneNumber(requestDto.getPhoneNumber())
                 .build();
 
         OrderEntity savedOrder = repository.saveOrder(order);

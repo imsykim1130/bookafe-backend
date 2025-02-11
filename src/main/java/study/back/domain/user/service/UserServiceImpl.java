@@ -7,10 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.file.FileService;
 import study.back.utils.item.UserManagementInfo;
-import study.back.domain.user.dto.response.GetUserOrderInfoResponseDto;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserRepository;
+import study.back.utils.item.UserOrderInfo;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -28,9 +28,11 @@ public class UserServiceImpl implements UserService {
         return GetUserResponseDto.success(user, totalPoint);
     }
 
+    // 유저 기본 배송정보 가져오기
     @Override
-    public ResponseEntity<? super GetUserOrderInfoResponseDto> getUserOrderInfo(UserEntity user) {
-        return GetUserOrderInfoResponseDto.success(user);
+    public UserOrderInfo getUserOrderInfo(UserEntity user) {
+        UserOrderInfo userOrderInfo = repository.findUserDefaultOrderInfo(user);
+        return userOrderInfo;
     }
 
     @Override

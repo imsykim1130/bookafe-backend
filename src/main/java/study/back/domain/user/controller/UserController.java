@@ -6,11 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.domain.user.dto.response.GetUserOrderInfoResponseDto;
+import study.back.domain.user.service.UserService;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.utils.ResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.service.UserServiceImpl;
+import study.back.utils.item.UserOrderInfo;
 
 import java.util.List;
 
@@ -18,7 +21,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/user")
 public class UserController {
-    private final UserServiceImpl userService;
+    private final UserService userService;
 
     // 로그인 유저 정보 가져오기
     @GetMapping("")
@@ -26,10 +29,12 @@ public class UserController {
         return userService.getUser(user);
     }
 
-    // 배송 관련 유저 정보 가져오기
+    // 유저 기본 배송정보 가져오기
+    // 기본 배송정보로 설정된 정보가 있으면 배송정보를 반환하고 없으면 null 을 반환한다.
     @GetMapping("/order-info")
-    public ResponseEntity<?> getUserOrderInfo(@AuthenticationPrincipal UserEntity user) {
-        return userService.getUserOrderInfo(user);
+    public ResponseEntity<GetUserOrderInfoResponseDto> getUserOrderInfo(@AuthenticationPrincipal UserEntity user) {
+        UserOrderInfo userOrderInfo = userService.getUserOrderInfo(user);
+        return GetUserOrderInfoResponseDto.success(userOrderInfo);
     }
 
     // 프로필 이미지 변경하기

@@ -29,19 +29,19 @@ public class UserEntity implements UserDetails {
     @Setter
     private String nickname;
     private String profileImg;
-    private String phoneNumber;
     private boolean googleAuth;
     private LocalDateTime createDate;
     @Enumerated(EnumType.STRING)
     private RoleName role;
+    private Long defaultAddressId;
 
     @Builder
     public static UserEntity toEntity(String email,
                                       String password,
                                       String nickname,
-                                      String phoneNumber,
                                       RoleName role,
-                                      Long id) {
+                                      Long id,
+                                      Long defaultAddressId) {
         LocalDateTime now = LocalDateTime.now();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -52,10 +52,10 @@ public class UserEntity implements UserDetails {
         userEntity.email = email;
         userEntity.password = encodedPassword;
         userEntity.nickname = nickname;
-        userEntity.phoneNumber = phoneNumber;
         userEntity.googleAuth = false;
         userEntity.createDate = now;
         userEntity.role = role;
+        userEntity.defaultAddressId = defaultAddressId;
         return userEntity;
     }
 
@@ -83,6 +83,11 @@ public class UserEntity implements UserDetails {
     public String changeProfileImg(String profileImg) {
         this.profileImg = profileImg;
         return this.profileImg;
+    }
+
+    public Long changeDefaultAddressId(Long defaultAddressId) {
+        this.defaultAddressId = defaultAddressId;
+        return this.defaultAddressId;
     }
 
     @Override
