@@ -102,9 +102,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(signUpRequestDto.getEmail())
                 .password(signUpRequestDto.getPassword())
                 .nickname(signUpRequestDto.getNickname())
-                .address(signUpRequestDto.getAddress())
                 .phoneNumber(signUpRequestDto.getPhoneNumber())
-                .addressDetail(signUpRequestDto.getAddressDetail())
                 .role(role)
                 .build();
 

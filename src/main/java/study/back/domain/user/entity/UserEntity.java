@@ -29,8 +29,6 @@ public class UserEntity implements UserDetails {
     @Setter
     private String nickname;
     private String profileImg;
-    private String address;
-    private String addressDetail;
     private String phoneNumber;
     private boolean googleAuth;
     private LocalDateTime createDate;
@@ -41,8 +39,6 @@ public class UserEntity implements UserDetails {
     public static UserEntity toEntity(String email,
                                       String password,
                                       String nickname,
-                                      String address,
-                                      String addressDetail,
                                       String phoneNumber,
                                       RoleName role,
                                       Long id) {
@@ -56,8 +52,6 @@ public class UserEntity implements UserDetails {
         userEntity.email = email;
         userEntity.password = encodedPassword;
         userEntity.nickname = nickname;
-        userEntity.address = address;
-        userEntity.addressDetail = addressDetail;
         userEntity.phoneNumber = phoneNumber;
         userEntity.googleAuth = false;
         userEntity.createDate = now;
