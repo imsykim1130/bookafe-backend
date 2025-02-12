@@ -10,7 +10,7 @@ import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserRepository;
-import study.back.utils.item.UserOrderInfo;
+import study.back.utils.item.UserDeliveryInfo;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -30,9 +30,14 @@ public class UserServiceImpl implements UserService {
 
     // 유저 기본 배송정보 가져오기
     @Override
-    public UserOrderInfo getUserOrderInfo(UserEntity user) {
-        UserOrderInfo userOrderInfo = repository.findUserDefaultOrderInfo(user);
-        return userOrderInfo;
+    public UserDeliveryInfo getUserDeliveryInfo(UserEntity user) {
+        return repository.findUserDefaultOrderInfo(user);
+    }
+
+    // 유저의 모든 배송 정보 가져오기
+    @Override
+    public List<UserDeliveryInfo> getAllUserDeliveryInfo(UserEntity user) {
+        return repository.findAllUserDeliveryInfo(user);
     }
 
     @Override

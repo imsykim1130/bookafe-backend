@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserOrderInfo {
+public class UserDeliveryInfo {
     private String name;
     private Boolean isDefault;
     private String receiver;

@@ -6,14 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.domain.user.dto.response.GetAllUserDeliveryInfoResponseDto;
 import study.back.domain.user.dto.response.GetUserOrderInfoResponseDto;
 import study.back.domain.user.service.UserService;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.utils.ResponseDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.service.UserServiceImpl;
-import study.back.utils.item.UserOrderInfo;
+import study.back.utils.item.UserDeliveryInfo;
 
 import java.util.List;
 
@@ -31,10 +31,18 @@ public class UserController {
 
     // 유저 기본 배송정보 가져오기
     // 기본 배송정보로 설정된 정보가 있으면 배송정보를 반환하고 없으면 null 을 반환한다.
-    @GetMapping("/order-info")
-    public ResponseEntity<GetUserOrderInfoResponseDto> getUserOrderInfo(@AuthenticationPrincipal UserEntity user) {
-        UserOrderInfo userOrderInfo = userService.getUserOrderInfo(user);
-        return GetUserOrderInfoResponseDto.success(userOrderInfo);
+    @GetMapping("/delivery-info")
+    public ResponseEntity<GetUserOrderInfoResponseDto> getUserDeliveryInfo(@AuthenticationPrincipal UserEntity user) {
+        UserDeliveryInfo userDeliveryInfo = userService.getUserDeliveryInfo(user);
+        return GetUserOrderInfoResponseDto.success(userDeliveryInfo);
+    }
+
+    // 유저의 모든 배송정보 가져오기
+    @GetMapping("/delivery-info/all")
+    public ResponseEntity<GetAllUserDeliveryInfoResponseDto> getAllUserDeliveryInfo(@AuthenticationPrincipal UserEntity user) {
+        List<UserDeliveryInfo> userDeliveryInfoList = userService.getAllUserDeliveryInfo(user);
+        GetAllUserDeliveryInfoResponseDto responseDto = new GetAllUserDeliveryInfoResponseDto(userDeliveryInfoList);
+        return ResponseEntity.ok(responseDto);
     }
 
     // 프로필 이미지 변경하기

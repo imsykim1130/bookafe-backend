@@ -4,7 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.Builder;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.UserOrderInfo;
+import study.back.utils.item.UserDeliveryInfo;
 
 import java.util.List;
 
@@ -111,20 +111,7 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 유저 기본 배송정보 가져오기
     @Override
-    public UserOrderInfo findUserDefaultOrderInfo(UserEntity user) {
-//        return em.createQuery("select a.name as name, " +
-//                        "case " +
-//                        "when a.id = u.defaultAddressId then true " +
-//                        "else false end as isDefault, " +
-//                        "a.receiver as receiver, " +
-//                        "a.receiverPhoneNumber as receiverPhoneNumber, " +
-//                        "a.address as address, " +
-//                        "a.addressDetail as addressDetail " +
-//                        "from AddressEntity a " +
-//                        "join UserEntity u on u.id = a.userId " +
-//                        "where a.userId = :userId", UserOrderInfo.class)
-//                .setParameter("userId", userId)
-//                .getSingleResult();
+    public UserDeliveryInfo findUserDefaultOrderInfo(UserEntity user) {
         if(user.getDefaultAddressId() == null) {
             return null;
         }
@@ -137,8 +124,26 @@ public class UserRepositoryImpl implements UserRepository {
                         "a.addressDetail as addressDetail " +
                         "from DeliveryInfoEntity a " +
                         "join UserEntity u on u.id = a.userId " +
-                        "where a.userId = :userId and a.id = u.defaultAddressId", UserOrderInfo.class)
+                        "where a.userId = :userId and a.id = u.defaultAddressId", UserDeliveryInfo.class)
                 .setParameter("userId", user.getId())
                 .getSingleResult();
+    }
+
+    // 유저의 모든 배송 정보 가져오기
+    @Override
+    public List<UserDeliveryInfo> findAllUserDeliveryInfo(UserEntity user) {
+       return em.createQuery("select a.name as name, " +
+                    "case " +
+                    "when a.id = u.defaultAddressId then true " +
+                    "else false end as isDefault, " +
+                    "a.receiver as receiver, " +
+                    "a.receiverPhoneNumber as receiverPhoneNumber, " +
+                    "a.address as address, " +
+                    "a.addressDetail as addressDetail " +
+                    "from DeliveryInfoEntity a " +
+                    "join UserEntity u on u.id = a.userId " +
+                    "where a.userId = :userId", UserDeliveryInfo.class)
+               .setParameter("userId", user.getId())
+               .getResultList();
     }
 }
