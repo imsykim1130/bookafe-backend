@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserDeliveryInfo {
+    private Long id;
     private String name;
     private Boolean isDefault;
     private String receiver;

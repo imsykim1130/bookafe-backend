@@ -116,7 +116,7 @@ public class UserRepositoryImpl implements UserRepository {
             return null;
         }
 
-        return em.createQuery("select a.name as name, " +
+        return em.createQuery("select a.id as id, a.name as name, " +
                         "cast((1) as boolean ) as isDefault, " +
                         "a.receiver as receiver, " +
                         "a.receiverPhoneNumber as receiverPhoneNumber, " +
@@ -132,7 +132,7 @@ public class UserRepositoryImpl implements UserRepository {
     // 유저의 모든 배송 정보 가져오기
     @Override
     public List<UserDeliveryInfo> findAllUserDeliveryInfo(UserEntity user) {
-       return em.createQuery("select a.name as name, " +
+       return em.createQuery("select a.id as id, a.name as name, " +
                     "case " +
                     "when a.id = u.defaultAddressId then true " +
                     "else false end as isDefault, " +
