@@ -1,11 +1,14 @@
 package study.back.domain.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
 import study.back.domain.user.dto.response.GetAllUserDeliveryInfoResponseDto;
 import study.back.domain.user.dto.response.GetUserOrderInfoResponseDto;
 import study.back.domain.user.service.UserService;
@@ -43,6 +46,15 @@ public class UserController {
         List<UserDeliveryInfo> userDeliveryInfoList = userService.getAllUserDeliveryInfo(user);
         GetAllUserDeliveryInfoResponseDto responseDto = new GetAllUserDeliveryInfoResponseDto(userDeliveryInfoList);
         return ResponseEntity.ok(responseDto);
+    }
+
+    // 새로운 배송정보 추가하기
+    @PostMapping("/delivery-info")
+    public ResponseEntity<ResponseDto> createUserDeliveryInfo(@AuthenticationPrincipal UserEntity user,
+                                                              @RequestBody @Valid CreateDeliveryInfoRequestDto requestDto) {
+        userService.createDeliveryInfo(user, requestDto);
+        ResponseDto responseDto = new ResponseDto("SU", "새로운 배송정보 추가 성공");
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
     // 프로필 이미지 변경하기

@@ -1,8 +1,10 @@
 package study.back.domain.user.repository;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.Builder;
 import org.springframework.stereotype.Repository;
+import study.back.domain.user.entity.DeliveryInfoEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.UserDeliveryInfo;
 
@@ -145,5 +147,26 @@ public class UserRepositoryImpl implements UserRepository {
                     "where a.userId = :userId", UserDeliveryInfo.class)
                .setParameter("userId", user.getId())
                .getResultList();
+    }
+
+    // 같은 배송정보 이름 존재 여부
+    @Override
+    public Boolean existsDeliveryInfoByName(String name) {
+        Long count;
+        try {
+            count = em.createQuery("select count(de) from DeliveryInfoEntity de where de.name = :name", Long.class)
+                    .setParameter("name", name)
+                    .getSingleResult();
+        } catch(Exception e) {
+            // 쿼리 실행 중 오류
+            return null;
+        }
+        return count == 1;
+    }
+
+    @Override
+    public DeliveryInfoEntity saveDeliveryInfo(DeliveryInfoEntity deliveryInfo) {
+        em.persist(deliveryInfo);
+        return deliveryInfo;
     }
 }

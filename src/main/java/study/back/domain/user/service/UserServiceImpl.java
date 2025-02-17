@@ -6,6 +6,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.file.FileService;
+import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
+import study.back.domain.user.entity.DeliveryInfoEntity;
+import study.back.exception.Conflict.ConflictNameException;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
@@ -40,6 +43,7 @@ public class UserServiceImpl implements UserService {
         return repository.findAllUserDeliveryInfo(user);
     }
 
+    // 프로필 이미지 변경
     @Override
     public String changeProfileImage(UserEntity user, MultipartFile file) {
         // 파일 업로드
@@ -92,5 +96,28 @@ public class UserServiceImpl implements UserService {
         if(result == 0) {
             throw new RuntimeException("유저 삭제 실패");
         }
+    }
+
+    // 배송정보 추가하기
+    @Override
+    public DeliveryInfoEntity createDeliveryInfo(UserEntity user, CreateDeliveryInfoRequestDto requestDto) {
+        // 배송정보 이름 중복 검증
+        Boolean isConflict = repository.existsDeliveryInfoByName(requestDto.getName());
+        if(isConflict) {
+            throw new ConflictNameException();
+        }
+
+        // 새로운 배송정보 생성
+        DeliveryInfoEntity deliveryInfo = DeliveryInfoEntity.builder()
+                .userId(user.getId())
+                .name(requestDto.getName())
+                .address(requestDto.getAddress())
+                .addressDetail(requestDto.getAddressDetail())
+                .receiver(requestDto.getReceiver())
+                .receiverPhoneNumber(requestDto.getReceiverPhoneNumber())
+                .build();
+
+        // 새로운 배송정보 저장
+        return repository.saveDeliveryInfo(deliveryInfo);
     }
 }

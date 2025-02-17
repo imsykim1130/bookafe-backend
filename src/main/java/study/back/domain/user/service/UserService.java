@@ -2,6 +2,8 @@ package study.back.domain.user.service;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
+import study.back.domain.user.entity.DeliveryInfoEntity;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
@@ -16,4 +18,5 @@ public interface UserService {
     List<UserManagementInfo> getSearchUserList(String searchWord);
     void deleteUser(UserEntity user);
     List<UserDeliveryInfo> getAllUserDeliveryInfo(UserEntity user);
+    DeliveryInfoEntity createDeliveryInfo(UserEntity user, CreateDeliveryInfoRequestDto requestDto);
 }

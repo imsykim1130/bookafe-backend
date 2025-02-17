@@ -1,5 +1,7 @@
 package study.back.domain.user.repository;
 
+import jakarta.validation.constraints.NotBlank;
+import study.back.domain.user.entity.DeliveryInfoEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.UserDeliveryInfo;
 
@@ -14,4 +16,6 @@ public interface UserRepository {
     void deleteUserDependencyData(UserEntity user);
     UserDeliveryInfo findUserDefaultOrderInfo(UserEntity user);
     List<UserDeliveryInfo> findAllUserDeliveryInfo(UserEntity user);
+    Boolean existsDeliveryInfoByName(String name);
+    DeliveryInfoEntity saveDeliveryInfo(DeliveryInfoEntity deliveryInfo);
 }
