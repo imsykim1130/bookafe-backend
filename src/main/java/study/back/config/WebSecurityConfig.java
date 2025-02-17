@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -74,42 +75,15 @@ public class WebSecurityConfig {
 //        };
 //    }
 
-    // 스프링 시큐리티용 cors 설정
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-
-        ArrayList<String> allowedOrigins = new ArrayList<>();
-        allowedOrigins.add("http://localhost:5173");
-        allowedOrigins.add("http://127.0.0.1:5173");
-        configuration.setAllowedOrigins(allowedOrigins);
-
-        ArrayList<String> allowedMethods = new ArrayList<>();
-        allowedMethods.add("GET");
-        allowedMethods.add("POST");
-        allowedMethods.add("PUT");
-        allowedMethods.add("DELETE");
-        allowedMethods.add("PATCH");
-        configuration.setAllowedMethods(allowedMethods);
-
-        configuration.setAllowedHeaders(Collections.singletonList("*"));
-
-        configuration.setAllowCredentials(true);
-
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-
     // 시큐리티 필터 체인 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         CharacterEncodingFilter filter = new CharacterEncodingFilter();
         filter.setEncoding("UTF-8");
         filter.setForceEncoding(true);
-
-        http.addFilterBefore(filter, CsrfFilter.class);
+        http.cors(Customizer.withDefaults());
         http.csrf(AbstractHttpConfigurer::disable);
-        http.cors(cors->cors.configurationSource(corsConfigurationSource()));
+        http.addFilterBefore(filter, CsrfFilter.class);
         http.exceptionHandling(exception->exception.authenticationEntryPoint(new CustomExceptionEntryPoint()));
         // jwt 기반 인증 사용을 위해 stateless 하게 바꿔주기
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
@@ -135,7 +109,7 @@ public class WebSecurityConfig {
 
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-            ResponseDto responseDto = new ResponseDto("UA", "권한이 없습니다");
+            ResponseDto responseDto = new ResponseDto("UA", "인증 실패");
 
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json");
