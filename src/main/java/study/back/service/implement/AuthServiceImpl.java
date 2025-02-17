@@ -63,13 +63,6 @@ public class AuthServiceImpl implements AuthService {
     // 회원가입
     @Override
     public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
-
-        // todo
-        //  지금처럼 쿼리문 두개를 보내서 어떤 항목이 중복인지 알려주는게 좋은지
-        //  아니면 쿼리를 하나로 줄여서 둘 중 하나라도 중복인 것을 알려주는게 좋은지 궁금
-        //  가입이 서버에 부하를 줄 만큼 자주 일어나는 동작은 아닌 것 같고
-        //  쿼리 1 -> 2 개는 성능에 큰 영향을 주지 않을 것 같긴하다.
-
         // 유저 확인
         UserEntity user = userJpaRepository.findByEmail(signUpRequestDto.getEmail());
         if(user != null) {
