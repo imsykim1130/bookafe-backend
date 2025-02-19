@@ -8,7 +8,10 @@ import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.file.FileService;
 import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
 import study.back.domain.user.entity.DeliveryInfoEntity;
+import study.back.domain.user.repository.UserRepositoryImpl;
 import study.back.exception.Conflict.ConflictNameException;
+import study.back.exception.Forbidden.UserMismatchException;
+import study.back.exception.NotFound.DeliveryInfoNotFoundException;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
@@ -17,6 +20,8 @@ import study.back.utils.item.UserDeliveryInfo;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -118,6 +123,35 @@ public class UserServiceImpl implements UserService {
                 .build();
 
         // 새로운 배송정보 저장
-        return repository.saveDeliveryInfo(deliveryInfo);
+        DeliveryInfoEntity savedDeliveryInfo = repository.saveDeliveryInfo(deliveryInfo);
+
+        // 기본 배송지 설정
+        if(requestDto.getIsDefault()) {
+            user.changeDefaultDeliveryInfoId(savedDeliveryInfo.getId());
+            repository.saveUser(user);
+        }
+
+        return savedDeliveryInfo;
+    }
+
+    // 배송지 삭제
+    @Override
+    public void deleteDeliveryInfo(UserEntity user, Long deliveryInfoId) {
+        DeliveryInfoEntity deliveryInfo = repository.findDeliveryInfoById(deliveryInfoId)
+                .orElseThrow(DeliveryInfoNotFoundException::new); // 배송지 여부 검증
+
+        // 배송지 소유자와 삭제하려는 유저 같은지 검증
+        if(!user.getId().equals(deliveryInfo.getUserId())) {
+            throw new UserMismatchException();
+        }
+
+        // 삭제
+        repository.deleteDeliveryInfo(deliveryInfoId);
+
+        // 기본 배송지를 삭제하면 유저의 기본 배송지 id 도 null 로 변경
+        if(user.getDefaultDeliveryInfoId() != null && user.getDefaultDeliveryInfoId().equals(deliveryInfoId)) {
+            user.changeDefaultDeliveryInfoId(null);
+            repository.saveUser(user);
+        }
     }
 }

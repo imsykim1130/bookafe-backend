@@ -1,6 +1,7 @@
 package study.back.domain.user.controller;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,6 +56,15 @@ public class UserController {
         userService.createDeliveryInfo(user, requestDto);
         ResponseDto responseDto = new ResponseDto("SU", "새로운 배송정보 추가 성공");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
+    // 배송정보 삭제하기
+    @DeleteMapping("/delivery-info/{deliveryInfoId}")
+    public ResponseEntity<ResponseDto> deleteUserDeliveryInfo(@AuthenticationPrincipal UserEntity user,
+                                                              @PathVariable(name = "deliveryInfoId") @Positive Long deliveryInfoId) {
+        userService.deleteDeliveryInfo(user, deliveryInfoId);
+        ResponseDto responseDto = ResponseDto.success("SU", "배송정보 삭제하기 성공");
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto);
     }
 
     // 프로필 이미지 변경하기

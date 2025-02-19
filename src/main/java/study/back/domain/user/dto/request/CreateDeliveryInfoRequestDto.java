@@ -19,6 +19,7 @@ public class CreateDeliveryInfoRequestDto {
     private String receiver;
     @NotBlank(message = "수신자 휴대폰 번호는 필수 입력사항입니다")
     private String receiverPhoneNumber;
+    private Boolean isDefault;
 
     @AssertTrue(message = "상세주소를 정확히 입력하세요")
     public boolean isValidAddressDetail() {

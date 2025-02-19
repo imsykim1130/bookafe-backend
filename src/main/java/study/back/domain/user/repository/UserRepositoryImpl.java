@@ -9,6 +9,7 @@ import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.UserDeliveryInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public class UserRepositoryImpl implements UserRepository {
@@ -114,21 +115,25 @@ public class UserRepositoryImpl implements UserRepository {
     // 유저 기본 배송정보 가져오기
     @Override
     public UserDeliveryInfo findUserDefaultOrderInfo(UserEntity user) {
-        if(user.getDefaultAddressId() == null) {
+        if(user.getDefaultDeliveryInfoId() == null) {
             return null;
         }
 
-        return em.createQuery("select a.id as id, a.name as name, " +
-                        "cast((1) as boolean ) as isDefault, " +
-                        "a.receiver as receiver, " +
-                        "a.receiverPhoneNumber as receiverPhoneNumber, " +
-                        "a.address as address, " +
-                        "a.addressDetail as addressDetail " +
-                        "from DeliveryInfoEntity a " +
-                        "join UserEntity u on u.id = a.userId " +
-                        "where a.userId = :userId and a.id = u.defaultAddressId", UserDeliveryInfo.class)
-                .setParameter("userId", user.getId())
-                .getSingleResult();
+        try {
+            return em.createQuery("select a.id as id, a.name as name, " +
+                            "cast((1) as boolean ) as isDefault, " +
+                            "a.receiver as receiver, " +
+                            "a.receiverPhoneNumber as receiverPhoneNumber, " +
+                            "a.address as address, " +
+                            "a.addressDetail as addressDetail " +
+                            "from DeliveryInfoEntity a " +
+                            "join UserEntity u on u.id = a.userId " +
+                            "where a.userId = :userId and a.id = u.defaultDeliveryInfoId", UserDeliveryInfo.class)
+                    .setParameter("userId", user.getId())
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     // 유저의 모든 배송 정보 가져오기
@@ -136,7 +141,7 @@ public class UserRepositoryImpl implements UserRepository {
     public List<UserDeliveryInfo> findAllUserDeliveryInfo(UserEntity user) {
        return em.createQuery("select a.id as id, a.name as name, " +
                     "case " +
-                    "when a.id = u.defaultAddressId then true " +
+                    "when a.id = u.defaultDeliveryInfoId then true " +
                     "else false end as isDefault, " +
                     "a.receiver as receiver, " +
                     "a.receiverPhoneNumber as receiverPhoneNumber, " +
@@ -168,5 +173,21 @@ public class UserRepositoryImpl implements UserRepository {
     public DeliveryInfoEntity saveDeliveryInfo(DeliveryInfoEntity deliveryInfo) {
         em.persist(deliveryInfo);
         return deliveryInfo;
+    }
+
+    // 배송지 삭제
+    @Override
+    public void deleteDeliveryInfo(Long deliveryInfoId) {
+        em.createQuery("delete from DeliveryInfoEntity di where di.id = :deliveryInfoId")
+                .setParameter("deliveryInfoId", deliveryInfoId)
+                .executeUpdate();
+    }
+
+    // 배송지 id 로 찾기
+    @Override
+    public Optional<DeliveryInfoEntity> findDeliveryInfoById(Long deliveryInfoId) {
+        return Optional.ofNullable(em.createQuery("select di from DeliveryInfoEntity di where di.id = :deliveryInfoId", DeliveryInfoEntity.class)
+                .setParameter("deliveryInfoId", deliveryInfoId)
+                .getSingleResult());
     }
 }

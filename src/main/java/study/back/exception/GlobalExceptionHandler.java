@@ -92,7 +92,7 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(responseDto);
     }
 
-    // @requestParam validation 실패
+    // @requestParam, @PathVariable validation 실패
     // 스프링부트 3.x.x 부터 해당 예외로 변경됨. 2.x.x 는 ConstraintViolationException 예외 발생.
     @ExceptionHandler(HandlerMethodValidationException.class)
     public ResponseEntity<ResponseDto> handleMethodValidationException(HandlerMethodValidationException e) {

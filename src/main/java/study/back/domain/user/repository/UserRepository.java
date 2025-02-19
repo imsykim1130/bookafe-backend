@@ -6,6 +6,7 @@ import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.UserDeliveryInfo;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRepository {
     UserEntity saveUser(UserEntity user);
@@ -18,4 +19,6 @@ public interface UserRepository {
     List<UserDeliveryInfo> findAllUserDeliveryInfo(UserEntity user);
     Boolean existsDeliveryInfoByName(String name);
     DeliveryInfoEntity saveDeliveryInfo(DeliveryInfoEntity deliveryInfo);
+    void deleteDeliveryInfo(Long deliveryInfoId);
+    Optional<DeliveryInfoEntity> findDeliveryInfoById(Long deliveryInfoId);
 }

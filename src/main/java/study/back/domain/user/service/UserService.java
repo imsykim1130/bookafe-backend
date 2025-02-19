@@ -1,5 +1,6 @@
 package study.back.domain.user.service;
 
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
@@ -19,4 +20,5 @@ public interface UserService {
     void deleteUser(UserEntity user);
     List<UserDeliveryInfo> getAllUserDeliveryInfo(UserEntity user);
     DeliveryInfoEntity createDeliveryInfo(UserEntity user, CreateDeliveryInfoRequestDto requestDto);
+    void deleteDeliveryInfo(UserEntity user, Long deliveryInfoId);
 }
