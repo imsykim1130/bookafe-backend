@@ -6,7 +6,6 @@ db/
 docker-compose.yml
 HELP.md
 .dockerignore
-Dockerfile
 
 ### STS ###
 .apt_generated
