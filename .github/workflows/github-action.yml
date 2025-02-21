@@ -33,6 +33,6 @@ jobs:
       # 3. 허브에 push
       - name: Build the Docker image and push to docker hub
         run: |
-          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
-          docker build -t ${{secrets.DOCKER_USRNAME}}/docker-springboot .
-          docker push ${{secrets.DOCKER_USRNAME}}/docker-springboot
+          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+          docker build -t ${{ secrets.DOCKER_USRNAME }}/docker-springboot .
+          docker push ${{ secrets.DOCKER_USRNAME }}/docker-springboot
