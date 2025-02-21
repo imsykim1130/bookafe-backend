@@ -1,0 +1,38 @@
+name: CI using github actions & docker
+
+on:
+  push:
+    branches: ["main"]
+
+permissions:
+  contents: read
+
+jobs:
+  CI:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        # 민감한 정보가 담긴 application.properties 는 github 에 없기 때문에 secret 변수를 이용하여 파일을 만들어준다.
+      - name: Make application.properties
+        # 1. 디렉토리 만들기
+        # 2. 디렉토리로 이동
+        # 3. 파일 만들기
+        # 4. 파일에 내용 쓰기
+        run: |
+          mkdir ./src/main/resources
+          cd ./src/main/resources
+          touch ./application.properties
+          echo "${{secrets.YML}}" > ./application.properties
+        shell: bash
+      # 빌드
+      - name: Build with Gradle
+        run: ./gradlew clean build -x test
+      # 도커 이미지 만들기 & docker hub 에 push
+      # 1. 도커 로그인
+      # 2. 이미지 빌드
+      # 3. 허브에 push
+      - name: Build the Docker image and push to docker hub
+        run: |
+          docker login -u ${{secrets.DOCKER_USERNAME}} -p ${{secrets.DOCKER_PASSWORD}}
+          docker build -t ${{secrets.DOCKER_USRNAME}}/docker-springboot .
+          docker push ${{secrets.DOCKER_USRNAME}}/docker-springboot
