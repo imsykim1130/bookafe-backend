@@ -1,11 +1,12 @@
 .gradle
 build/
 db/
-gradle/
 **/src/main/**/build/
 **/src/main/resources/
 docker-compose.yml
-
+HELP.md
+.dockerignore
+Dockerfile
 
 ### STS ###
 .apt_generated
