@@ -13,17 +13,30 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         # 민감한 정보가 담긴 application.properties 는 github 에 없기 때문에 secret 변수를 이용하여 파일을 만들어준다.
-      - name: Make application.properties
         # 1. 디렉토리 만들기
         # 2. 디렉토리로 이동
         # 3. 파일 만들기
         # 4. 파일에 내용 쓰기
+      - name: Make application.properties
         run: |
           mkdir ./src/main/resources
           cd ./src/main/resources
           touch ./application.properties
           echo "${{secrets.PROPERTIES}}" > ./application.properties
         shell: bash
+      # gradle 캐싱 설정
+      - name: Cache Gradle Dependencies
+        uses: actions/cache@v3
+        with:
+          # 캐시 저장 장소
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          # 캐시의 고유 키, 빌드 설정 파일이 변경될 때만 새로운 캐시가 생성되도록 함
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          # 키가 일치하지 않을 경우 대체키
+          restore-keys: |
+            ${{ runner.os }}-gradle-
       # 빌드
       - name: Build with Gradle
         run: ./gradlew clean build -x test
