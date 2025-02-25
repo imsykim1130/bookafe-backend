@@ -47,6 +47,18 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
         bookFavoriteJpaRepository.delete(bookFavorite);
     }
 
+    // 좋아요 책 일괄취소
+    @Override
+    public int deleteAllFavoriteBook(UserEntity user, List<String> isbnList) {
+        int deletedCount = em.createQuery("delete from BookFavoriteEntity bf where bf.user.id = :userId and bf.isbn in :isbnList")
+                .setParameter("userId", user.getId())
+                .setParameter("isbnList", isbnList)
+                .executeUpdate();
+
+        em.clear();
+        return deletedCount;
+    }
+
     // 유저의 좋아요 책 리스트 페이지네이션과 함께
     @Override
     public Page<FavoriteBookView> findAllFavoriteBookView(UserEntity user, Pageable pageable) {

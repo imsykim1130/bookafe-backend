@@ -1,5 +1,6 @@
 package study.back.domain.book.service;
 
+import jakarta.validation.constraints.NotNull;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.Top10View;
@@ -12,4 +13,5 @@ public interface BookFavoriteService {
     void deleteBookFromFavorite(UserEntity user, String isbn);
     GetFavoriteBookListResponseDto getFavoriteBookList(UserEntity user, Integer page, Integer size);
     List<Top10View> getTop10BookList();
+    int deleteBookListFromFavorite(UserEntity user, List<String> isbnList);
 }

@@ -51,11 +51,18 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
         repository.saveBookFavorite(bookFavorite);
     }
 
+    // 좋아요 취소
     @Override
     public void deleteBookFromFavorite(UserEntity user, String isbn) {
         // 좋아요 여부 검증
         BookFavoriteEntity bookFavorite = repository.findBookFavoriteByUserAndIsbn(user, isbn).orElseThrow(() -> new RuntimeException("이미 좋아요가 해제된 책입니다"));
         repository.deleteBookFavorite(bookFavorite);
+    }
+
+    // 좋아요 책 일괄 취소
+    @Override
+    public int deleteBookListFromFavorite(UserEntity user, List<String> isbnList) {
+        return repository.deleteAllFavoriteBook(user, isbnList);
     }
 
     // 좋아요 책 가져오기

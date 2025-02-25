@@ -25,4 +25,6 @@ public interface BookFavoriteRepository {
     Page<FavoriteBookView> findAllFavoriteBookView(UserEntity user, Pageable pageable);
 
     List<Top10View> findAllTop10View();
+
+    int deleteAllFavoriteBook(UserEntity user, List<String> isbnList);
 }

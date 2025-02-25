@@ -1,13 +1,17 @@
 package study.back.domain.book.conroller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.domain.book.dto.request.DeleteFavoriteBookListRequestDto;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.user.entity.UserEntity;
+import study.back.utils.ResponseDto;
 import study.back.utils.item.Top10View;
 import study.back.domain.book.service.BookFavoriteService;
 
@@ -41,6 +45,15 @@ public class BookFavoriteController {
                                  @PathVariable(name = "isbn") String isbn) {
         bookFavoriteService.deleteBookFromFavorite(user, isbn);
         return ResponseEntity.ok().build();
+    }
+
+    // 좋아요 책 일괄 취소
+    @DeleteMapping("/list")
+    public ResponseEntity<ResponseDto> deleteFavoriteBookList(@AuthenticationPrincipal UserEntity user,
+                                                              @RequestBody @Valid DeleteFavoriteBookListRequestDto requestDto) {
+        bookFavoriteService.deleteBookListFromFavorite(user, requestDto.getIsbnList());
+        ResponseDto responseDto = new ResponseDto("SU", "좋아요 책 일괄취소 성공");
+        return ResponseEntity.status(HttpStatus.OK).body(responseDto);
     }
 
     // 좋아요 책 리스트 가져오기
