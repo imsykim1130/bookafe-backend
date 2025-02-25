@@ -1,11 +1,13 @@
 package study.back.domain.book.conroller;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.FavoriteBookView;
 import study.back.utils.item.Top10View;
 import study.back.domain.book.service.BookFavoriteService;
 
@@ -43,8 +45,10 @@ public class BookFavoriteController {
 
     // 좋아요 책 리스트 가져오기
     @GetMapping("/list")
-    public ResponseEntity<List<FavoriteBookView>> favoriteList(@AuthenticationPrincipal UserEntity user) {
-        List<FavoriteBookView> result = bookFavoriteService.getFavoriteBookList(user);
+    public ResponseEntity<GetFavoriteBookListResponseDto> favoriteList(@AuthenticationPrincipal UserEntity user,
+                                                                       @RequestParam(name = "page") @Min(value = 0, message = "페이지는 음수가 될 수 없습니다") Integer page,
+                                                                       @RequestParam(name = "size", defaultValue = "10", required = false) @Positive(message = "한 번에 가져올 데이터의 수는 1 이상이어야 합니다") Integer size) {
+        GetFavoriteBookListResponseDto result = bookFavoriteService.getFavoriteBookList(user, page, size);
         return ResponseEntity.ok(result);
     }
 
@@ -54,5 +58,4 @@ public class BookFavoriteController {
         List<Top10View> result = bookFavoriteService.getTop10BookList();
         return ResponseEntity.ok(result);
     }
-
 }

@@ -3,8 +3,10 @@ package study.back.domain.book.service.impl;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import study.back.domain.book.entity.BookEntity;
+import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.user.entity.UserEntity;
@@ -21,7 +23,7 @@ import java.util.List;
 @Service
 @Transactional
 public class BookFavoriteServiceImpl implements BookFavoriteService {
-    private BookFavoriteRepository repository;
+    private final BookFavoriteRepository repository;
 
     @Autowired
     public BookFavoriteServiceImpl(BookFavoriteJpaRepository bookFavoriteJpaRepository, BookJpaRepository bookJpaRepository, EntityManager em) {
@@ -36,7 +38,7 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
     @Override
     public void putBookToFavorite(UserEntity user, String isbn) {
         // 책 여부 검증
-        BookEntity book = repository.findBookByIsbn(isbn).orElseThrow(()->new NotFoundBookException());
+        repository.findBookByIsbn(isbn).orElseThrow(NotFoundBookException::new);
 
         // 좋아요 여부 검증
         Boolean isFavorite = repository.existsBookFavoriteByUserAndIsbn(user, isbn);
@@ -58,16 +60,17 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
 
     // 좋아요 책 가져오기
     @Override
-    public List<FavoriteBookView> getFavoriteBookList(UserEntity user) {
-        List<FavoriteBookView> result = null;
-        result = repository.findAllFavoriteBookView(user);
-        return result;
+    public GetFavoriteBookListResponseDto getFavoriteBookList(UserEntity user, Integer page, Integer size) {
+        // page 는 필수 입력값
+        // size 는 기본 10
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<FavoriteBookView> result = repository.findAllFavoriteBookView(user, pageRequest);
+        return new GetFavoriteBookListResponseDto("SU", "좋아요 책 리스트 가져오기 성공", result.getContent(), result.isLast(), result.getTotalPages());
     }
 
     // top10 가져오기
     @Override
     public List<Top10View> getTop10BookList() {
-        List<Top10View> result = repository.findAllTop10View();
-        return result;
+        return repository.findAllTop10View();
     }
 }

@@ -12,5 +12,4 @@ public class FavoriteBookView {
    String author;
    Integer price;
    Integer discountPercent;
-   Long isCart;
 }

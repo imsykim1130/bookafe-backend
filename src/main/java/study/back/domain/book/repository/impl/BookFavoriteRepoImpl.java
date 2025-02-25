@@ -2,6 +2,8 @@ package study.back.domain.book.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.domain.book.repository.BookFavoriteRepository;
@@ -36,7 +38,6 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
     }
 
     @Override
-
     public Optional<BookFavoriteEntity> findBookFavoriteByUserAndIsbn(UserEntity user, String isbn) {
         return bookFavoriteJpaRepository.findByUserAndIsbn(user, isbn);
     }
@@ -46,11 +47,10 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
         bookFavoriteJpaRepository.delete(bookFavorite);
     }
 
+    // 유저의 좋아요 책 리스트 페이지네이션과 함께
     @Override
-    public List<FavoriteBookView> findAllFavoriteBookView(UserEntity user) {
-        return em.createQuery("select b.isbn as isbn, b.bookImg as bookImg, b.title as title, b.author as author, b.price as price, b.discountPercent as discountPercent, (select count(bc) from BookCartEntity bc where bc.isbn = bf.isbn) as isCart from BookFavoriteEntity bf join BookEntity b on b.isbn = bf.isbn where bf.user = :user", FavoriteBookView.class)
-                .setParameter("user", user)
-                .getResultList();
+    public Page<FavoriteBookView> findAllFavoriteBookView(UserEntity user, Pageable pageable) {
+        return bookFavoriteJpaRepository.findAllFavoriteBookViewWithPagination(user, pageable);
     }
 
     // isbn, bookImg, title, author, favoriteCount

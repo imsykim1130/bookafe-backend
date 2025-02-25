@@ -1,5 +1,7 @@
 package study.back.domain.book.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
@@ -20,7 +22,7 @@ public interface BookFavoriteRepository {
 
     void deleteBookFavorite(BookFavoriteEntity bookFavorite);
 
-    List<FavoriteBookView> findAllFavoriteBookView(UserEntity user);
+    Page<FavoriteBookView> findAllFavoriteBookView(UserEntity user, Pageable pageable);
 
     List<Top10View> findAllTop10View();
 }
