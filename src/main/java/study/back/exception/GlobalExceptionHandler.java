@@ -126,6 +126,7 @@ public class GlobalExceptionHandler {
     }
 
     // 500 Internal Server Error
+    // 예상하고 지정된 에러
     // ISE
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ResponseDto> handleInternalServerErrorException(InternalServerErrorException e) {
@@ -135,6 +136,7 @@ public class GlobalExceptionHandler {
     }
 
     // 그 외 런타임 오류
+    // 예상하지 못한 곳에서 발생한 에러
     // RT
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseDto> handleRuntimeException(RuntimeException e) {
