@@ -29,7 +29,7 @@ public interface BookFavoriteRepository {
 
     int deleteAllFavoriteBook(UserEntity user, List<String> isbnList);
 
-    FavoriteInfoView findFavoriteInfoView(UserEntity user, String isbn);
+    List<Long> findFavoriteBookUserIdList(String isbn);
 
     Boolean existsBook(String isbn);
 }

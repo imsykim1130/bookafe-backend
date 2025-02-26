@@ -41,8 +41,20 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
             throw new NotFoundBookException();
         }
 
-        FavoriteInfoView favoriteInfoView = repository.findFavoriteInfoView(user, isbn);
-       return new GetBookFavoriteInfoResponseDto(favoriteInfoView.getIsFavorite(), favoriteInfoView.getFavoriteCount());
+        List<Long> userIdList = repository.findFavoriteBookUserIdList(isbn);
+
+        // 유저 id 리스트에 해당 유저가 있는지 여부
+        boolean isFavorite;
+        // 로그인 되어있지 않은 상황이라 user 가 없으면 무조건 false 반환
+        if(user == null) {
+            isFavorite = false;
+        } else {
+         isFavorite = userIdList.contains(user.getId());
+        }
+        // 해당 책을 좋아요 한 유저의 수
+        Integer favoriteCount = userIdList.size();
+
+       return new GetBookFavoriteInfoResponseDto(isFavorite, favoriteCount);
     }
 
     @Override

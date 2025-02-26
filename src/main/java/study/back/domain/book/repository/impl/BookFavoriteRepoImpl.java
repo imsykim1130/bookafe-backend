@@ -60,17 +60,12 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
         return deletedCount;
     }
 
-    // 책의 좋아요 정보 가져오기
-    // 로그인 유저의 좋아요 여부, 책의 총 좋아요 개수
+    // 책에 좋아요를 누른 유저 id 리스트
     @Override
-    public FavoriteInfoView findFavoriteInfoView(UserEntity user, String isbn) {
-        // 책에 좋아요를 누른 유저 id 리스트
-        List<Long> userIdList = em.createQuery("select bf.user.id from BookFavoriteEntity bf where bf.isbn = :isbn", Long.class)
+    public List<Long> findFavoriteBookUserIdList(String isbn) {
+        return em.createQuery("select bf.user.id from BookFavoriteEntity bf where bf.isbn = :isbn", Long.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
-        // 유저 id 리스트에 해당 유저가 있는지 여부
-        Boolean isFavorite = userIdList.contains(user.getId());
-        return new FavoriteInfoView(isFavorite, userIdList.size());
     }
 
     // 책 여부
