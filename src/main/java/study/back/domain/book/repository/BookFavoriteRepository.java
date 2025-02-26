@@ -6,6 +6,7 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.FavoriteBookView;
+import study.back.utils.item.FavoriteInfoView;
 import study.back.utils.item.Top10View;
 
 import java.util.List;
@@ -27,4 +28,8 @@ public interface BookFavoriteRepository {
     List<Top10View> findAllTop10View();
 
     int deleteAllFavoriteBook(UserEntity user, List<String> isbnList);
+
+    FavoriteInfoView findFavoriteInfoView(UserEntity user, String isbn);
+
+    Boolean existsBook(String isbn);
 }

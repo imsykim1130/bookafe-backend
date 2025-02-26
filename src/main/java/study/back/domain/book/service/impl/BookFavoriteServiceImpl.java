@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import study.back.domain.book.dto.response.GetBookFavoriteInfoResponseDto;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.exception.NotFound.NotFoundBookException;
@@ -15,6 +16,7 @@ import study.back.domain.book.repository.impl.BookFavoriteRepoImpl;
 import study.back.domain.book.repository.jpa.BookFavoriteJpaRepository;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.utils.item.FavoriteBookView;
+import study.back.utils.item.FavoriteInfoView;
 import study.back.utils.item.Top10View;
 import study.back.domain.book.service.BookFavoriteService;
 
@@ -30,9 +32,17 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
         this.repository = new BookFavoriteRepoImpl(bookFavoriteJpaRepository, bookJpaRepository, em);
     }
 
+    // 책의 좋아요 관련 정보 가져오기
     @Override
-    public boolean isFavorite(UserEntity user, String isbn) {
-        return repository.existsBookFavoriteByUserAndIsbn(user, isbn);
+    public GetBookFavoriteInfoResponseDto getBookFavoriteInfo(UserEntity user, String isbn) {
+        // 책 여부 검증
+        Boolean isExistsedBook = repository.existsBook(isbn);
+        if(!isExistsedBook) {
+            throw new NotFoundBookException();
+        }
+
+        FavoriteInfoView favoriteInfoView = repository.findFavoriteInfoView(user, isbn);
+       return new GetBookFavoriteInfoResponseDto(favoriteInfoView.getIsFavorite(), favoriteInfoView.getFavoriteCount());
     }
 
     @Override

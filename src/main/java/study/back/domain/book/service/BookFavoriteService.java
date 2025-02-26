@@ -1,6 +1,6 @@
 package study.back.domain.book.service;
 
-import jakarta.validation.constraints.NotNull;
+import study.back.domain.book.dto.response.GetBookFavoriteInfoResponseDto;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.Top10View;
@@ -8,7 +8,7 @@ import study.back.utils.item.Top10View;
 import java.util.List;
 
 public interface BookFavoriteService {
-    boolean isFavorite(UserEntity user, String isbn);
+    GetBookFavoriteInfoResponseDto getBookFavoriteInfo(UserEntity user, String isbn);
     void putBookToFavorite(UserEntity user, String isbn);
     void deleteBookFromFavorite(UserEntity user, String isbn);
     GetFavoriteBookListResponseDto getFavoriteBookList(UserEntity user, Integer page, Integer size);

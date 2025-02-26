@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import study.back.domain.book.dto.request.DeleteFavoriteBookListRequestDto;
+import study.back.domain.book.dto.response.GetBookFavoriteInfoResponseDto;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.ResponseDto;
@@ -23,12 +24,14 @@ import java.util.List;
 public class BookFavoriteController {
     private final BookFavoriteService bookFavoriteService;
 
-    // 좋아요 여부
+    // 책 좋아요 정보
+    // 좋아요 여부, 좋아요 개수
     @GetMapping("/{isbn}")
-    public ResponseEntity<Boolean> isFavorite(@AuthenticationPrincipal UserEntity user,
+    public ResponseEntity<GetBookFavoriteInfoResponseDto> getBookFavoriteInfo(@AuthenticationPrincipal UserEntity user,
                                               @PathVariable(name = "isbn") String isbn) {
-        boolean result = bookFavoriteService.isFavorite(user, isbn);
-        return ResponseEntity.ok(result);
+
+        GetBookFavoriteInfoResponseDto responseDto = bookFavoriteService.getBookFavoriteInfo(user, isbn);
+        return ResponseEntity.ok(responseDto);
     }
 
     // 좋아요
