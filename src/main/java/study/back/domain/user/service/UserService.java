@@ -20,4 +20,5 @@ public interface UserService {
     List<UserDeliveryInfo> getAllUserDeliveryInfo(UserEntity user);
     DeliveryInfoEntity createDeliveryInfo(UserEntity user, CreateDeliveryInfoRequestDto requestDto);
     void deleteDeliveryInfo(UserEntity user, Long deliveryInfoId);
+    void initProfileImage(UserEntity user);
 }

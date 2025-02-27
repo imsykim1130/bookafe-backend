@@ -74,17 +74,26 @@ public class UserServiceImpl implements UserService {
 
         // DB 업데이트
         user.changeProfileImg(url);
-        repository.saveUser(user);// 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
+        repository.saveUser(user); // 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
 
-        // 기존 이미지 삭제 (예외 발생해도 새 이미지 등록은 유지)
-//        if(oldUrl != null) {
-//            try {
-//                fileService.delete(oldUrl, folderName);
-//            } catch (Exception e) {
-//                System.err.println("기존 이미지 삭제 실패");
-//            }
-//        }
         return url;
+    }
+
+    // 프로필 이미지 초기화
+    @Override
+    public void initProfileImage(UserEntity user) {
+        String folderName = "image";
+
+        // 이미지 초기화 (예외 발생해도 DB 에서 프로필 이미지 초기화는 진행)
+        try {
+            String url = user.getProfileImg();
+            fileService.delete(url, folderName);
+        } catch (Exception e) {
+            System.err.println("이미지 삭제 실패");
+        }
+
+        user.changeProfileImg(null);
+        repository.saveUser(user); // 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
     }
 
     @Override
@@ -185,4 +194,6 @@ public class UserServiceImpl implements UserService {
             repository.saveUser(user);
         }
     }
+
+
 }

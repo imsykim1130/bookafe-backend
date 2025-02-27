@@ -74,6 +74,13 @@ public class UserController {
         return ResponseEntity.ok(result);
     }
 
+    // 프로필 이미지 초기화
+    @DeleteMapping("/profile-image")
+    public ResponseEntity<ResponseDto> deleteProfileImage(@AuthenticationPrincipal UserEntity user) {
+        userService.initProfileImage(user);
+        return ResponseEntity.ok(new ResponseDto("SU", "프로필 이미지 초기화 성공"));
+    }
+
     // 유저 검색
     @GetMapping("/search")
     public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord) {
