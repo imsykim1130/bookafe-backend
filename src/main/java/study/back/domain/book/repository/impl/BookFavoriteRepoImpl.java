@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.stereotype.Repository;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.domain.book.repository.BookFavoriteRepository;
@@ -11,12 +12,12 @@ import study.back.domain.book.repository.jpa.BookFavoriteJpaRepository;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.FavoriteBookView;
-import study.back.utils.item.FavoriteInfoView;
 import study.back.utils.item.Top10View;
 
 import java.util.List;
 import java.util.Optional;
 
+@Repository
 @RequiredArgsConstructor
 public class BookFavoriteRepoImpl implements BookFavoriteRepository {
     private final BookFavoriteJpaRepository bookFavoriteJpaRepository;

@@ -1,6 +1,7 @@
 package study.back.exception;
 
 import org.springframework.context.MessageSourceResolvable;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -15,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import study.back.exception.errors.*;
 
-import java.util.Arrays;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
@@ -24,60 +24,6 @@ public class GlobalExceptionHandler {
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 400 Bad Request
-    // default BR
-    @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ResponseDto> handleBadRequestException(BadRequestException e) {
-        HttpStatus status = HttpStatus.BAD_REQUEST;
-        String message = e.getMessage();
-        String code = message.split(" ")[0];
-        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
-        return ResponseEntity.status(status).body(responseDto);
-    }
-
-    // 401 Unauthorized
-    // default UA
-    @ExceptionHandler(UnauthorizedException.class)
-    public ResponseEntity<ResponseDto> handleUnauthorizedException(UnauthorizedException e) {
-        HttpStatus status = HttpStatus.UNAUTHORIZED;
-        String message = e.getMessage();
-        String code = message.split(" ")[0];
-        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
-        return ResponseEntity.status(status).body(responseDto);
-    }
-
-    // 403 Forbidden
-    // default FB
-    @ExceptionHandler(ForbiddenException.class)
-    public ResponseEntity<ResponseDto> handleForbiddenException(ForbiddenException e) {
-        HttpStatus status = HttpStatus.FORBIDDEN;
-        String message = e.getMessage();
-        String code = message.split(" ")[0];
-        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
-        return ResponseEntity.status(status).body(responseDto);
-    }
-
-    // 404 Not Found
-    // default NF
-    @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ResponseDto> handleNotFoundException(NotFoundException e) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        String message = e.getMessage();
-        String code = message.split(" ")[0];
-        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
-        return ResponseEntity.status(status).body(responseDto);
-    }
-
-    // 409
-    // default CF
-    @ExceptionHandler(ConflictException.class)
-    public ResponseEntity<ResponseDto> handleConflictException(ConflictException e) {
-        HttpStatus status = HttpStatus.CONFLICT;
-        String message = e.getMessage();
-        String code = message.split(" ")[0];
-        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
-        return ResponseEntity.status(status).body(responseDto);
-    }
-
     // @requestBody validation 실패
     // default RBVF
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -125,6 +71,60 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(responseDto);
     }
 
+    // default BR
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<ResponseDto> handleBadRequestException(BadRequestException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        String message = e.getMessage();
+        String code = message.split(" ")[0];
+        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 401 Unauthorized
+    // default UA
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ResponseDto> handleUnauthorizedException(UnauthorizedException e) {
+        HttpStatus status = HttpStatus.UNAUTHORIZED;
+        String message = e.getMessage();
+        String code = message.split(" ")[0];
+        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 403 Forbidden
+    // default FB
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<ResponseDto> handleForbiddenException(ForbiddenException e) {
+        HttpStatus status = HttpStatus.FORBIDDEN;
+        String message = e.getMessage();
+        String code = message.split(" ")[0];
+        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 404 Not Found
+    // default NF
+    @ExceptionHandler(NotFoundException.class)
+    public ResponseEntity<ResponseDto> handleNotFoundException(NotFoundException e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        String message = e.getMessage();
+        String code = message.split(" ")[0];
+        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 409 Conflict
+    // default CF
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ResponseDto> handleConflictException(ConflictException e) {
+        HttpStatus status = HttpStatus.CONFLICT;
+        String message = e.getMessage();
+        String code = message.split(" ")[0];
+        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
     // 500 Internal Server Error
     // 예상하고 지정된 에러
     // ISE
@@ -142,6 +142,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ResponseDto> handleRuntimeException(RuntimeException e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
         ResponseDto responseDto = ResponseDto.builder().code("RT").message(e.getMessage()).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 데이터베이스 관련 예외
+    // DBE
+    @ExceptionHandler(DataAccessException.class)
+    public ResponseEntity<ResponseDto> handleDataAccessException(DataAccessException e) {
+        HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
+        ResponseDto responseDto = ResponseDto.builder().code("DBE").message(e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 }

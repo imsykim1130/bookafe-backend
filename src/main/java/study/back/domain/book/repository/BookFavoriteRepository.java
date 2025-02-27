@@ -6,7 +6,6 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.FavoriteBookView;
-import study.back.utils.item.FavoriteInfoView;
 import study.back.utils.item.Top10View;
 
 import java.util.List;

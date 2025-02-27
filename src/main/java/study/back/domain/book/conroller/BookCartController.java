@@ -15,7 +15,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/cart")
-public class BookCartController {
+class BookCartController {
     private final BookCartService bookCartService;
 
     // 장바구니 담기

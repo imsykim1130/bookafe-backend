@@ -22,23 +22,19 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import study.back.utils.ResponseDto;
 import study.back.security.JwtFilter;
 import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfig {
+public class WebSecurityConfig implements WebMvcConfigurer {
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtils jwtUtils;
 
@@ -94,7 +90,7 @@ public class WebSecurityConfig {
                 auth
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/**", "/api/v1/comment/**", "/image/**", "/api/v1/favorite/top10", "/api/v1/favorite/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/**", "/api/v1/comment/**", "/image/**", "/api/v1/favorite/top10", "/api/v1/favorite/**").permitAll()
                         .requestMatchers("api/v1/admin/**").hasRole("ADMIN") // 인가
                         .anyRequest().authenticated()
 

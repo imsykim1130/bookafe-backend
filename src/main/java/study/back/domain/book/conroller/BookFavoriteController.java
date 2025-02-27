@@ -29,7 +29,6 @@ public class BookFavoriteController {
     @GetMapping("/{isbn}")
     public ResponseEntity<GetBookFavoriteInfoResponseDto> getBookFavoriteInfo(@AuthenticationPrincipal UserEntity user,
                                               @PathVariable(name = "isbn") String isbn) {
-
         GetBookFavoriteInfoResponseDto responseDto = bookFavoriteService.getBookFavoriteInfo(user, isbn);
         return ResponseEntity.ok(responseDto);
     }

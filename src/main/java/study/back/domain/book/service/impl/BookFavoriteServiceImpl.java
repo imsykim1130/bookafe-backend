@@ -2,7 +2,6 @@ package study.back.domain.book.service.impl;
 
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
@@ -16,7 +15,6 @@ import study.back.domain.book.repository.impl.BookFavoriteRepoImpl;
 import study.back.domain.book.repository.jpa.BookFavoriteJpaRepository;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.utils.item.FavoriteBookView;
-import study.back.utils.item.FavoriteInfoView;
 import study.back.utils.item.Top10View;
 import study.back.domain.book.service.BookFavoriteService;
 
@@ -26,8 +24,7 @@ import java.util.List;
 @Transactional
 public class BookFavoriteServiceImpl implements BookFavoriteService {
     private final BookFavoriteRepository repository;
-
-    @Autowired
+    
     public BookFavoriteServiceImpl(BookFavoriteJpaRepository bookFavoriteJpaRepository, BookJpaRepository bookJpaRepository, EntityManager em) {
         this.repository = new BookFavoriteRepoImpl(bookFavoriteJpaRepository, bookJpaRepository, em);
     }
