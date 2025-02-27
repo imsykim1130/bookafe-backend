@@ -52,7 +52,7 @@ public class UserController {
     // 새로운 배송정보 추가하기
     @PostMapping("/delivery-info")
     public ResponseEntity<ResponseDto> createUserDeliveryInfo(@AuthenticationPrincipal UserEntity user,
-                                                              @RequestBody @Valid CreateDeliveryInfoRequestDto requestDto) {
+                                                                @RequestBody @Valid CreateDeliveryInfoRequestDto requestDto) {
         userService.createDeliveryInfo(user, requestDto);
         ResponseDto responseDto = new ResponseDto("SU", "새로운 배송정보 추가 성공");
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);

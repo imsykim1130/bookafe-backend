@@ -1,25 +1,27 @@
 package study.back.domain.user.service;
 
-import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
+import java.io.IOException;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import study.back.domain.file.FileService;
 import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
+import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.DeliveryInfoEntity;
+import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.repository.UserRepository;
 import study.back.exception.BadRequest.InvalidPhoneNumberException;
 import study.back.exception.Conflict.ConflictNameException;
 import study.back.exception.Forbidden.UserMismatchException;
 import study.back.exception.NotFound.DeliveryInfoNotFoundException;
-import study.back.utils.item.UserManagementInfo;
-import study.back.domain.user.dto.response.GetUserResponseDto;
-import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.repository.UserRepository;
 import study.back.utils.item.UserDeliveryInfo;
-
-import java.time.format.DateTimeFormatter;
-import java.util.List;
+import study.back.utils.item.UserManagementInfo;
 
 @Service
 @Transactional
@@ -28,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final FileService fileService;
     private final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
-
 
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(UserEntity user) {
@@ -48,18 +49,42 @@ public class UserServiceImpl implements UserService {
         return repository.findAllUserDeliveryInfo(user);
     }
 
+    /**
+     * 새 이미지 업로드
+        파일 이름은 유저별로 동일한 값을 가지도록 하고 해당 파일 이름을 public_id 로 사용한다.
+        cloudinary 에서는 같은 public_id 를 가지면 덮어쓰기가 된다.
+        덮어쓰기가 되면 프로필 변경 시 이전 파일을 삭제하지 않아도 된다.
+        이미지 초기화 시에만 파일을 삭제한다.
+     */
     // 프로필 이미지 변경
     @Override
     public String changeProfileImage(UserEntity user, MultipartFile file) {
-        // 파일 업로드
-        String fileName = fileService.upload(file);
-        user.changeProfileImg(fileName);
-        UserEntity changedUser = repository.saveUser(user);// 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
+        String folderName = "image";
+        // 기존 이미지 가져오기
+        String oldUrl = user.getProfileImg();
 
-        if(changedUser.getProfileImg() == null) {
-            throw new RuntimeException("이미지 변경 실패");
+        String url = null;
+        String fileName = user.getNickname();
+
+        try {
+            url = fileService.upload(file, folderName, fileName);
+        } catch (IOException e) {
+            throw new RuntimeException("이미지 업로드 실패");
         }
-        return changedUser.getProfileImg();
+
+        // DB 업데이트
+        user.changeProfileImg(url);
+        repository.saveUser(user);// 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
+
+        // 기존 이미지 삭제 (예외 발생해도 새 이미지 등록은 유지)
+//        if(oldUrl != null) {
+//            try {
+//                fileService.delete(oldUrl, folderName);
+//            } catch (Exception e) {
+//                System.err.println("기존 이미지 삭제 실패");
+//            }
+//        }
+        return url;
     }
 
     @Override
