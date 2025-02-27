@@ -1,6 +1,5 @@
 package study.back.domain.user.repository;
 
-import jakarta.validation.constraints.NotBlank;
 import study.back.domain.user.entity.DeliveryInfoEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.UserDeliveryInfo;

@@ -33,7 +33,7 @@ public class CouponController {
 
     // 새로운 쿠폰 등록하기(관리자)
     @PostMapping("")
-    public ResponseEntity registerCoupon(@RequestBody @Valid RegisterCouponRequestDto requestDto) {
+    public ResponseEntity<ResponseDto> registerCoupon(@RequestBody @Valid RegisterCouponRequestDto requestDto) {
         couponService.registerCoupon(requestDto.getName(), requestDto.getDiscountPercent());
         ResponseDto responseDto = ResponseDto.builder().code("SU").message("쿠폰 등록 성공.").build();
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
@@ -41,7 +41,7 @@ public class CouponController {
 
     // 쿠폰 삭제하기(관리자)
     @DeleteMapping("/{couponId}")
-    public ResponseEntity deleteCoupon(@PathVariable(name = "couponId") Long couponId) {
+    public ResponseEntity<ResponseDto> deleteCoupon(@PathVariable(name = "couponId") Long couponId) {
         couponService.deleteCoupon(couponId);
         ResponseDto responseDto = ResponseDto.builder().code("SU").message("쿠폰 삭제 성공.").build();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto); // 204: 작업이 수행되었고 반환할 것이 없을 때
@@ -49,7 +49,7 @@ public class CouponController {
 
     // 쿠폰 수정하기(관리자)
     @PatchMapping("")
-    public ResponseEntity modifyCoupon(@RequestBody @Valid ModifyCouponRequestDto requestDto) {
+    public ResponseEntity<ResponseDto> modifyCoupon(@RequestBody @Valid ModifyCouponRequestDto requestDto) {
         couponService.modifyCoupon(requestDto);
         ResponseDto responseDto = ResponseDto.builder().code("SU").message("쿠폰 수정 성공.").build();
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto);

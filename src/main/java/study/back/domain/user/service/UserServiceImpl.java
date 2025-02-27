@@ -8,7 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.file.FileService;
 import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
 import study.back.domain.user.entity.DeliveryInfoEntity;
-import study.back.domain.user.repository.UserRepositoryImpl;
+import study.back.exception.BadRequest.InvalidPhoneNumberException;
 import study.back.exception.Conflict.ConflictNameException;
 import study.back.exception.Forbidden.UserMismatchException;
 import study.back.exception.NotFound.DeliveryInfoNotFoundException;
@@ -20,8 +20,6 @@ import study.back.utils.item.UserDeliveryInfo;
 
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -29,6 +27,8 @@ import java.util.Optional;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final FileService fileService;
+    private final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
+
 
     @Override
     public ResponseEntity<? super GetUserResponseDto> getUser(UserEntity user) {
@@ -106,10 +106,16 @@ public class UserServiceImpl implements UserService {
     // 배송정보 추가하기
     @Override
     public DeliveryInfoEntity createDeliveryInfo(UserEntity user, CreateDeliveryInfoRequestDto requestDto) {
+
         // 배송정보 이름 중복 검증
         Boolean isConflict = repository.existsDeliveryInfoByName(requestDto.getName());
         if(isConflict) {
             throw new ConflictNameException();
+        }
+
+        // 전화번호 검증
+        if(!requestDto.getReceiverPhoneNumber().matches(PHONE_NUMBER_REGEX)) {
+            throw new InvalidPhoneNumberException();
         }
 
         // 새로운 배송정보 생성

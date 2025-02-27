@@ -25,7 +25,7 @@ public class CommentController {
     // 댓글 작성
     @PostMapping("")
     public ResponseEntity<ResponseDto> postComment(@RequestBody PostCommentRequestDto requestDto,
-                                         @AuthenticationPrincipal UserEntity user) {
+                                            @AuthenticationPrincipal UserEntity user) {
         commentService.postComment(requestDto, user);
         ResponseDto result = ResponseDto.builder().code("SU").message("댓글 작성 성공").build();
         return ResponseEntity.status(HttpStatus.OK).body(result);
@@ -63,25 +63,27 @@ public class CommentController {
 
     // 댓글 좋아요
     @PostMapping("/favorite/{commentId}")
-    public ResponseEntity putCommentFavorite(
+    public ResponseEntity<ResponseDto> putCommentFavorite(
             @PathVariable(name="commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         commentService.putCommentFavorite(commentId, user);
-        return ResponseEntity.ok().build();
+        ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 성공");
+        return ResponseEntity.ok(responseDto);
     }
 
     // 댓글 좋아요 취소
     @DeleteMapping("/favorite/{commentId}")
-    public ResponseEntity cancelCommentFavorite(@AuthenticationPrincipal UserEntity user,
+    public ResponseEntity<ResponseDto> cancelCommentFavorite(@AuthenticationPrincipal UserEntity user,
                                                 @PathVariable(name = "commentId") Long commentId) {
         commentService.cancelCommentFavorite(commentId, user);
-        return ResponseEntity.ok().build();
+        ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 취소 성공");
+        return ResponseEntity.ok(responseDto);
     }
 
     // 댓글 좋아요 여부
     @GetMapping("/is-favorite/{commentId}")
     public ResponseEntity<Boolean> isCommentFavorite(@AuthenticationPrincipal UserEntity user,
-                                                     @PathVariable(name = "commentId") Long commentId) {
+                                                        @PathVariable(name = "commentId") Long commentId) {
         Boolean result = commentService.isFavoriteComment(commentId, user);
         return ResponseEntity.ok(result);
     }

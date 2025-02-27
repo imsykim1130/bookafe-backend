@@ -91,9 +91,12 @@ public class CommentServiceImpl implements CommentService {
        // 책 여부 확인
         BookEntity book = findBook(isbn);
 
+        if(book == null) {
+            throw new NotFoundBookException();
+        }
+
         // 댓글 가져오기
         commentList = repository.findAllCommentItemByIsbn(isbn);
-      
         return commentList;
     }
 

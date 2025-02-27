@@ -69,10 +69,8 @@ public class PointServiceImpl implements PointService {
                     .pointDatetime(dateTime)
                     .changedPoint(points)
                     .build();
-        }
-
-        // 포인트 양수일 때 포인트 적립
-        if(points > 0) {
+        } else {
+            // 포인트 양수일 때 포인트 적립
             // 포인트 적립 로그 저장
             point = PointEntity.builder()
                     .user(user)
@@ -81,7 +79,7 @@ public class PointServiceImpl implements PointService {
                     .changedPoint(points)
                     .build();
         }
-
+        
         return pointJpaRepository.save(point);
     }
 

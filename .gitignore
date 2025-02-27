@@ -6,6 +6,8 @@ db/
 docker-compose.yml
 HELP.md
 .dockerignore
+**/src/main/**/out/
+**/src/test/**
 
 ### STS ###
 .apt_generated
@@ -24,8 +26,6 @@ bin/
 *.iml
 *.ipr
 out/
-**/src/main/**/out/
-**/src/test/**
 
 ### NetBeans ###
 /nbproject/private/
@@ -37,4 +37,5 @@ out/
 ### VS Code ###
 .vscode/
 
+### mac
 .DS_Store

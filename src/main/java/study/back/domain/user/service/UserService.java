@@ -1,6 +1,5 @@
 package study.back.domain.user.service;
 
-import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;

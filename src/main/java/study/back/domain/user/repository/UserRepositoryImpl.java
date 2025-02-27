@@ -1,7 +1,6 @@
 package study.back.domain.user.repository;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import lombok.Builder;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.DeliveryInfoEntity;

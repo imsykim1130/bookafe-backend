@@ -44,9 +44,9 @@ dependencies {
 }
 
  // jar file 하나만 생성
- tasks.jar {
- 	enabled = false
- }
+tasks.jar {
+	enabled = false
+}
 
 //tasks.named('test') {
 //	useJUnitPlatform()

@@ -12,16 +12,12 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 import study.back.utils.ResponseDto;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import study.back.exception.errors.*;
 
 import java.util.stream.Collectors;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     // 400 Bad Request
     // @requestBody validation 실패

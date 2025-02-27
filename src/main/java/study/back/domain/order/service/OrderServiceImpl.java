@@ -42,7 +42,6 @@ import java.util.stream.Collectors;
 @Service
 @Transactional
 public class OrderServiceImpl implements OrderService {
-    private static final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
     private OrderRepositoryInterface repository;
 
     public OrderServiceImpl(OrderRepository orderRepository, UserJpaRepository userJpaRepository, PointJpaRepository pointJpaRepository, OrderBookJpaRepository orderBookJpaRepository, UserCouponJpaRepository userCouponJpaRepository, EntityManager em) {
