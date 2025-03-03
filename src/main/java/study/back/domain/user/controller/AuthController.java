@@ -22,10 +22,11 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/sign-up")
-    public ResponseEntity<SignUpResponseDto> signUp(@RequestBody SignUpRequestDto requestDto) {
-        SignUpResponseDto signUpResponseDto = authService.signUp(requestDto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(signUpResponseDto);
+    public ResponseEntity<Void> signUp(@RequestBody SignUpRequestDto requestDto) {
+        authService.signUp(requestDto);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
     // 로그인
     @PostMapping("/sign-in")
     public ResponseEntity<Void> signIn(@RequestBody SignInRequestDto requestDto) {
