@@ -30,12 +30,9 @@ public class AuthServiceImpl implements AuthService {
 
     // 로그인
     @Override
-    public SignInResponseDto signIn(SignInRequestDto signInRequestDto) {
+    public String signIn(SignInRequestDto signInRequestDto) {
         String email = signInRequestDto.getEmail();
         String password = signInRequestDto.getPassword();
-
-        String jwt;
-        UserItem userItem;
 
         // 유저 가입 유무 확인
         UserEntity user = userJpaRepository.findByEmail(email);
@@ -49,15 +46,9 @@ public class AuthServiceImpl implements AuthService {
             throw new UnauthorizedException("로그인 실패");
         }
 
-        // 토큰 생성
+        // 토큰 생성 및 반환
         Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        jwt = jwtUtils.generateToken(authentication);
-
-        // 유저 정보
-        userItem = user.toItem();
-
-        // 로그인 성공
-        return new SignInResponseDto("SU", "로그인 성공", jwt, userItem);
+        return jwtUtils.generateToken(authentication);
     }
 
     // 회원가입
