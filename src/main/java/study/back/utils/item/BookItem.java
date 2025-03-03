@@ -3,13 +3,14 @@ package study.back.utils.item;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class BookItem {
     private String[] authors;
-    private String[] translators;
     private String contents;
     private String datetime;
     private String isbn;
@@ -19,5 +20,7 @@ public class BookItem {
     private String status;
     private String thumbnail;
     private String title;
+    private String[] translators;
+    private String url;
 }
 
