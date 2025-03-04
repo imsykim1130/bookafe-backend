@@ -44,4 +44,21 @@ public class AuthController {
                 .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
                 .build();
     }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout() {
+       ResponseCookie emptyCookie = ResponseCookie.from("jwt", null)
+               .httpOnly(true)
+               .secure(true)
+               .sameSite("None")
+               .path("/")
+               .maxAge(0) // 즉시 만료
+               .build();
+
+        return ResponseEntity
+                .ok()
+                .header(HttpHeaders.SET_COOKIE, emptyCookie.toString())
+                .build();
+    }
 }
