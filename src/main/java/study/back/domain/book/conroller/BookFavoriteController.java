@@ -34,7 +34,7 @@ public class BookFavoriteController {
 
     // 책 좋아요 정보
     // 좋아요 여부, 좋아요 개수
-    @GetMapping("/{isbn}")
+    @GetMapping("/{isbn}/permit")
     public ResponseEntity<GetBookFavoriteInfoResponseDto> getBookFavoriteInfo(@AuthenticationPrincipal UserEntity user,
                                                                                 @PathVariable(name = "isbn") String isbn) {
         GetBookFavoriteInfoResponseDto responseDto = bookFavoriteService.getBookFavoriteInfo(user, isbn);
