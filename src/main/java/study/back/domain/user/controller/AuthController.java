@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
-import study.back.domain.user.dto.response.SignUpResponseDto;
 import study.back.service.AuthService;
 
 @RestController

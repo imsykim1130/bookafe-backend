@@ -1,7 +1,5 @@
 package study.back.domain.user.controller;
 
-import jakarta.validation.Valid;
-import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,15 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
-import study.back.domain.user.dto.response.GetAllUserDeliveryInfoResponseDto;
-import study.back.domain.user.dto.response.GetUserOrderInfoResponseDto;
 import study.back.domain.user.service.UserService;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.utils.ResponseDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.UserDeliveryInfo;
 
 import java.util.List;
 
@@ -28,46 +22,35 @@ public class UserController {
     private final UserService userService;
 
     // 로그인 유저 정보 가져오기
+    /**
+     * @param user
+     * @return id, email, nickname, profileImg, createDate, role, totalPoint
+     */
     @GetMapping("")
-    public ResponseEntity<? super GetUserResponseDto> getUser(@AuthenticationPrincipal UserEntity user) {
-        return userService.getUser(user);
+    public ResponseEntity<GetUserResponseDto> getUser(@AuthenticationPrincipal UserEntity user) {
+        GetUserResponseDto data = userService.getUser(user);
+        return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 
-    // 유저 기본 배송정보 가져오기
-    // 기본 배송정보로 설정된 정보가 있으면 배송정보를 반환하고 없으면 null 을 반환한다.
-    @GetMapping("/delivery-info")
-    public ResponseEntity<GetUserOrderInfoResponseDto> getUserDeliveryInfo(@AuthenticationPrincipal UserEntity user) {
-        UserDeliveryInfo userDeliveryInfo = userService.getUserDeliveryInfo(user);
-        return GetUserOrderInfoResponseDto.success(userDeliveryInfo);
-    }
-
-    // 유저의 모든 배송정보 가져오기
-    @GetMapping("/delivery-info/all")
-    public ResponseEntity<GetAllUserDeliveryInfoResponseDto> getAllUserDeliveryInfo(@AuthenticationPrincipal UserEntity user) {
-        List<UserDeliveryInfo> userDeliveryInfoList = userService.getAllUserDeliveryInfo(user);
-        GetAllUserDeliveryInfoResponseDto responseDto = new GetAllUserDeliveryInfoResponseDto(userDeliveryInfoList);
-        return ResponseEntity.ok(responseDto);
-    }
-
-    // 새로운 배송정보 추가하기
-    @PostMapping("/delivery-info")
-    public ResponseEntity<ResponseDto> createUserDeliveryInfo(@AuthenticationPrincipal UserEntity user,
-                                                                @RequestBody @Valid CreateDeliveryInfoRequestDto requestDto) {
-        userService.createDeliveryInfo(user, requestDto);
-        ResponseDto responseDto = new ResponseDto("SU", "새로운 배송정보 추가 성공");
-        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-    }
-
-    // 배송정보 삭제하기
-    @DeleteMapping("/delivery-info/{deliveryInfoId}")
-    public ResponseEntity<ResponseDto> deleteUserDeliveryInfo(@AuthenticationPrincipal UserEntity user,
-                                                              @PathVariable(name = "deliveryInfoId") @Positive Long deliveryInfoId) {
-        userService.deleteDeliveryInfo(user, deliveryInfoId);
-        ResponseDto responseDto = ResponseDto.success("SU", "배송정보 삭제하기 성공");
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(responseDto);
+    // 유저 검색
+    /**
+     * @param searchWord : 유저 이메일에 포함된 단어
+     * @return
+     */
+    @GetMapping("/search")
+    public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord) {
+        List<UserManagementInfo> result = userService.getSearchUserList(searchWord);
+        return ResponseEntity.ok().body(result);
     }
 
     // 프로필 이미지 변경하기
+    // 클라우드 상에서 같은 유저는 같은 파일 이름으로 저장되기 때문에
+    // 기존에 이미지가 없다가 새로 추가하는 것이 아니라면 한 번 받은 이미지 url 계속 사용 가능
+    /**
+     * @param user
+     * @param file
+     * @return image url
+     */
     @PostMapping(value = "/profile-image", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<String> changeProfileImage(@AuthenticationPrincipal UserEntity user, @RequestPart(name = "file") MultipartFile file) {
         String result = userService.changeProfileImage(user, file);
@@ -75,17 +58,14 @@ public class UserController {
     }
 
     // 프로필 이미지 초기화
+    /**
+     * @param user: 로그인 된 유저
+     * @return
+     */
     @DeleteMapping("/profile-image")
     public ResponseEntity<ResponseDto> deleteProfileImage(@AuthenticationPrincipal UserEntity user) {
         userService.initProfileImage(user);
         return ResponseEntity.ok(new ResponseDto("SU", "프로필 이미지 초기화 성공"));
-    }
-
-    // 유저 검색
-    @GetMapping("/search")
-    public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord) {
-        List<UserManagementInfo> result = userService.getSearchUserList(searchWord);
-        return ResponseEntity.ok().body(result);
     }
 
     // 유저 삭제

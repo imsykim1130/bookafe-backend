@@ -4,23 +4,15 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import study.back.domain.file.FileService;
-import study.back.domain.user.dto.request.CreateDeliveryInfoRequestDto;
 import study.back.domain.user.dto.response.GetUserResponseDto;
-import study.back.domain.user.entity.DeliveryInfoEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserRepository;
-import study.back.exception.BadRequest.InvalidPhoneNumberException;
-import study.back.exception.Conflict.ConflictNameException;
-import study.back.exception.Forbidden.UserMismatchException;
-import study.back.exception.NotFound.DeliveryInfoNotFoundException;
-import study.back.utils.item.UserDeliveryInfo;
 import study.back.utils.item.UserManagementInfo;
 
 @Service
@@ -29,24 +21,24 @@ import study.back.utils.item.UserManagementInfo;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final FileService fileService;
-    private final String PHONE_NUMBER_REGEX = "^(01[0-9])?(\\d{3,4})?(\\d{4})$";
 
+    /**
+     * 유저 정보 가져오기
+     * @param user
+     * @return 유저 정보와 총 보유 포인트 반환
+     */
     @Override
-    public ResponseEntity<? super GetUserResponseDto> getUser(UserEntity user) {
-        Long totalPoint = repository.findUserTotalPoint(user);
-        return GetUserResponseDto.success(user, totalPoint);
-    }
-
-    // 유저 기본 배송정보 가져오기
-    @Override
-    public UserDeliveryInfo getUserDeliveryInfo(UserEntity user) {
-        return repository.findUserDefaultOrderInfo(user);
-    }
-
-    // 유저의 모든 배송 정보 가져오기
-    @Override
-    public List<UserDeliveryInfo> getAllUserDeliveryInfo(UserEntity user) {
-        return repository.findAllUserDeliveryInfo(user);
+    public GetUserResponseDto getUser(UserEntity user) {
+         Long totalPoint = repository.findUserTotalPoint(user);
+         return GetUserResponseDto.builder()
+                 .createDate(user.getCreateDate())
+                 .role(user.getRole())
+                 .nickname(user.getNickname())
+                 .profileImg(user.getProfileImg())
+                 .email(user.getEmail())
+                 .id(user.getId())
+                 .totalPoint(totalPoint)
+                 .build();
     }
 
     /**
@@ -60,8 +52,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public String changeProfileImage(UserEntity user, MultipartFile file) {
         String folderName = "image";
-        // 기존 이미지 가져오기
-        String oldUrl = user.getProfileImg();
 
         String url = null;
         String fileName = user.getNickname();
@@ -136,64 +126,4 @@ public class UserServiceImpl implements UserService {
             throw new RuntimeException("유저 삭제 실패");
         }
     }
-
-    // 배송정보 추가하기
-    @Override
-    public DeliveryInfoEntity createDeliveryInfo(UserEntity user, CreateDeliveryInfoRequestDto requestDto) {
-
-        // 배송정보 이름 중복 검증
-        Boolean isConflict = repository.existsDeliveryInfoByName(requestDto.getName());
-        if(isConflict) {
-            throw new ConflictNameException();
-        }
-
-        // 전화번호 검증
-        if(!requestDto.getReceiverPhoneNumber().matches(PHONE_NUMBER_REGEX)) {
-            throw new InvalidPhoneNumberException();
-        }
-
-        // 새로운 배송정보 생성
-        DeliveryInfoEntity deliveryInfo = DeliveryInfoEntity.builder()
-                .userId(user.getId())
-                .name(requestDto.getName())
-                .address(requestDto.getAddress())
-                .addressDetail(requestDto.getAddressDetail())
-                .receiver(requestDto.getReceiver())
-                .receiverPhoneNumber(requestDto.getReceiverPhoneNumber())
-                .build();
-
-        // 새로운 배송정보 저장
-        DeliveryInfoEntity savedDeliveryInfo = repository.saveDeliveryInfo(deliveryInfo);
-
-        // 기본 배송지 설정
-        if(requestDto.getIsDefault()) {
-            user.changeDefaultDeliveryInfoId(savedDeliveryInfo.getId());
-            repository.saveUser(user);
-        }
-
-        return savedDeliveryInfo;
-    }
-
-    // 배송지 삭제
-    @Override
-    public void deleteDeliveryInfo(UserEntity user, Long deliveryInfoId) {
-        DeliveryInfoEntity deliveryInfo = repository.findDeliveryInfoById(deliveryInfoId)
-                .orElseThrow(DeliveryInfoNotFoundException::new); // 배송지 여부 검증
-
-        // 배송지 소유자와 삭제하려는 유저 같은지 검증
-        if(!user.getId().equals(deliveryInfo.getUserId())) {
-            throw new UserMismatchException();
-        }
-
-        // 삭제
-        repository.deleteDeliveryInfo(deliveryInfoId);
-
-        // 기본 배송지를 삭제하면 유저의 기본 배송지 id 도 null 로 변경
-        if(user.getDefaultDeliveryInfoId() != null && user.getDefaultDeliveryInfoId().equals(deliveryInfoId)) {
-            user.changeDefaultDeliveryInfoId(null);
-            repository.saveUser(user);
-        }
-    }
-
-
 }
