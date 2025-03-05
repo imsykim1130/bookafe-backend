@@ -1,14 +1,12 @@
 package study.back.domain.user.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
 import study.back.service.AuthService;
@@ -28,37 +26,31 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/sign-in")
-    public ResponseEntity<Void> signIn(@RequestBody SignInRequestDto requestDto) {
-        String jwt = authService.signIn(requestDto);
+    public ResponseEntity<Long> signIn(@RequestBody SignInRequestDto requestDto) {
+        authService.signIn(requestDto);
+        ResponseCookie cookie = authService.getCookie(requestDto.getEmail());
+        Long expire = cookie.getMaxAge().getSeconds();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(expire);
+    }
 
-        ResponseCookie jwtCookie = ResponseCookie.from("jwt", jwt) // 키 이름으로 "jwt" 가지도록 저장
-                .httpOnly(true) // XSS 방어. javascript 에서 접근 불가
-                .secure(true) // HTTPS 에서만 전송
-                .sameSite("None") // 크로스 도메인 지원
-                .path("/") // 모든 경로에서 쿠키 전송 가능
-                .maxAge(3600) // 1시간 유효
-                .build();
-
+    // 토큰 쿠키에 발급
+    @PostMapping("/set-cookie/{email}")
+    public ResponseEntity<Void> setCookie(@PathVariable(name = "email") String email) {
+        ResponseCookie cookie = authService.getCookie(email);
         return ResponseEntity
-                .ok()
-                .header(HttpHeaders.SET_COOKIE, jwtCookie.toString())
-                .build();
+                .status(HttpStatus.OK)
+                .header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 
     // 로그아웃
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout() {
-       ResponseCookie emptyCookie = ResponseCookie.from("jwt", null)
-               .httpOnly(true)
-               .secure(true)
-               .sameSite("None")
-               .path("/")
-               .maxAge(0) // 즉시 만료
-               .build();
-
-        return ResponseEntity
-                .ok()
-                .header(HttpHeaders.SET_COOKIE, emptyCookie.toString())
+    public ResponseEntity<Void> logout(HttpServletResponse response) {
+        ResponseCookie cookie = ResponseCookie.from("jwt", null)
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+                .maxAge(0) // 유효시간 0 으로 하여 jwt 쿠키 무효화
                 .build();
+        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 }

@@ -1,14 +1,13 @@
 package study.back.service.implement;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import study.back.utils.item.UserItem;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
-import study.back.domain.user.dto.response.SignInResponseDto;
 import study.back.domain.user.dto.response.SignUpResponseDto;
 import study.back.exception.Conflict.ConflictEmailException;
 import study.back.exception.Conflict.ConflictNicknameException;
@@ -30,7 +29,7 @@ public class AuthServiceImpl implements AuthService {
 
     // 로그인
     @Override
-    public String signIn(SignInRequestDto signInRequestDto) {
+    public void signIn(SignInRequestDto signInRequestDto) {
         String email = signInRequestDto.getEmail();
         String password = signInRequestDto.getPassword();
 
@@ -45,10 +44,6 @@ public class AuthServiceImpl implements AuthService {
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new UnauthorizedException("로그인 실패");
         }
-
-        // 토큰 생성 및 반환
-        Authentication authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        return jwtUtils.generateToken(authentication);
     }
 
     // 회원가입
@@ -94,5 +89,20 @@ public class AuthServiceImpl implements AuthService {
 
         // 회원가입 성공
         return new SignUpResponseDto("SU", "회원가입 성공");
+    }
+
+    // 쿠키 생성
+    @Override
+    public ResponseCookie getCookie(String email) {
+        UserDetails user = userJpaRepository.findByEmail(email);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        String jwt = jwtUtils.generateToken(authenticationToken);
+        ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
+                .path("/")
+                .secure(true)
+                .sameSite("None")
+                .maxAge(60 * 2) // 2분
+                .build();
+        return cookie;
     }
 }
