@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,6 +21,9 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import study.back.utils.ResponseDto;
@@ -30,6 +32,7 @@ import study.back.security.JwtUtils;
 import study.back.security.UserDetailsServiceImpl;
 
 import java.io.IOException;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
@@ -62,6 +65,20 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         return authProvider;
     }
 
+    // cors 설정
+    public CorsConfigurationSource corsConfigurationSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration configuration = new CorsConfiguration();
+
+        configuration.setAllowedOrigins(List.of("https://localhost:5173"));
+        configuration.setAllowedMethods(List.of("GET", "PUT", "PATCH", "POST", "DELETE", "OPTIONS"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowCredentials(true);
+
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
+
 //    시큐리티 필터 무시할 요청
 //    @Bean
 //    public WebSecurityCustomizer webSecurityCustomizer() {
@@ -74,12 +91,13 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     // 시큐리티 필터 체인 설정
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        CharacterEncodingFilter filter = new CharacterEncodingFilter();
-        filter.setEncoding("UTF-8");
-        filter.setForceEncoding(true);
-        http.cors(Customizer.withDefaults());
-        http.csrf(AbstractHttpConfigurer::disable);
-        http.addFilterBefore(filter, CsrfFilter.class);
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
+        http.csrf(csrf -> csrf.disable());
+        http.cors(cors ->
+                cors.configurationSource(corsConfigurationSource()));
+        http.addFilterBefore(encodingFilter, CsrfFilter.class);
         http.exceptionHandling(exception->exception.authenticationEntryPoint(new CustomExceptionEntryPoint()));
         // jwt 기반 인증 사용을 위해 stateless 하게 바꿔주기
         http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
