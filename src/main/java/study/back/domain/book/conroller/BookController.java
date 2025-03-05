@@ -42,11 +42,8 @@ public class BookController {
 
     // 오늘의 책 가져오기
     @GetMapping("/book/today")
-    public ResponseEntity<GetTodayBookResponseDto> getRecommendBook() {
-        TodayBookView result = bookService.getRecommendBook();
-        GetTodayBookResponseDto responseDto =
-                new GetTodayBookResponseDto(result);
+    public ResponseEntity<TodayBookView> getRecommendBook() {
+        TodayBookView responseDto = bookService.getRecommendBook();
         return ResponseEntity.ok(responseDto);
     }
-
 }
