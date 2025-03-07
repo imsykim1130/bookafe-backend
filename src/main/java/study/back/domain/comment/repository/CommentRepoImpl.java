@@ -119,4 +119,12 @@ public class CommentRepoImpl implements CommentRepository {
 
     }
 
+    // 유저가 작성한 리뷰에 좋아요를 누른 유저의 닉네임 리스트 가져오기
+    @Override
+    public List<String> findAllCommentFavoriteNicknameByUser(UserEntity user) {
+        return em.createQuery("select cf.user.nickname from CommentFavoriteEntity cf where cf.comment.userId = :userId", String.class)
+                .setParameter("userId", user.getId())
+                .getResultList();
+    }
+
 }

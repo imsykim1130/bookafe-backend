@@ -24,4 +24,5 @@ public interface CommentRepository {
     int deleteCommentFavorite(Long commentId, UserEntity user);
     Boolean existsCommentFavorite(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
+    List<String> findAllCommentFavoriteNicknameByUser(UserEntity user);
 }

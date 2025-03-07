@@ -190,4 +190,10 @@ public class CommentServiceImpl implements CommentService {
         return repository.findBookById(isbn)
                 .orElseThrow(() -> new NotFoundBookException());
     }
+
+    // 내 리뷰의 좋아요 유저 리스트 가져오기
+    @Override
+    public List<String> getReviewFavoriteUserList(UserEntity user) {
+        return repository.findAllCommentFavoriteNicknameByUser(user);
+    }
 }
