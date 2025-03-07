@@ -7,6 +7,7 @@ import study.back.domain.book.dto.response.GetBookDetailResponseDto;
 import study.back.domain.book.dto.response.GetBookListResponseDto;
 import study.back.domain.book.dto.response.GetTodayBookResponseDto;
 import study.back.domain.book.service.BookService;
+import study.back.utils.item.BookDetail;
 import study.back.utils.item.TodayBookView;
 
 @RestController
@@ -36,8 +37,9 @@ public class BookController {
 
     // 책 상세정보
     @GetMapping("/book/detail/{isbn}")
-    public ResponseEntity<GetBookDetailResponseDto> getBookDetail(@PathVariable(name = "isbn") String isbn) {
-        return bookService.getBookDetail(isbn);
+    public ResponseEntity<BookDetail> getBookDetail(@PathVariable(name = "isbn") String isbn) {
+       BookDetail data = bookService.getBookDetail(isbn);
+       return ResponseEntity.ok(data);
     }
 
     // 오늘의 책 가져오기

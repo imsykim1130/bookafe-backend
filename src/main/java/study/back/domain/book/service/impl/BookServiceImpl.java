@@ -85,7 +85,7 @@ public class BookServiceImpl implements BookService {
 
     // 책 상세 정보 가져오기
     @Override
-    public ResponseEntity<GetBookDetailResponseDto> getBookDetail (String isbn) {
+    public BookDetail getBookDetail (String isbn) {
         BookDetail bookDetail = null;
 
         // 책 유무 확인
@@ -101,7 +101,7 @@ public class BookServiceImpl implements BookService {
         }
 
         // 책 정보 찾기 성공
-        return GetBookDetailResponseDto.success(bookDetail);
+        return bookDetail;
     }
 
     // 추천 책 가져오기

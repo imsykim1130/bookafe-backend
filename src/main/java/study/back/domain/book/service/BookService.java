@@ -14,7 +14,7 @@ public interface BookService {
                                                                Integer size,
                                                                String target);
 
-    ResponseEntity<GetBookDetailResponseDto> getBookDetail (String isbn);
+    BookDetail getBookDetail (String isbn);
     TodayBookView getRecommendBook();
     BookEntity getBookIfExistOrElseNull(String isbn);
 }
