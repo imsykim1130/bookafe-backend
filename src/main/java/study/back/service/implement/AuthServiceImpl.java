@@ -104,7 +104,7 @@ public class AuthServiceImpl implements AuthService {
                 .path("/") // 쿠키 사용 가능 path
                 .secure(true) // https 에서만 사용 가능
                 .sameSite("None") // 크로스 도메인 허용(실제 사용시에는 strict 나 lax 로 변경 필요)
-                .maxAge(60 * 2) // 유효기간
+                .maxAge(60 * 60) // 유효기간
                 .build();
         return cookie;
     }
