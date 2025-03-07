@@ -3,6 +3,7 @@ package study.back.domain.book.repository.jpa;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.RecommendBookEntity;
 import study.back.utils.item.RecommendBookView;
@@ -16,5 +17,6 @@ public interface RecommendBookJpaRepository extends JpaRepository<RecommendBookE
     List<RecommendBookView> getAllRecommendBook();
 
     @Modifying
-    void deleteByBook(BookEntity book);
+    @Query("delete from RecommendBookEntity rb where rb.book = :book")
+    void deleteByBook(@Param("book")BookEntity book);
 }
