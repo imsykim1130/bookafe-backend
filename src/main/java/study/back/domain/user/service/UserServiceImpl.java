@@ -13,6 +13,7 @@ import study.back.domain.file.FileService;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserRepository;
+import study.back.exception.NotFound.NotFoundUserException;
 import study.back.utils.item.UserManagementInfo;
 
 @Service
@@ -84,6 +85,14 @@ public class UserServiceImpl implements UserService {
 
         user.changeProfileImg(null);
         repository.saveUser(user); // 위의 유저는 필터단에서 받아온 유저이기 때문에 더티체킹이 되지 않는다. 그래서 save 를 직접 해주어야 변경사항이 적용된다.
+    }
+
+    // 관리자 유저 탈퇴 시키기
+    @Override
+    public void deleteUserByAdmin(Long userId) {
+        // 유저 여부 확인
+        UserEntity user = repository.findUserById(userId).orElseThrow(NotFoundUserException::new);
+        repository.deleteUser(user);
     }
 
     @Override

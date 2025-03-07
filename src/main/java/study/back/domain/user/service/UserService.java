@@ -13,4 +13,5 @@ public interface UserService {
     List<UserManagementInfo> getSearchUserList(String searchWord);
     void deleteUser(UserEntity user);
     void initProfileImage(UserEntity user);
+    void deleteUserByAdmin(Long userId);
 }

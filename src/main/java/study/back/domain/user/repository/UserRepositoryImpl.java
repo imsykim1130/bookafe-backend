@@ -189,4 +189,10 @@ public class UserRepositoryImpl implements UserRepository {
                 .setParameter("deliveryInfoId", deliveryInfoId)
                 .getSingleResult());
     }
+
+    // 유저 id 로 유저 찾기
+    @Override
+    public Optional<UserEntity> findUserById(Long userId) {
+       return userJpaRepository.findById(userId);
+    }
 }

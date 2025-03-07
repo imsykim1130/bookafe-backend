@@ -38,7 +38,8 @@ public class UserController {
      * @return
      */
     @GetMapping("/search")
-    public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord) {
+    public ResponseEntity<List<UserManagementInfo>> getSearchUserList(@RequestParam(name = "searchWord") String searchWord,
+                                                                      @RequestParam(name="filter", required = false, defaultValue = "email") String filter) {
         List<UserManagementInfo> result = userService.getSearchUserList(searchWord);
         return ResponseEntity.ok().body(result);
     }
@@ -68,11 +69,17 @@ public class UserController {
         return ResponseEntity.ok(new ResponseDto("SU", "프로필 이미지 초기화 성공"));
     }
 
-    // 유저 삭제
+    // 탈퇴하기
     @DeleteMapping("")
-    public ResponseEntity<ResponseDto> deleteUser(@AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal UserEntity user) {
         userService.deleteUser(user);
-        return ResponseEntity.ok(ResponseDto.builder().code("SU").message("유저 탈퇴 성공").build());
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 상태를 반환하여 로그아웃 하게 만들기
     }
 
+    // 유저 탈퇴시키기
+    @DeleteMapping("/admin")
+    public ResponseEntity<Void> deleteUserByAdmin(@RequestParam("userId") Long userId) {
+        userService.deleteUserByAdmin(userId);
+        return ResponseEntity.ok().build();
+    }
 }

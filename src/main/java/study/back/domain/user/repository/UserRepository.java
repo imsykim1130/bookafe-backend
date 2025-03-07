@@ -20,4 +20,5 @@ public interface UserRepository {
     DeliveryInfoEntity saveDeliveryInfo(DeliveryInfoEntity deliveryInfo);
     void deleteDeliveryInfo(Long deliveryInfoId);
     Optional<DeliveryInfoEntity> findDeliveryInfoById(Long deliveryInfoId);
+    Optional<UserEntity> findUserById(Long userId);
 }

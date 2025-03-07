@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -19,8 +20,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.AccessDeniedHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.csrf.CsrfFilter;
+import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -88,39 +91,8 @@ public class WebSecurityConfig implements WebMvcConfigurer {
 //        };
 //    }
 
-    // 시큐리티 필터 체인 설정
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
-        encodingFilter.setEncoding("UTF-8");
-        encodingFilter.setForceEncoding(true);
-        http.csrf(csrf -> csrf.disable());
-        http.cors(cors ->
-                cors.configurationSource(corsConfigurationSource()));
-        http.addFilterBefore(encodingFilter, CsrfFilter.class);
-        http.exceptionHandling(exception->exception.authenticationEntryPoint(new CustomExceptionEntryPoint()));
-        // jwt 기반 인증 사용을 위해 stateless 하게 바꿔주기
-        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-        // form 인증 비활성화
-        http.formLogin(AbstractHttpConfigurer::disable);
-        http.httpBasic(AbstractHttpConfigurer::disable);
-        http.authorizeHttpRequests(auth->
-                auth
-                        .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/**", "/api/v1/comment/**", "/image/**", "/api/v1/favorite/top10", "/api/v1/favorite/*/permit").permitAll()
-                        .requestMatchers("api/v1/admin/**").hasRole("ADMIN") // 인가
-                        .anyRequest().authenticated()
-
-        );
-        http.authenticationProvider(daoAuthenticationProvider()); // db 의 유저 정보와 입력된 유저 정보 비교
-        http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
-        return http.build();
-    }
-
-    // 인증, 인가 실패 시
-    static class CustomExceptionEntryPoint implements AuthenticationEntryPoint {
-
+    // 인증 실패 시 401 반환
+    public static class CustomExceptionEntryPoint implements AuthenticationEntryPoint {
         @Override
         public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
             ResponseDto responseDto = new ResponseDto("UA", "인증 실패");
@@ -131,4 +103,48 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         }
     }
 
+    // 인가 실패 시 403 반환
+    static class CustomAccessDeniedHandler implements AccessDeniedHandler {
+        @Override
+        public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
+            // access denied
+            ResponseDto  responseDto = new ResponseDto("AD", "해당 요청에 대한 권한이 없습니다");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
+        }
+    }
+
+    // 시큐리티 필터 체인 설정
+    @Bean
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        CharacterEncodingFilter encodingFilter = new CharacterEncodingFilter();
+        encodingFilter.setEncoding("UTF-8");
+        encodingFilter.setForceEncoding(true);
+        http.csrf(csrf -> csrf.disable());
+        http.cors(cors ->
+                cors.configurationSource(corsConfigurationSource()));
+        http.addFilterBefore(encodingFilter, CsrfFilter.class);
+        http.exceptionHandling(exception -> {
+            exception.accessDeniedHandler(new CustomAccessDeniedHandler()).authenticationEntryPoint(new CustomExceptionEntryPoint());
+        });
+        // jwt 기반 인증 사용을 위해 stateless 하게 바꿔주기
+        http.sessionManagement(session->session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+        // form 인증 비활성화
+        http.formLogin(AbstractHttpConfigurer::disable);
+        http.httpBasic(AbstractHttpConfigurer::disable);
+        http.authorizeHttpRequests(auth->
+                auth
+                        .requestMatchers("/api/v1/admin/**", "/api/v1/user/admin").hasRole("ADMIN") // 인가
+                        .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/comment/list/*", "/api/v1/comment/reply/list/*", "/api/v1/comment/favorite/count/*").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/**","/image/**", "/api/v1/favorite/top10", "/api/v1/favorite/*/permit").permitAll()
+                        .anyRequest().authenticated()
+
+        );
+        http.authenticationProvider(daoAuthenticationProvider()); // db 의 유저 정보와 입력된 유저 정보 비교
+        http.addFilterBefore(jwtFilter(), UsernamePasswordAuthenticationFilter.class);
+        return http.build();
+    }
 }
