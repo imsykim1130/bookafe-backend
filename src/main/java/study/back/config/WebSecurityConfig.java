@@ -139,7 +139,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/v1/comment/list/*", "/api/v1/comment/reply/list/*", "/api/v1/comment/favorite/count/*").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/**","/image/**", "/api/v1/favorite/top10", "/api/v1/favorite/*/permit", "/api/v1/comment/favorite/user-list").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/book/**", "/api/v1/books/**","/image/**", "/api/v1/favorite/top10", "/api/v1/favorite/*/permit", "/api/v1/comment/favorite/user-list","/api/v1/comment/my/list").permitAll()
                         .anyRequest().authenticated()
 
         );

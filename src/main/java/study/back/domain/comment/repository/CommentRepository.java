@@ -1,5 +1,6 @@
 package study.back.domain.comment.repository;
 
+import study.back.domain.comment.dto.response.MyReview;
 import study.back.utils.item.CommentItem;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.comment.entity.CommentEntity;
@@ -25,4 +26,5 @@ public interface CommentRepository {
     Boolean existsCommentFavorite(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
     List<String> findAllCommentFavoriteNicknameByUser(Long userId);
+    List<MyReview> findAllMyReviewByUserId(Long userId);
 }

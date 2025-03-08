@@ -1,5 +1,6 @@
 package study.back.service;
 
+import study.back.domain.comment.dto.response.MyReview;
 import study.back.utils.item.CommentItem;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
@@ -19,4 +20,5 @@ public interface CommentService {
     Boolean isFavoriteComment(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
     List<String> getReviewFavoriteUserList(Long userId);
+    List<MyReview> getMyReviewList(Long userId);
 }

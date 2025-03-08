@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.domain.comment.dto.response.MyReview;
 import study.back.utils.item.CommentItem;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
@@ -101,4 +102,12 @@ public class CommentController {
         List<String> result = commentService.getReviewFavoriteUserList(userId);
         return ResponseEntity.ok(result);
     }
+
+    // 내 리뷰 가져오기
+    @GetMapping("/my/list")
+    public ResponseEntity<List<MyReview>> getMyCommentList(@RequestParam(name = "userId") Long userId) {
+        List<MyReview> result = commentService.getMyReviewList(userId);
+        return ResponseEntity.ok(result);
+    }
+
 }

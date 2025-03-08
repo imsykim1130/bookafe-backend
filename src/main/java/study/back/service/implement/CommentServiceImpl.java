@@ -3,6 +3,7 @@ package study.back.service.implement;
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
+import study.back.domain.comment.dto.response.MyReview;
 import study.back.utils.item.CommentItem;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
@@ -195,5 +196,11 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public List<String> getReviewFavoriteUserList(Long userId) {
         return repository.findAllCommentFavoriteNicknameByUser(userId);
+    }
+
+    // 내 리뷰 리스트 가져오기
+    @Override
+    public List<MyReview> getMyReviewList(Long userId) {
+        return repository.findAllMyReviewByUserId(userId);
     }
 }

@@ -2,6 +2,7 @@ package study.back.domain.comment.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import study.back.domain.comment.dto.response.MyReview;
 import study.back.utils.item.CommentItem;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.comment.entity.CommentEntity;
@@ -127,4 +128,15 @@ public class CommentRepoImpl implements CommentRepository {
                 .getResultList();
     }
 
+    /**
+     * 유저가 작성한 댓글을 MyReview 형태로 가져오기
+     * @param userId
+     * @return content, createdAt, title, author 가 담긴 리스트
+     */
+    @Override
+    public List<MyReview> findAllMyReviewByUserId(Long userId) {
+        return em.createQuery("select c.content as content, c.writeDate as createdAt, c.book.title as title, c.book.author as author from CommentEntity c where c.userId = :userId and c.parent is null", MyReview.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }
