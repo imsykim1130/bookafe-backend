@@ -97,8 +97,8 @@ public class CommentController {
 
     // 내 리뷰의 좋아요 유저 닉네임 리스트 가져오기
     @GetMapping("/favorite/user-list")
-    public ResponseEntity<List<String>> getReviewFavoriteUserList(@AuthenticationPrincipal UserEntity user) {
-        List<String> result = commentService.getReviewFavoriteUserList(user);
+    public ResponseEntity<List<String>> getReviewFavoriteUserList(@RequestParam(name = "userId") Long userId) {
+        List<String> result = commentService.getReviewFavoriteUserList(userId);
         return ResponseEntity.ok(result);
     }
 }

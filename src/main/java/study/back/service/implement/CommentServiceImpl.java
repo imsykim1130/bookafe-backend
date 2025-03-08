@@ -193,7 +193,7 @@ public class CommentServiceImpl implements CommentService {
 
     // 내 리뷰의 좋아요 유저 리스트 가져오기
     @Override
-    public List<String> getReviewFavoriteUserList(UserEntity user) {
-        return repository.findAllCommentFavoriteNicknameByUser(user);
+    public List<String> getReviewFavoriteUserList(Long userId) {
+        return repository.findAllCommentFavoriteNicknameByUser(userId);
     }
 }
