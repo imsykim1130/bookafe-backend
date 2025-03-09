@@ -136,9 +136,7 @@ public class CommentRepoImpl implements CommentRepository {
      * @return content, createdAt, title, author 가 담긴 리스트
      */
     @Override
-    public List<MyReview> findAllMyReviewByUserId(Long userId) {
-        return em.createQuery("select c.content as content, c.writeDate as createdAt, c.book.title as title, c.book.author as author from CommentEntity c where c.userId = :userId and c.parent is null", MyReview.class)
-                .setParameter("userId", userId)
-                .getResultList();
+    public Page<MyReview> findAllMyReviewByUserId(Long userId, Pageable pageable) {
+        return commentJpaRepository.findAllMyReviewByUserId(userId, pageable);
     }
 }

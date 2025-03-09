@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import lombok.RequiredArgsConstructor;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
-import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.MyReviewListResponseDto;
 import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.service.CommentService;
@@ -116,8 +116,12 @@ public class CommentController {
 
     // 내 리뷰 가져오기
     @GetMapping("/my/list")
-    public ResponseEntity<List<MyReview>> getMyCommentList(@RequestParam(name = "userId") Long userId) {
-        List<MyReview> result = commentService.getMyReviewList(userId);
+    public ResponseEntity<MyReviewListResponseDto> getMyReviewList(
+        @RequestParam(name = "userId") Long userId,
+        @RequestParam(name = "page")Integer page,
+        @RequestParam(name = "size") Integer size)
+    {
+        MyReviewListResponseDto result = commentService.getMyReviewList(userId, page, size);
         return ResponseEntity.ok(result);
     }
 

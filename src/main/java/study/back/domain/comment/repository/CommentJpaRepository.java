@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import study.back.domain.comment.dto.response.MyReview;
 import study.back.domain.comment.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.utils.item.CommentResultSet;
@@ -33,4 +34,8 @@ public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long>
 
     @Query("select new study.back.domain.comment.dto.response.ReviewFavoriteUser(cf.user.id, cf.user.nickname) from CommentFavoriteEntity cf where cf.user.id = :userId")
     Page<ReviewFavoriteUser> findAllReviewFavoriteUserByUserId(@Param("userId") Long userId, Pageable pageable);
+
+    
+    @Query("select new study.back.domain.comment.dto.response.MyReview(c.content, c.writeDate, c.book.title, c.book.author) from CommentEntity c where c.userId = :userId and c.parent is null")
+    Page<MyReview> findAllMyReviewByUserId(@Param("userId") Long userId, Pageable pageable);
 }

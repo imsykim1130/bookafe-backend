@@ -15,6 +15,7 @@ import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
 import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.MyReviewListResponseDto;
 import study.back.domain.comment.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
@@ -215,7 +216,14 @@ public class CommentServiceImpl implements CommentService {
 
     // 내 리뷰 리스트 가져오기
     @Override
-    public List<MyReview> getMyReviewList(Long userId) {
-        return repository.findAllMyReviewByUserId(userId);
+    public MyReviewListResponseDto getMyReviewList(Long userId, Integer page, Integer size) {
+        PageRequest pageable = PageRequest.of(page, size);
+        Page<MyReview> reviewList = repository.findAllMyReviewByUserId(userId, pageable);
+        
+        return MyReviewListResponseDto.builder()
+        .reviewList(reviewList.getContent())
+        .totalCount(reviewList.getTotalElements())
+        .isEnd(reviewList.isLast())
+        .build();
     }
 }

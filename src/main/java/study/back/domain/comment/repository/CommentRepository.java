@@ -30,5 +30,5 @@ public interface CommentRepository {
     Boolean existsCommentFavorite(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
     Page<ReviewFavoriteUser> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable);
-    List<MyReview> findAllMyReviewByUserId(Long userId);
+    Page<MyReview> findAllMyReviewByUserId(Long userId, Pageable pageable);
 }
