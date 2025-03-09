@@ -1,20 +1,29 @@
 package study.back.domain.comment.conroller;
 
-import lombok.RequiredArgsConstructor;
+import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.*;
-import study.back.domain.comment.dto.response.MyReview;
-import study.back.utils.item.CommentItem;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import lombok.RequiredArgsConstructor;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
-import study.back.utils.ResponseDto;
+import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.service.CommentService;
-
-import java.util.List;
+import study.back.utils.ResponseDto;
+import study.back.utils.item.CommentItem;
 
 @RestController
 @RequiredArgsConstructor
@@ -96,10 +105,12 @@ public class CommentController {
         return ResponseEntity.ok(result);
     }
 
-    // 내 리뷰의 좋아요 유저 닉네임 리스트 가져오기
+    // 내 리뷰의 좋아요 유저 리스트 가져오기
     @GetMapping("/favorite/user-list")
-    public ResponseEntity<List<String>> getReviewFavoriteUserList(@RequestParam(name = "userId") Long userId) {
-        List<String> result = commentService.getReviewFavoriteUserList(userId);
+    public ResponseEntity<ReviewFavoriteUserListResponseDto> getReviewFavoriteUserList(@RequestParam(name = "userId") Long userId,
+    @RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size) {
+        ReviewFavoriteUserListResponseDto result = commentService.getReviewFavoriteUserList(userId, page, size);
+        
         return ResponseEntity.ok(result);
     }
 

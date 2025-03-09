@@ -1,17 +1,21 @@
 package study.back.domain.comment.repository;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
-import study.back.domain.comment.dto.response.MyReview;
-import study.back.utils.item.CommentItem;
 import study.back.domain.book.entity.BookEntity;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
+import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.book.repository.jpa.BookJpaRepository;
-
-import java.util.List;
-import java.util.Optional;
+import study.back.utils.item.CommentItem;
 
 @RequiredArgsConstructor
 public class CommentRepoImpl implements CommentRepository {
@@ -122,10 +126,8 @@ public class CommentRepoImpl implements CommentRepository {
 
     // 유저가 작성한 리뷰에 좋아요를 누른 유저의 닉네임 리스트 가져오기
     @Override
-    public List<String> findAllCommentFavoriteNicknameByUser(Long userId) {
-        return em.createQuery("select cf.user.nickname from CommentFavoriteEntity cf where cf.comment.userId = :userId", String.class)
-                .setParameter("userId", userId)
-                .getResultList();
+    public Page<ReviewFavoriteUser> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable) {
+        return commentJpaRepository.findAllReviewFavoriteUserByUserId(userId, pageable);
     }
 
     /**

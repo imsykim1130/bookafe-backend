@@ -1,15 +1,28 @@
 package study.back.service.implement;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.stereotype.Service;
+
 import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
-import org.springframework.stereotype.Service;
-import study.back.domain.comment.dto.response.MyReview;
-import study.back.utils.item.CommentItem;
+import study.back.domain.book.entity.BookEntity;
+import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
-import study.back.domain.book.entity.BookEntity;
+import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.ReviewFavoriteUser;
+import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
+import study.back.domain.comment.repository.CommentJpaRepository;
+import study.back.domain.comment.repository.CommentRepoImpl;
+import study.back.domain.comment.repository.CommentRepository;
+import study.back.domain.user.entity.UserEntity;
 import study.back.exception.BadRequest.AlreadyFavoriteCommentException;
 import study.back.exception.BadRequest.NoCommentContentException;
 import study.back.exception.Forbidden.CommentAuthorMismatchException;
@@ -17,16 +30,8 @@ import study.back.exception.NotFound.NoParentCommentException;
 import study.back.exception.NotFound.NotExistCommentException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.exception.Unauthorized.UserNotFoundException;
-import study.back.domain.user.entity.UserEntity;
-import study.back.domain.comment.repository.CommentRepository;
-import study.back.domain.comment.repository.CommentRepoImpl;
-import study.back.domain.book.repository.jpa.BookJpaRepository;
-import study.back.domain.comment.repository.CommentJpaRepository;
 import study.back.service.CommentService;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
+import study.back.utils.item.CommentItem;
 
 @Service
 @Transactional
@@ -193,9 +198,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     // 내 리뷰의 좋아요 유저 리스트 가져오기
+    // 페이지네이션 적용
     @Override
-    public List<String> getReviewFavoriteUserList(Long userId) {
-        return repository.findAllCommentFavoriteNicknameByUser(userId);
+    public ReviewFavoriteUserListResponseDto getReviewFavoriteUserList(Long userId, Integer page, Integer size) {
+        // 페이지네이션 정보
+        PageRequest pageRequest = PageRequest.of(page, size);
+
+        Page<ReviewFavoriteUser> userList = repository.findAllCommentFavoriteNicknameByUser(userId, pageRequest);
+
+        return ReviewFavoriteUserListResponseDto.builder()
+                .userList(userList.getContent())
+                .isEnd(userList.isLast())
+                .totalCount(userList.getSize())
+                .build();
     }
 
     // 내 리뷰 리스트 가져오기

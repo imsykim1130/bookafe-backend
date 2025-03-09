@@ -1,12 +1,16 @@
 package study.back.domain.comment.repository;
 
+import java.util.List;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+
+import study.back.domain.comment.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.utils.item.CommentResultSet;
-
-import java.util.List;
 
 
 public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long> {
@@ -27,6 +31,6 @@ public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long>
             "where parent_comment_id = :parent_id", nativeQuery = true)
     List<CommentResultSet> findByParent(@Param(value="parent_id") String parent_id);
 
-
-
+    @Query("select new study.back.domain.comment.dto.response.ReviewFavoriteUser(cf.user.id, cf.user.nickname) from CommentFavoriteEntity cf where cf.user.id = :userId")
+    Page<ReviewFavoriteUser> findAllReviewFavoriteUserByUserId(@Param("userId") Long userId, Pageable pageable);
 }

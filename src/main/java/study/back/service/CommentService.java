@@ -1,13 +1,14 @@
 package study.back.service;
 
-import study.back.domain.comment.dto.response.MyReview;
-import study.back.utils.item.CommentItem;
+import java.util.List;
+
 import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
 import study.back.domain.comment.dto.request.PostCommentRequestDto;
+import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.user.entity.UserEntity;
-
-import java.util.List;
+import study.back.utils.item.CommentItem;
 
 public interface CommentService {
     CommentEntity postComment(PostCommentRequestDto requestDto, UserEntity user);
@@ -19,6 +20,6 @@ public interface CommentService {
     Boolean cancelCommentFavorite(Long commentId, UserEntity user);
     Boolean isFavoriteComment(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
-    List<String> getReviewFavoriteUserList(Long userId);
+    ReviewFavoriteUserListResponseDto getReviewFavoriteUserList(Long userId, Integer page, Integer size);
     List<MyReview> getMyReviewList(Long userId);
 }

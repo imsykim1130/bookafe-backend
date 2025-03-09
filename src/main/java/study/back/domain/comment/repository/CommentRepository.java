@@ -1,14 +1,18 @@
 package study.back.domain.comment.repository;
 
-import study.back.domain.comment.dto.response.MyReview;
-import study.back.utils.item.CommentItem;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import study.back.domain.book.entity.BookEntity;
+import study.back.domain.comment.dto.response.MyReview;
+import study.back.domain.comment.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
-
-import java.util.List;
-import java.util.Optional;
+import study.back.utils.item.CommentItem;
 
 public interface CommentRepository {
 
@@ -25,6 +29,6 @@ public interface CommentRepository {
     int deleteCommentFavorite(Long commentId, UserEntity user);
     Boolean existsCommentFavorite(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
-    List<String> findAllCommentFavoriteNicknameByUser(Long userId);
+    Page<ReviewFavoriteUser> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable);
     List<MyReview> findAllMyReviewByUserId(Long userId);
 }
