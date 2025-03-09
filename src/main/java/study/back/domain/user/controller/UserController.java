@@ -73,7 +73,7 @@ public class UserController {
     @DeleteMapping("")
     public ResponseEntity<Void> deleteUser(@AuthenticationPrincipal UserEntity user) {
         userService.deleteUser(user);
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 상태를 반환하여 로그아웃 하게 만들기
+        return ResponseEntity.status(HttpStatus.OK).build();
     }
 
     // 유저 탈퇴시키기
