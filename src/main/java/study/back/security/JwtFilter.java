@@ -14,6 +14,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
+import study.back.exception.Unauthorized.UserNotFoundException;
+import study.back.exception.errors.UnauthorizedException;
 import study.back.utils.ResponseDto;
 
 import java.io.IOException;
@@ -45,16 +47,20 @@ public class JwtFilter extends OncePerRequestFilter {
                 Authentication auth = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
-         // 토큰 validate 중 에러 발생
-        } catch (JwtException e) {
+
+        } catch (JwtException e) { // 토큰 validate 중 에러 발생
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             ResponseDto responseDto = ResponseDto.builder().code("UA").message("올바르지 않은 토큰 또는 만료된 토큰입니다").build();
             response.getWriter().write(objectMapper.writeValueAsString(responseDto));
             return;
 
-          // 서버 에러
-        } catch(Exception e) {
-            e.printStackTrace();
+        } catch(UserNotFoundException e) { // db 에서 로그인 정보 찾지 못함
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            ResponseDto responseDto = ResponseDto.builder().code("UA").message("존재하지 않는 유저입니다").build();
+            response.getWriter().write(objectMapper.writeValueAsString(responseDto));
+            return;
+
+        } catch(Exception e) { // 서버 에러
             response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             ResponseDto responseDto = ResponseDto.builder().code("ISE").message("서버 에러").build();
             response.getWriter().write(objectMapper.writeValueAsString(responseDto));

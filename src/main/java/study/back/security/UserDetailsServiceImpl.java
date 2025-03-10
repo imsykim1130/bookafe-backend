@@ -16,7 +16,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private final UserJpaRepository userJpaRepository;
 
     @Override
-    public UserEntity loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserEntity loadUserByUsername(String email){
         return Optional.ofNullable(userJpaRepository.findByEmail(email))
                 .orElseThrow(() -> new UsernameNotFoundException("존재하지 않는 유저입니다."));
     }
