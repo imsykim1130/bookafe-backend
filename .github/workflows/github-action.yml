@@ -19,7 +19,7 @@ jobs:
       - name: Make .env file
         run: echo "${{ secrets.ENV }}" | base64 --decode > .env
 
-d      # 이미지 빌드
+      # 이미지 빌드
       - name: Build image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/docker-springboot .
 
