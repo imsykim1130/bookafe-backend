@@ -8,5 +8,5 @@ import java.util.Optional;
 public interface BookRepository {
     Optional<BookEntity> findBookByIsbn(String isbn);
     BookEntity saveBook(BookEntity book);
-    TodayBookView findRecommendBook(int recommendBookMaxCount);
+    TodayBookView findRecommendBook();
 }

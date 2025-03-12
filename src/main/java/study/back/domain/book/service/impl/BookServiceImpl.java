@@ -2,10 +2,7 @@ package study.back.domain.book.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import study.back.domain.book.dto.response.GetBookDetailResponseDto;
 import study.back.domain.book.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.BookRepository;
@@ -25,10 +22,7 @@ public class BookServiceImpl implements BookService {
     private final BookRepository repository;
     private final KakaoService kakaoService;
 
-    @Value("${recommend-book-max-count}")
-    private int recommendBookMaxCount;
-
-    // 책 정보 가져오기
+     // 책 정보 가져오기
     // db, 카카오 api 에 모두 찾는 책 정보가 없으면 null 반환
     // db 에 데이터가 없으면 카카오 api 에서 정보를 찾은 뒤 db 에 넣어준다
     @Override
@@ -108,6 +102,6 @@ public class BookServiceImpl implements BookService {
     @Override
     public TodayBookView getRecommendBook() {
         // todo
-        return repository.findRecommendBook(recommendBookMaxCount);
+        return repository.findRecommendBook();
     }
 }

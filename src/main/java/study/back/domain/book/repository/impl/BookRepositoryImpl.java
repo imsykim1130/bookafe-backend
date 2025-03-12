@@ -30,7 +30,7 @@ public class BookRepositoryImpl implements BookRepository {
 
     // title, author, isbn, bookImg, favoriteComment
     @Override
-    public TodayBookView findRecommendBook(int recommendBookMaxCount) {
+    public TodayBookView findRecommendBook() {
         TodayBookView result;
         try {
             result = em.createQuery("select " +

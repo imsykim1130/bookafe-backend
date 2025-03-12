@@ -25,9 +25,6 @@ public class RecommendServiceImpl implements RecommendBookService {
     private final BookJpaRepository bookJpaRepository;
     private final BookService bookService;
 
-    @Value("${recommend-book-max-count}")
-    private int recommendBookMaxCount;
-
     // 책 추천하기
     @Override
     public Boolean registerRecommendBook(String isbn) {
@@ -45,6 +42,7 @@ public class RecommendServiceImpl implements RecommendBookService {
         // 추천 책 개수 제한 검증
         long count = recommendBookJpaRepository.count();
 
+        int recommendBookMaxCount = 10;
         if(count >= recommendBookMaxCount) {
             throw new NoMoreRecommendBookException();
         }
