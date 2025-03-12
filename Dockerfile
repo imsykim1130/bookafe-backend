@@ -20,9 +20,8 @@
 # springboot layer 로 최적화
 FROM openjdk:21-jdk as build
 WORKDIR /app
-COPY /build/libs/*.jar ./app.jar
-RUN java -Djarmode=layertools -jar app.jar extract
-
+ARG JAR_FILE=*.jar
+RUN java -Djarmode=layertools -jar ${JAR_FILE} extract
 
 # 실행할 컨테이너(크기를 줄이기 위해 slim 이미지 사용)
 FROM openjdk:21-jdk-slim
