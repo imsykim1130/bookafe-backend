@@ -1,4 +1,5 @@
-FROM openjdk:21-jdk-alpine as build
+# 빌드
+FROM openjdk:21-jdk-slim as build
 # gradle 캐시 최적화를 위해 필요한 파일들만 먼저 복사
 COPY gradle gradle
 COPY build.gradle settings.gradle gradlew ./
@@ -13,7 +14,7 @@ COPY . .
 RUN ./gradlew clean build
 #RUN ./gradlew build -x test # 테스트 불포함
 
-# 실행할 컨테이너(크기를 줄이기 위해 slim 이미지 사용)
+# 실행
 FROM openjdk:21-jdk-slim
 WORKDIR /app
 
