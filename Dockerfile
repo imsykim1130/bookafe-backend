@@ -12,7 +12,7 @@ COPY . .
 # jar 파일만 필요하면 bootJar
 #RUN ./gradlew bootJar
 # 코드 컴파일, 테스트, jar 생성 한 번에 하고 싶으면 build
-RUN ./gradlew clean build
+RUN ./gradlew clean build -x test
 #RUN ./gradlew build -x test # 테스트 불포함
 
 # 실행
