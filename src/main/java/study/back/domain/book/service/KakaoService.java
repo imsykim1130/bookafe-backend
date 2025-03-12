@@ -11,8 +11,11 @@ import study.back.utils.item.OriginBookItem;
 @Service
 @Transactional
 public class KakaoService {
-    @Value("${kakao-authorization}")
-    private String kakaoAuthorization;
+    private final String kakaoAuthorization;
+
+    public KakaoService(@Value("${kakao-authorization}") String kakaoAuthorization) {
+        this.kakaoAuthorization = kakaoAuthorization;
+    }
 
     // 카카오 api 에서 책 정보 가져오기
     public OriginBookItem getBookDataFromKakaoApi(String query, String sort, String page, String size, String target) throws KakaoAuthorizationException {
