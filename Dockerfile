@@ -1,5 +1,5 @@
 # 빌드
-FROM openjdk:21-jdk-slim as buildi
+FROM openjdk:21-jdk-slim as build
 WORKDIR /app
 # gradle 캐시 최적화를 위해 필요한 파일들만 먼저 복사
 COPY gradle gradle
