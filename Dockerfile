@@ -28,10 +28,10 @@ RUN java -Djarmode=layertools -jar app.jar extract
 FROM openjdk:21-jdk-slim
 WORKDIR /app
 
-COPY --from=layer app/dependencies/ .
-COPY --from=layer app/spring-boot-loader/ .
-COPY --from=layer app/snapshot-dependencies/ .
-COPY --from=layer app/application/ .
+COPY --from=build app/dependencies/ .
+COPY --from=build app/spring-boot-loader/ .
+COPY --from=build app/snapshot-dependencies/ .
+COPY --from=build app/application/ .
 
 EXPOSE 8080
 
