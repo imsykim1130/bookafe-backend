@@ -2,12 +2,24 @@
 build/
 db/
 **/src/main/**/build/
-**/src/main/resources/
-docker-compose.yml
+**/src/main/resources/static
+**/src/main/resources/templates
+docker-compose-dev.yml
 HELP.md
 .dockerignore
 **/src/main/**/out/
 **/src/test/**
+src/main/resources/properties/.env
+/docker-compose.yml
+/docker-compose-dev.yml
+nginx
+
+src/main/resources/keystore.p12
+src/main/resources/keystore.p12.base64
+src/main/resources/application.properties
+
+### 환경변수 ###
+.env
 
 ### STS ###
 .apt_generated

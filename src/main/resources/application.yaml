@@ -1,0 +1,54 @@
+server:
+  port: 8080
+#  ssl:
+#    key-store: classpath:keystore.p12
+#    key-store-type: PKCS12
+#    key-store-password: ${SSL_KEYSTORE_PASSWORD}
+
+spring:
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    properties:
+          hibernate:
+            show_sql: true
+            format_sql: true
+            order_updates: true
+            order-inserts: true
+            jdbc:
+              batch_size: 100
+            ddl-auth: validate
+            dialect: org.hibernate.dialect.MySQLDialect
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 3GB
+      max-request-size: 3GB
+  web:
+    resources:
+      add-mappings: true
+# logging
+logging:
+  level:
+    org:
+      springframework:
+        jdbc: debug
+
+# swagger
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+
+# kakao
+secret-key: ${KAKAO_SECRET_KEY}
+kakao-authorization: ${KAKAO_AUTHORIZATION}
+  
+# cloudinary
+cloudinary-cloud-name: ${CLOUDINARY_CLOUD_NAME}
+cloudinary-api-key: ${CLOUDINARY_API_KEY}
+cloudinary-api-secret: ${CLOUDINARY_API_SECRET}
