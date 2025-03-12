@@ -6,6 +6,9 @@ server:
 #    key-store-password: ${SSL_KEYSTORE_PASSWORD}
 
 spring:
+  config:
+    # .env 를 .env.properties 로 가져옴. optional 이기 때문에 .env 없어도 괜찮음
+    import: optional:file:.env[.properties]
   datasource:
     url: ${DB_URL}
     username: ${DB_USERNAME}
@@ -43,12 +46,3 @@ springdoc:
   api-docs:
     path: /v3/api-docs
     enabled: true
-
-# kakao
-secret-key: ${KAKAO_SECRET_KEY}
-kakao-authorization: ${KAKAO_AUTHORIZATION}
-  
-# cloudinary
-cloudinary-cloud-name: ${CLOUDINARY_CLOUD_NAME}
-cloudinary-api-key: ${CLOUDINARY_API_KEY}
-cloudinary-api-secret: ${CLOUDINARY_API_SECRET}
