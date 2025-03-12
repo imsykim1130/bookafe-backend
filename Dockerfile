@@ -18,7 +18,7 @@
 ##RUN ./gradlew build -x test # 테스트 불포함
 
 # springboot layer 로 최적화
-FROM openjdk:21-jdk as layer
+FROM openjdk:21-jdk as build
 WORKDIR /app
 COPY /build/libs/*.jar ./app.jar
 RUN java -Djarmode=layertools -jar app.jar extract
