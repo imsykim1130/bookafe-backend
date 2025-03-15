@@ -33,3 +33,6 @@ target/
 .gitignore
 .gitattributes
 .github
+
+# firebase
+src/main/resources/firebase-key.json

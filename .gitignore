@@ -18,7 +18,7 @@ src/main/resources/keystore.p12.base64
 src/main/resources/application.properties
 
 ### 환경변수 ###
-.env
+*.env
 
 ### STS ###
 .apt_generated
@@ -50,3 +50,6 @@ out/
 
 ### mac
 .DS_Store
+
+### firebase
+/src/main/resources/firebase-key.json

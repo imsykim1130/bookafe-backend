@@ -1,11 +1,15 @@
-package study.back.service.implement;
+package study.back.domain.user.service;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import study.back.domain.user.dto.request.AuthWithGoogleRequestDto;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
 import study.back.domain.user.dto.response.SignUpResponseDto;
@@ -18,7 +22,6 @@ import study.back.domain.user.entity.RoleName;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserJpaRepository;
 import study.back.security.JwtUtils;
-import study.back.service.AuthService;
 
 @RequiredArgsConstructor
 @Service
@@ -26,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserJpaRepository userJpaRepository;
     private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     private final JwtUtils jwtUtils;
+    private final FirebaseAuth firebaseAuth;
 
     // 로그인
     @Override
@@ -107,5 +111,56 @@ public class AuthServiceImpl implements AuthService {
                 .maxAge(60 * 60) // 유효기간
                 .build();
         return cookie;
+    }
+
+    // firebase 를 이용한 google 인증 후 google 인증 정보로 jwt 생성
+    @Override
+    public ResponseCookie authWithGoogle(AuthWithGoogleRequestDto requestDto) {
+        String idToken = requestDto.getIdToken();
+        Boolean isSignup = requestDto.isSignUp();
+
+        try {
+            // firebase id 토큰 검증
+            FirebaseToken decodedToken = firebaseAuth.verifyIdToken(idToken);
+            String email = decodedToken.getEmail();
+            // 비밀번호로 사용
+            String uid = decodedToken.getUid();
+            // 닉네임으로 사용
+            String nickname = decodedToken.getName();
+
+            // 가입하는 경우 해당 이메일로 가입된 계정 있는지 검증
+            if(isSignup) {
+                UserEntity alreadySignedUser = userJpaRepository.findByEmail(email);
+                if(alreadySignedUser != null) {
+                    throw new ConflictUserException();
+                }
+            }
+
+            UserEntity user = UserEntity.builder()
+                    .email(email)
+                    .password(uid)
+                    .nickname(nickname)
+                    .role(RoleName.ROLE_USER)
+                    .build();
+            // 구글 인증 표시
+            user.googleAuth();
+
+            UserEntity savedUser = userJpaRepository.save(user);
+
+            // jwt 생성
+            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(savedUser, null, savedUser.getAuthorities());
+            String jwt = jwtUtils.generateToken(authenticationToken);
+
+            // jwt 쿠키 반환
+            return ResponseCookie.from("jwt", jwt)
+                    .path("/") // 쿠키 사용 가능 path
+                    .secure(true) // https 에서만 사용 가능
+                    .sameSite("None") // 크로스 도메인 허용(실제 사용시에는 strict 나 lax 로 변경 필요)
+                    .maxAge(60 * 60) // 유효기간
+                    .build();
+
+        } catch (FirebaseAuthException e) { // 토큰 검증 실패
+            throw new UnauthorizedException();
+        }
     }
 }

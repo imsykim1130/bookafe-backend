@@ -22,7 +22,6 @@ public class BookDetail {
         bookDetail.isbn = bookEntity.getIsbn();
         bookDetail.bookImg = bookEntity.getBookImg();
         bookDetail.title = bookEntity.getTitle();
-        bookDetail.price = bookEntity.getPrice();
         bookDetail.publisher = bookEntity.getPublisher();
         bookDetail.author = bookEntity.getAuthor();
         bookDetail.pubDate = bookEntity.getPubDate();

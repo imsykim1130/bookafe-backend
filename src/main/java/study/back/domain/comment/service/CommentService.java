@@ -1,4 +1,4 @@
-package study.back.service;
+package study.back.domain.comment.service;
 
 import java.util.List;
 

@@ -1,19 +1,18 @@
-package study.back.service.implement;
+package study.back.domain.book.service.impl;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.RecommendBookEntity;
+import study.back.domain.book.service.BookService;
+import study.back.domain.book.service.RecommendBookService;
 import study.back.exception.BadRequest.AlreadyRecommendedBookException;
 import study.back.exception.BadRequest.NoMoreRecommendBookException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.book.repository.jpa.RecommendBookJpaRepository;
 import study.back.utils.item.RecommendBookView;
-import study.back.domain.book.service.BookService;
-import study.back.service.RecommendBookService;
 
 import java.util.List;
 

@@ -21,7 +21,7 @@ import study.back.domain.comment.dto.request.PostCommentRequestDto;
 import study.back.domain.comment.dto.response.MyReviewListResponseDto;
 import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.service.CommentService;
+import study.back.domain.comment.service.CommentService;
 import study.back.utils.ResponseDto;
 import study.back.utils.item.CommentItem;
 

@@ -3,9 +3,7 @@ package study.back.domain.user.repository;
 import jakarta.persistence.EntityManager;
 import lombok.Builder;
 import org.springframework.stereotype.Repository;
-import study.back.domain.user.entity.DeliveryInfoEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.UserDeliveryInfo;
 
 import java.util.List;
 import java.util.Optional;
@@ -56,36 +54,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 유저 관련 데이터 삭제(댓글은 isDelete 컬럼의 값 변경만)
     public void deleteUserDependencyData(UserEntity user) {
-        // 포인트 내역 삭제
-        em.createQuery("delete from PointEntity p where p.user = :user")
-                .setParameter("user", user)
-                .executeUpdate();
-
-        // 유져 쿠폰 삭제
-        em.createQuery("delete from UserCouponEntity uc where uc.user = :user")
-                .setParameter("user", user)
-                .executeUpdate();
-
-        // 장바구니 삭제
-        em.createQuery("delete from BookCartEntity bc where bc.user = :user")
-                .setParameter("user", user)
-                .executeUpdate();
 
         // 좋아요 책 삭제 처리
         em.createQuery("update BookFavoriteEntity bf set bf.user = null where bf.user = :user")
                 .setParameter("user", user)
                 .executeUpdate();
-
-        // 주문 책 삭제
-        em.createQuery("delete from OrderBookEntity ob where ob.order.user = :user")
-                .setParameter("user", user)
-                .executeUpdate();
-
-        // 주문 삭제
-        em.createQuery("delete from OrderEntity o where o.user = :user")
-                .setParameter("user", user)
-                .executeUpdate();
-
         // 댓글 삭제 처리
         em.createQuery("update CommentEntity c set c.isDeleted = true where c.userId = :userId")
                 .setParameter("userId", user.getId())
@@ -111,84 +84,6 @@ public class UserRepositoryImpl implements UserRepository {
                 .executeUpdate();
     }
 
-    // 유저 기본 배송정보 가져오기
-    @Override
-    public UserDeliveryInfo findUserDefaultOrderInfo(UserEntity user) {
-        if(user.getDefaultDeliveryInfoId() == null) {
-            return null;
-        }
-
-        try {
-            return em.createQuery("select a.id as id, a.name as name, " +
-                            "cast((1) as boolean ) as isDefault, " +
-                            "a.receiver as receiver, " +
-                            "a.receiverPhoneNumber as receiverPhoneNumber, " +
-                            "a.address as address, " +
-                            "a.addressDetail as addressDetail " +
-                            "from DeliveryInfoEntity a " +
-                            "join UserEntity u on u.id = a.userId " +
-                            "where a.userId = :userId and a.id = u.defaultDeliveryInfoId", UserDeliveryInfo.class)
-                    .setParameter("userId", user.getId())
-                    .getSingleResult();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    // 유저의 모든 배송 정보 가져오기
-    @Override
-    public List<UserDeliveryInfo> findAllUserDeliveryInfo(UserEntity user) {
-       return em.createQuery("select a.id as id, a.name as name, " +
-                    "case " +
-                    "when a.id = u.defaultDeliveryInfoId then true " +
-                    "else false end as isDefault, " +
-                    "a.receiver as receiver, " +
-                    "a.receiverPhoneNumber as receiverPhoneNumber, " +
-                    "a.address as address, " +
-                    "a.addressDetail as addressDetail " +
-                    "from DeliveryInfoEntity a " +
-                    "join UserEntity u on u.id = a.userId " +
-                    "where a.userId = :userId", UserDeliveryInfo.class)
-               .setParameter("userId", user.getId())
-               .getResultList();
-    }
-
-    // 같은 배송정보 이름 존재 여부
-    @Override
-    public Boolean existsDeliveryInfoByName(String name) {
-        Long count;
-        try {
-            count = em.createQuery("select count(de) from DeliveryInfoEntity de where de.name = :name", Long.class)
-                    .setParameter("name", name)
-                    .getSingleResult();
-        } catch(Exception e) {
-            // 쿼리 실행 중 오류
-            return null;
-        }
-        return count == 1;
-    }
-
-    @Override
-    public DeliveryInfoEntity saveDeliveryInfo(DeliveryInfoEntity deliveryInfo) {
-        em.persist(deliveryInfo);
-        return deliveryInfo;
-    }
-
-    // 배송지 삭제
-    @Override
-    public void deleteDeliveryInfo(Long deliveryInfoId) {
-        em.createQuery("delete from DeliveryInfoEntity di where di.id = :deliveryInfoId")
-                .setParameter("deliveryInfoId", deliveryInfoId)
-                .executeUpdate();
-    }
-
-    // 배송지 id 로 찾기
-    @Override
-    public Optional<DeliveryInfoEntity> findDeliveryInfoById(Long deliveryInfoId) {
-        return Optional.ofNullable(em.createQuery("select di from DeliveryInfoEntity di where di.id = :deliveryInfoId", DeliveryInfoEntity.class)
-                .setParameter("deliveryInfoId", deliveryInfoId)
-                .getSingleResult());
-    }
 
     // 유저 id 로 유저 찾기
     @Override

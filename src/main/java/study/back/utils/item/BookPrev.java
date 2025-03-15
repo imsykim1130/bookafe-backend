@@ -21,8 +21,6 @@ public class BookPrev {
         bookPrev.bookImg = book.getBookImg();
         bookPrev.title = book.getTitle();
         bookPrev.author = book.getAuthor();
-        bookPrev.price = book.getPrice();
-        bookPrev.discountPercent = book.getDiscountPercent();
         return bookPrev;
     }
 

@@ -8,7 +8,7 @@ import study.back.domain.user.entity.UserEntity;
 import java.util.List;
 
 public interface BookJpaRepository extends JpaRepository<BookEntity, String> {
-    @Query("select bf from BookFavoriteEntity bf inner join BookEntity b on b.isbn = bf.isbn where bf.user = :user")
+    @Query("select bf from BookFavoriteEntity bf inner join BookEntity b on bf.book = b where bf.user = :user")
     List<BookEntity> findFavoriteBookListByUser(@Param("user")UserEntity user);
 
 //    @Query("select bf.book.isbn as isbn, bf.book.bookImg as bookImg, bf.book.title as title, bf.book.author as author, bf.book.price as price, bf.book.discountPercent as discountPercent, (select count(bc) from BookCartEntity bc inner join BookEntity b on b.isbn = bc.isbn where b = bf.book) as isCart from BookFavorite bf where bf.user = ?1")

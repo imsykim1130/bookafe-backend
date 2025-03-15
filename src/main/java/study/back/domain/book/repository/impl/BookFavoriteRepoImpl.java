@@ -52,7 +52,7 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
     // 좋아요 책 일괄취소
     @Override
     public int deleteAllFavoriteBook(UserEntity user, List<String> isbnList) {
-        int deletedCount = em.createQuery("delete from BookFavoriteEntity bf where bf.user.id = :userId and bf.isbn in :isbnList")
+        int deletedCount = em.createQuery("delete from BookFavoriteEntity bf where bf.user.id = :userId and bf.book.isbn in :isbnList")
                 .setParameter("userId", user.getId())
                 .setParameter("isbnList", isbnList)
                 .executeUpdate();
@@ -64,7 +64,7 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
     // 책에 좋아요를 누른 유저 id 리스트
     @Override
     public List<Long> findFavoriteBookUserIdList(String isbn) {
-        return em.createQuery("select bf.user.id from BookFavoriteEntity bf where bf.isbn = :isbn", Long.class)
+        return em.createQuery("select bf.user.id from BookFavoriteEntity bf where bf.book.isbn = :isbn", Long.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
     }
@@ -84,7 +84,7 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
     // isbn, bookImg, title, author, favoriteCount
     @Override
     public List<Top10View> findAllTop10View() {
-        return em.createQuery("select b.isbn as ibsn, b.bookImg as bookImg, b.title as title, b.author as author, count(bf.isbn) as favoriteCount from BookFavoriteEntity bf join BookEntity b on b.isbn = bf.isbn group by bf.isbn order by count(bf.isbn) desc limit 10", Top10View.class)
+        return em.createQuery("select bf.book.isbn as ibsn, bf.book.bookImg as bookImg, bf.book.title as title, bf.book.author as author, count(bf.book) as favoriteCount from BookFavoriteEntity bf group by bf.book order by count(bf.book) desc limit 10", Top10View.class)
                 .getResultList();
     }
 }

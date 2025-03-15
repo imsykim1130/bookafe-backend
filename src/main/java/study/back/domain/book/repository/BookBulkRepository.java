@@ -20,7 +20,6 @@ public class BookBulkRepository {
                 bookEntityList,
                 bookEntityList.size(),
                 (PreparedStatement ps, BookEntity bookEntity) -> {
-                    ps.setInt(1, bookEntity.getPrice());
                     ps.setString(2, bookEntity.getDescription());
                     ps.setString(3, bookEntity.getAuthor());
                     ps.setString(4, bookEntity.getBookImg());

@@ -10,6 +10,4 @@ public class FavoriteBookView {
    String bookImg;
    String title;
    String author;
-   Integer price;
-   Integer discountPercent;
 }

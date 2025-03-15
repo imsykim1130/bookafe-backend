@@ -40,9 +40,3 @@ logging:
     org:
       springframework:
         jdbc: debug
-
-# swagger
-springdoc:
-  api-docs:
-    path: /v3/api-docs
-    enabled: true

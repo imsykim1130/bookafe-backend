@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import study.back.domain.book.dto.response.GetBookFavoriteInfoResponseDto;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
+import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.user.entity.UserEntity;
@@ -57,7 +58,7 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
     @Override
     public void putBookToFavorite(UserEntity user, String isbn) {
         // 책 여부 검증
-        repository.findBookByIsbn(isbn).orElseThrow(NotFoundBookException::new);
+        BookEntity book = repository.findBookByIsbn(isbn).orElseThrow(NotFoundBookException::new);
 
         // 좋아요 여부 검증
         Boolean isFavorite = repository.existsBookFavoriteByUserAndIsbn(user, isbn);
@@ -66,7 +67,7 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
         }
 
         // 저장
-        BookFavoriteEntity bookFavorite = BookFavoriteEntity.createBookFavorite(user, isbn);
+        BookFavoriteEntity bookFavorite = BookFavoriteEntity.createBookFavorite(user, book);
         repository.saveBookFavorite(bookFavorite);
     }
 

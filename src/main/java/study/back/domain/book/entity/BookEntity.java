@@ -20,12 +20,10 @@ public class BookEntity {
     private String title;
     private String author;
     private String publisher;
-    private Integer price;
     @Column(length = 10000)
     private String description;
     private String pubDate;
     private String bookImg;
-    private Integer discountPercent;
 
     public static BookEntity toEntity(BookItem bookItem) {
         BookEntity bookEntity = new BookEntity();
@@ -35,9 +33,7 @@ public class BookEntity {
         bookEntity.publisher = bookItem.getPublisher();
         bookEntity.description = bookItem.getContents();
         bookEntity.pubDate = bookItem.getDatetime().split("T")[0].replace("-", ".");
-        bookEntity.price = bookItem.getPrice();
         bookEntity.bookImg = bookItem.getThumbnail();
-        bookEntity.discountPercent = 10;
         return bookEntity;
     }
    

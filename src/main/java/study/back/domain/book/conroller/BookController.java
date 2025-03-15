@@ -3,9 +3,7 @@ package study.back.domain.book.conroller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.back.domain.book.dto.response.GetBookDetailResponseDto;
 import study.back.domain.book.dto.response.GetBookListResponseDto;
-import study.back.domain.book.dto.response.GetTodayBookResponseDto;
 import study.back.domain.book.service.BookService;
 import study.back.utils.item.BookDetail;
 import study.back.utils.item.TodayBookView;
@@ -17,12 +15,15 @@ public class BookController {
 
     private final BookService bookService;
 
-    // 책 검색 리스트 가져오기
-    // query : 검색어
-    // sort : 정확도순, 발간일순
-    // page : 현재 페이지
-    // size : 한 페이지 당 검색 결과 개수. 기본 10개
-    // target : 책 제목, 저자, 춢판사
+    /**
+     * 책 검색 리스트 가져오기
+     * @param query 검색어
+     * @param sort accuracy, latest
+     * @param page 현재 페이지
+     * @param size 페이지 당 검색 결과수, 기본 10개
+     * @param target title, author, publisher
+     * @return {@link GetBookListResponseDto}
+     */
     @GetMapping("/books/search")
     public ResponseEntity<GetBookListResponseDto> getBookSearchList(
             @RequestParam(name = "query") String query,

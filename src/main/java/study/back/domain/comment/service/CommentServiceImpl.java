@@ -1,4 +1,4 @@
-package study.back.service.implement;
+package study.back.domain.comment.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -31,7 +31,6 @@ import study.back.exception.NotFound.NoParentCommentException;
 import study.back.exception.NotFound.NotExistCommentException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.exception.Unauthorized.UserNotFoundException;
-import study.back.service.CommentService;
 import study.back.utils.item.CommentItem;
 
 @Service

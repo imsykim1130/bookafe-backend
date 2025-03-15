@@ -1,8 +1,12 @@
 package study.back.domain.book.service.impl;
 
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Service;
+
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 import study.back.domain.book.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.BookRepository;
@@ -10,10 +14,11 @@ import study.back.domain.book.service.BookService;
 import study.back.domain.book.service.KakaoService;
 import study.back.exception.BadRequest.InvalidQueryException;
 import study.back.exception.NotFound.NotFoundBookException;
-import study.back.utils.item.*;
-
-import java.util.List;
-import java.util.Optional;
+import study.back.utils.item.BookDetail;
+import study.back.utils.item.BookItem;
+import study.back.utils.item.BookSearchItem;
+import study.back.utils.item.OriginBookItem;
+import study.back.utils.item.TodayBookView;
 
 @Service
 @Transactional
@@ -39,7 +44,7 @@ public class BookServiceImpl implements BookService {
                     isbn.split(" ")[0], "accuracy", null, null, "isbn");
             List<BookItem> bookItemList = bookDataFromKakaoApi.getDocuments();
             if(!bookItemList.isEmpty()) {
-                BookItem bookItem = bookItemList.getFirst();
+                BookItem bookItem = bookItemList.get(0);
                 book = BookEntity.toEntity(bookItem);
                 repository.saveBook(book);
             }

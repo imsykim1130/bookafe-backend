@@ -1,4 +1,4 @@
-package study.back.service;
+package study.back.domain.book.service;
 
 import study.back.utils.item.RecommendBookView;
 

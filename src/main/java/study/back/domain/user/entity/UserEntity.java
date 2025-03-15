@@ -33,15 +33,13 @@ public class UserEntity implements UserDetails {
     private LocalDateTime createDate;
     @Enumerated(EnumType.STRING)
     private RoleName role;
-    private Long defaultDeliveryInfoId;
 
     @Builder
     public static UserEntity toEntity(String email,
                                       String password,
                                       String nickname,
                                       RoleName role,
-                                      Long id,
-                                      Long defaultDeliveryInfoId) {
+                                      Long id){
         LocalDateTime now = LocalDateTime.now();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
@@ -55,7 +53,6 @@ public class UserEntity implements UserDetails {
         userEntity.googleAuth = false;
         userEntity.createDate = now;
         userEntity.role = role;
-        userEntity.defaultDeliveryInfoId = defaultDeliveryInfoId;
         return userEntity;
     }
 
@@ -63,6 +60,10 @@ public class UserEntity implements UserDetails {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         String createDate = this.createDate.format(formatter);
         return new UserItem(this.id, this.email, this.nickname, this.profileImg, createDate, this.role.toString());
+    }
+
+    public void googleAuth() {
+        this.googleAuth = true;
     }
 
     @Override
@@ -83,11 +84,6 @@ public class UserEntity implements UserDetails {
     public String changeProfileImg(String profileImg) {
         this.profileImg = profileImg;
         return this.profileImg;
-    }
-
-    public Long changeDefaultDeliveryInfoId(Long defaultDeliveryInfoId) {
-        this.defaultDeliveryInfoId = defaultDeliveryInfoId;
-        return this.defaultDeliveryInfoId;
     }
 
     @Override

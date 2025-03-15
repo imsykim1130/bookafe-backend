@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import study.back.utils.item.RecommendBookView;
-import study.back.service.RecommendBookService;
+import study.back.domain.book.service.RecommendBookService;
 
 import java.util.List;
 

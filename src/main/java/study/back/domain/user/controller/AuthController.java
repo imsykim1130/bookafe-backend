@@ -7,9 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import study.back.domain.user.dto.request.AuthWithGoogleRequestDto;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
-import study.back.service.AuthService;
+import study.back.domain.user.service.AuthService;
 
 @RestController
 @RequiredArgsConstructor
@@ -31,6 +32,13 @@ public class AuthController {
         ResponseCookie cookie = authService.getCookie(requestDto.getEmail());
         Long expire = cookie.getMaxAge().getSeconds();
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(expire);
+    }
+
+    // 구글 계정 인증정보로 인증
+    @PostMapping("/google")
+    public ResponseEntity<Void> authWithGoogle(@RequestBody AuthWithGoogleRequestDto requestDto) {
+        ResponseCookie cookie = authService.authWithGoogle(requestDto);
+        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
     }
 
     // 토큰 쿠키에 발급
