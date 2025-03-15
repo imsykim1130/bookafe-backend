@@ -132,24 +132,32 @@ public class AuthServiceImpl implements AuthService {
             // 닉네임으로 사용
             String nickname = decodedToken.getName();
 
+            UserEntity alreadySignedUser = userJpaRepository.findByEmail(email);
+            UserEntity savedUser;
+
             // 가입하는 경우 해당 이메일로 가입된 계정 있는지 검증
             if(isSignup) {
-                UserEntity alreadySignedUser = userJpaRepository.findByEmail(email);
                 if(alreadySignedUser != null) {
                     throw new ConflictUserException();
                 }
+                // 유저 생성
+                UserEntity user = UserEntity.builder()
+                        .email(email)
+                        .password(uid)
+                        .nickname(nickname)
+                        .role(RoleName.ROLE_USER)
+                        .build();
+                // 구글 인증 표시
+                user.googleAuth();
+
+                savedUser = userJpaRepository.save(user);
+            } else {
+                // 로그인 시 회원정보가 DB 에 없으면 예외 발생
+                if(alreadySignedUser == null) {
+                    throw new UserNotFoundException();
+                }
+                savedUser = alreadySignedUser;
             }
-
-            UserEntity user = UserEntity.builder()
-                    .email(email)
-                    .password(uid)
-                    .nickname(nickname)
-                    .role(RoleName.ROLE_USER)
-                    .build();
-            // 구글 인증 표시
-            user.googleAuth();
-
-            UserEntity savedUser = userJpaRepository.save(user);
 
             // jwt 생성
             UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(savedUser, null, savedUser.getAuthorities());
