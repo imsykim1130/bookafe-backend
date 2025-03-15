@@ -4,7 +4,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseToken;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -12,6 +15,7 @@ import org.springframework.stereotype.Service;
 import study.back.domain.user.dto.request.AuthWithGoogleRequestDto;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
+import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.dto.response.SignUpResponseDto;
 import study.back.exception.Conflict.ConflictEmailException;
 import study.back.exception.Conflict.ConflictNicknameException;
@@ -115,7 +119,7 @@ public class AuthServiceImpl implements AuthService {
 
     // firebase 를 이용한 google 인증 후 google 인증 정보로 jwt 생성
     @Override
-    public ResponseCookie authWithGoogle(AuthWithGoogleRequestDto requestDto) {
+    public ResponseEntity<GetUserResponseDto> authWithGoogle(AuthWithGoogleRequestDto requestDto) {
         String idToken = requestDto.getIdToken();
         Boolean isSignup = requestDto.isSignUp();
 
@@ -152,12 +156,23 @@ public class AuthServiceImpl implements AuthService {
             String jwt = jwtUtils.generateToken(authenticationToken);
 
             // jwt 쿠키 반환
-            return ResponseCookie.from("jwt", jwt)
+            ResponseCookie cookie = ResponseCookie.from("jwt", jwt)
                     .path("/") // 쿠키 사용 가능 path
                     .secure(true) // https 에서만 사용 가능
                     .sameSite("None") // 크로스 도메인 허용(실제 사용시에는 strict 나 lax 로 변경 필요)
                     .maxAge(60 * 60) // 유효기간
                     .build();
+
+            GetUserResponseDto responseBody = GetUserResponseDto.builder()
+                    .id(savedUser.getId())
+                    .email(savedUser.getEmail())
+                    .nickname(savedUser.getNickname())
+                    .role(savedUser.getRole())
+                    .profileImg(savedUser.getProfileImg())
+                    .createDate(savedUser.getCreateDate())
+                    .build();
+
+            return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, cookie.toString()).body(responseBody);
 
         } catch (FirebaseAuthException e) { // 토큰 검증 실패
             throw new UnauthorizedException();

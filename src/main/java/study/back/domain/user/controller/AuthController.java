@@ -10,13 +10,16 @@ import org.springframework.web.bind.annotation.*;
 import study.back.domain.user.dto.request.AuthWithGoogleRequestDto;
 import study.back.domain.user.dto.request.SignInRequestDto;
 import study.back.domain.user.dto.request.SignUpRequestDto;
+import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.service.AuthService;
+import study.back.domain.user.service.UserService;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthService authService;
+    private final UserService userService;
 
     // 회원가입
     @PostMapping("/sign-up")
@@ -35,14 +38,14 @@ public class AuthController {
     }
 
     /**
-     * 구글 계정으로 유저 인증
-     * @param requestDto
-     * @return
+     * <pre>구글 계정으로 유저 인증</pre>
+     * <pre>인증 성공 시 헤더에 jwt 쿠키와 유저 정보 반환</pre>
+     * @param requestDto 회원가입 여부, tokenId
+     * @return {@link GetUserResponseDto}
      */
     @PostMapping("/google")
-    public ResponseEntity<Void> authWithGoogle(@RequestBody AuthWithGoogleRequestDto requestDto) {
-        ResponseCookie cookie = authService.authWithGoogle(requestDto);
-        return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
+    public ResponseEntity<GetUserResponseDto> authWithGoogle(@RequestBody AuthWithGoogleRequestDto requestDto) {
+        return authService.authWithGoogle(requestDto);
     }
 
     // 토큰 쿠키에 발급
