@@ -34,7 +34,11 @@ public class AuthController {
         return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(expire);
     }
 
-    // 구글 계정 인증정보로 인증
+    /**
+     * 구글 계정으로 유저 인증
+     * @param requestDto
+     * @return
+     */
     @PostMapping("/google")
     public ResponseEntity<Void> authWithGoogle(@RequestBody AuthWithGoogleRequestDto requestDto) {
         ResponseCookie cookie = authService.authWithGoogle(requestDto);

@@ -7,7 +7,6 @@ import java.util.Optional;
 
 public interface UserRepository {
     UserEntity saveUser(UserEntity user);
-    Long findUserTotalPoint(UserEntity user);
     Long findUserCommentCount(UserEntity user);
     List<UserEntity> findAllUserBySearchWord(String searchWord);
     int deleteUser(UserEntity user);

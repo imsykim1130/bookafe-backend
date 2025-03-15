@@ -26,15 +26,6 @@ public class UserRepositoryImpl implements UserRepository {
         return userJpaRepository.save(user);
     }
 
-    // 유저의 총 포인트 얻기
-    @Override
-    public Long findUserTotalPoint(UserEntity user) {
-        Long result = em.createQuery("select sum(p.changedPoint) from PointEntity p where p.user = :user", Long.class)
-                .setParameter("user", user)
-                .getSingleResult();
-
-        return result == null ? 0 : result;
-    }
 
     // 유저의 댓글 개수 얻기
     @Override

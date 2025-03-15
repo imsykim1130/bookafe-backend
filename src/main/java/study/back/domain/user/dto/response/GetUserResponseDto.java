@@ -20,5 +20,4 @@ public class GetUserResponseDto {
     private String profileImg;
     private LocalDateTime createDate;
     private RoleName role;
-    private Long totalPoint;
 }

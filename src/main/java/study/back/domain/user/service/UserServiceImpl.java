@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public GetUserResponseDto getUser(UserEntity user) {
-         Long totalPoint = repository.findUserTotalPoint(user);
          return GetUserResponseDto.builder()
                  .createDate(user.getCreateDate())
                  .role(user.getRole())
@@ -38,7 +37,6 @@ public class UserServiceImpl implements UserService {
                  .profileImg(user.getProfileImg())
                  .email(user.getEmail())
                  .id(user.getId())
-                 .totalPoint(totalPoint)
                  .build();
     }
 
@@ -104,8 +102,7 @@ public class UserServiceImpl implements UserService {
         List<UserEntity> searchedUserList = repository.findAllUserBySearchWord(searchWord);
 
         return searchedUserList.stream().map(user -> {
-            // 각 유저의 보유 포인트 가져오기
-            Long totalPoint = repository.findUserTotalPoint(user);
+
             // 각 유저의 댓글 작성 개수 가져오기
             Long commentCount = repository.findUserCommentCount(user);
 
@@ -116,7 +113,6 @@ public class UserServiceImpl implements UserService {
                     .id(user.getId())
                     .email(user.getEmail())
                     .datetime(user.getCreateDate().format(formatter))
-                    .point(totalPoint)
                     .commentCount(commentCount)
                     .build();
         }).toList();
