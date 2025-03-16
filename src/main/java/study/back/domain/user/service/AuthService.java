@@ -9,7 +9,7 @@ import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.dto.response.SignUpResponseDto;
 
 public interface AuthService {
-    void signIn(SignInRequestDto signInRequestDto);
+    ResponseEntity<GetUserResponseDto> signIn(SignInRequestDto signInRequestDto);
     SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto);
     ResponseCookie getCookie(String email);
     ResponseEntity<GetUserResponseDto> authWithGoogle(AuthWithGoogleRequestDto requestDto);

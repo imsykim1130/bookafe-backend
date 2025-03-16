@@ -30,11 +30,8 @@ public class AuthController {
 
     // 로그인
     @PostMapping("/sign-in")
-    public ResponseEntity<Long> signIn(@RequestBody SignInRequestDto requestDto) {
-        authService.signIn(requestDto);
-        ResponseCookie cookie = authService.getCookie(requestDto.getEmail());
-        Long expire = cookie.getMaxAge().getSeconds();
-        return ResponseEntity.ok().header(HttpHeaders.SET_COOKIE, cookie.toString()).body(expire);
+    public ResponseEntity<GetUserResponseDto> signIn(@RequestBody SignInRequestDto requestDto) {
+        return authService.signIn(requestDto);
     }
 
     /**
