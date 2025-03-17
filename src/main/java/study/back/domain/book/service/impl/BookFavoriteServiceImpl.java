@@ -39,6 +39,7 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
             throw new NotFoundBookException();
         }
 
+        // 책에 좋아요를 누른 유저의 id 리스트
         List<Long> userIdList = repository.findFavoriteBookUserIdList(isbn);
 
         // 유저 id 리스트에 해당 유저가 있는지 여부
