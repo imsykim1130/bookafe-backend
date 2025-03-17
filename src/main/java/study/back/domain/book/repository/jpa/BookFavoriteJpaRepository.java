@@ -17,7 +17,7 @@ import java.util.Optional;
 
 public interface BookFavoriteJpaRepository extends JpaRepository<BookFavoriteEntity, Long> {
 
-    @Query("select count(*) from BookFavoriteEntity bf where bf.user = :user and bf.book.isbn = :isbn")
+    @Query("select case when count(*) > 0 then true else false end from BookFavoriteEntity bf where bf.user = :user and bf.book.isbn = :isbn")
     Boolean existsByUserAndIsbn(@Param("user") UserEntity user, @Param("isbn") String isbn);
 
     @Query("select bf from BookFavoriteEntity bf where bf.user = :user and bf.book.isbn = :isbn")
