@@ -10,6 +10,8 @@ public class CommentItem {
     @Getter
     private Long id;
     @Getter
+    private Long userId;
+    @Getter
     private String profileImg;
     @Getter
     private String nickname;

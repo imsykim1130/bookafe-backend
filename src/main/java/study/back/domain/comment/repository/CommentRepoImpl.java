@@ -41,7 +41,7 @@ public class CommentRepoImpl implements CommentRepository {
 
     @Override
     public List<CommentItem> findAllCommentItemByIsbn(String isbn) {
-        List<CommentItem> result = em.createQuery("select c.id as id, u.profileImg as profileImg, u.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c join UserEntity u on c.userId = u.id where c.book.isbn = :isbn and c.parent is null order by c.writeDate", CommentItem.class)
+        List<CommentItem> result = em.createQuery("select c.id as id, u.id as userId, u.profileImg as profileImg, u.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c join UserEntity u on c.userId = u.id where c.book.isbn = :isbn and c.parent is null order by c.writeDate", CommentItem.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
         return result;
