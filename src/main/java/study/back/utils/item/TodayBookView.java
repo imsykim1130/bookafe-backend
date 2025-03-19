@@ -10,5 +10,4 @@ public class TodayBookView {
     private String author;
     private String isbn;
     private String bookImg;
-    private String favoriteComment;
 }

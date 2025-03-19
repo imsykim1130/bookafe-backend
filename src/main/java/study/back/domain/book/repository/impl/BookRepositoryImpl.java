@@ -37,9 +37,7 @@ public class BookRepositoryImpl implements BookRepository {
                             "rb.book.title as title, " +
                             "rb.book.author as author, " +
                             "rb.book.isbn as isbn, " +
-                            "rb.book.bookImg as bookImg, " +
-                            "(select cf.comment.content from CommentFavoriteEntity cf where cf.comment.book = rb.book " +
-                            "group by cf.comment order by count(cf) desc limit 1) as favoriteComment " +
+                            "rb.book.bookImg as bookImg " +
                             "from RecommendBookEntity rb order by function('RAND') limit 1", TodayBookView.class)
                     .getSingleResult();
         } catch (NoResultException e) {
