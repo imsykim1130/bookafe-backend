@@ -107,7 +107,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
         @Override
         public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
             // access denied
-            ResponseDto  responseDto = new ResponseDto("AD", "해당 요청에 대한 권한이 없습니다");
+            ResponseDto  responseDto = new ResponseDto("FB", "해당 요청에 대한 권한이 없습니다");
             response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             response.setContentType("application/json");
             response.getWriter().write(new ObjectMapper().writeValueAsString(responseDto));
@@ -136,10 +136,10 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 auth
                         .requestMatchers("/api/v1/admin/**", "/api/v1/user/admin").hasRole("ADMIN") // 인가
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll() // swagger
+                        .requestMatchers("/api/v1/auth/sign-in", "/api/v1/auth/sign-up", "/api/v1/auth/google").permitAll() // auth
                         .requestMatchers(HttpMethod.GET,  "/api/v1/book/**", "/api/v1/books/**").permitAll() // book 에 대한 get 요청
-                        .requestMatchers(HttpMethod.GET,"/api/v1/comment/list/*","/api/v1/comment/reply/list/*","/api/v1/comment/my/list", "/api/v1/comment/favorite/user-list").permitAll()
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/test/**", "/test").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/v1/comment/list/*", "/api/v1/comment/reply/list/*", "/api/v1/comment/favorite/count/*").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/api/v1/comment/list/*","/api/v1/comment/reply/list/*","/api/v1/comment/my/list", "/api/v1/comment/favorite/count/*", "/api/v1/comment/favorite/user-list").permitAll() // comment
+                        .requestMatchers( "/api/v1/test/**", "/test").permitAll()
                         .anyRequest().authenticated()
 
         );

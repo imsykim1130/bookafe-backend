@@ -1,12 +1,12 @@
 package study.back.exception.errors;
 
-// 409
-public class ConflictException extends RuntimeException {
-    public ConflictException(String message) {
-        super(message);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public ConflictException() {
-        this("이미 존재하는 자원입니다.");
-    }
+// 409
+@Getter
+@AllArgsConstructor
+public class ConflictException extends RuntimeException {
+    private final String code;
+    private final String message;
 }

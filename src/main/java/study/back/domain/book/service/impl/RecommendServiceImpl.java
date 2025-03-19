@@ -7,7 +7,7 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.RecommendBookEntity;
 import study.back.domain.book.service.BookService;
 import study.back.domain.book.service.RecommendBookService;
-import study.back.exception.BadRequest.AlreadyRecommendedBookException;
+import study.back.exception.Conflict.AlreadyRecommendedBookException;
 import study.back.exception.BadRequest.NoMoreRecommendBookException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.book.repository.jpa.BookJpaRepository;

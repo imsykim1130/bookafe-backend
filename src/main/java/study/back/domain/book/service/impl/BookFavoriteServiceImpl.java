@@ -9,6 +9,7 @@ import study.back.domain.book.dto.response.GetBookFavoriteInfoResponseDto;
 import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
+import study.back.exception.Conflict.AlreadyRecommendedBookException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.book.repository.BookFavoriteRepository;
@@ -64,7 +65,7 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
         // 좋아요 여부 검증
         Boolean isFavorite = repository.existsBookFavoriteByUserAndIsbn(user, isbn);
         if(isFavorite) {
-            throw new RuntimeException("이미 좋아요가 적용된 책입니다");
+            throw new AlreadyRecommendedBookException();
         }
 
         // 저장

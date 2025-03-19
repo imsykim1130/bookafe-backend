@@ -50,7 +50,7 @@ public class AuthServiceImpl implements AuthService {
 
         // 비밀번호 일치 여부 확인
         if (!passwordEncoder.matches(password, savedUser.getPassword())) {
-            throw new UnauthorizedException("로그인 실패");
+            throw new UnauthorizedException("UA", "인증 실패");
         }
 
 
@@ -185,7 +185,7 @@ public class AuthServiceImpl implements AuthService {
             return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, cookie.toString()).body(responseBody);
 
         } catch (FirebaseAuthException e) { // 토큰 검증 실패
-            throw new UnauthorizedException();
+            throw new UnauthorizedException("AU", "인증 실패");
         }
     }
 

@@ -27,7 +27,6 @@ import study.back.domain.user.entity.UserEntity;
 import study.back.exception.BadRequest.AlreadyFavoriteCommentException;
 import study.back.exception.BadRequest.NoCommentContentException;
 import study.back.exception.Forbidden.CommentAuthorMismatchException;
-import study.back.exception.NotFound.NoParentCommentException;
 import study.back.exception.NotFound.NotExistCommentException;
 import study.back.exception.NotFound.NotFoundBookException;
 import study.back.exception.Unauthorized.UserNotFoundException;
@@ -67,9 +66,7 @@ public class CommentServiceImpl implements CommentService {
         CommentEntity parent = null;
 
         if(parentId != null) {
-            parent = repository.findCommentById(parentId).orElseThrow(()->{
-                throw new NoParentCommentException();
-            });
+            parent = repository.findCommentById(parentId).orElseThrow(NotExistCommentException::new);
         }
 
         // 댓글 저장

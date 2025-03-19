@@ -4,6 +4,6 @@ import study.back.exception.errors.ConflictException;
 
 public class ConflictUserException extends ConflictException {
     public ConflictUserException() {
-        super("이미 가입된 유저입니다.");
+        super("CU", "이미 가입된 유저입니다");
     }
 }

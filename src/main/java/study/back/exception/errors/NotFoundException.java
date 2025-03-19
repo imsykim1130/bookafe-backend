@@ -1,12 +1,12 @@
 package study.back.exception.errors;
 
-// 404: 존재하지 않는 자원에 대한 요청이 왔을 때
-public class NotFoundException extends RuntimeException {
-    public NotFoundException(String message) {
-        super(message);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public NotFoundException() {
-        this("해당 자원이 존재하지 않습니다.");
-    }
+// 404: 존재하지 않는 자원에 대한 요청이 왔을 때
+@Getter
+@AllArgsConstructor
+public class NotFoundException extends RuntimeException {
+    private final String code;
+    private final String message;
 }

@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingPathVariableException;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
@@ -21,7 +22,6 @@ public class GlobalExceptionHandler {
 
     // 400 Bad Request
     // @requestBody validation 실패
-    // default RBVF
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ResponseDto> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         // 모든 검증 메시지를 문자열로 변환하여 합치기
@@ -30,7 +30,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", ")); // 콤마(,)로 메시지 합치기
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ResponseDto responseDto = ResponseDto.builder().code("RBVF").message(message).build();
+        ResponseDto responseDto = ResponseDto.builder().code("VF").message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
@@ -45,7 +45,7 @@ public class GlobalExceptionHandler {
                 .collect(Collectors.joining(", "));  // 콤마(,)로 메시지 합치기
 
         HttpStatus status = HttpStatus.BAD_REQUEST;
-        ResponseDto responseDto = ResponseDto.builder().code("RPVF").message(message).build();
+        ResponseDto responseDto = ResponseDto.builder().code("VF").message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
@@ -58,21 +58,20 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(status).body(responseDto);
     }
 
-    // 잘못된 요청 주소
-    // NRF
-    @ExceptionHandler(NoResourceFoundException.class)
-    public ResponseEntity<ResponseDto> handleNoResourceFoundException(NoResourceFoundException e) {
-        HttpStatus status = HttpStatus.NOT_FOUND;
-        ResponseDto responseDto = ResponseDto.builder().code("NRF").message("요청 주소를 다시 확인해주세요. " + e.getMessage()).build();
+    // requestParam 없음
+    @ExceptionHandler(MissingServletRequestParameterException.class)
+    public ResponseEntity<ResponseDto> handleMissingServletRequestParameterException(MissingServletRequestParameterException e) {
+        HttpStatus status = HttpStatus.BAD_REQUEST;
+        ResponseDto responseDto = ResponseDto.builder().code("MRP").message(e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
-    // default BR
+    // 기타 잘못된 요청
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ResponseDto> handleBadRequestException(BadRequestException e) {
         HttpStatus status = HttpStatus.BAD_REQUEST;
+        String code = e.getCode();
         String message = e.getMessage();
-        String code = message.split(" ")[0];
         ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
@@ -82,8 +81,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UnauthorizedException.class)
     public ResponseEntity<ResponseDto> handleUnauthorizedException(UnauthorizedException e) {
         HttpStatus status = HttpStatus.UNAUTHORIZED;
+        String code = e.getCode();
         String message = e.getMessage();
-        String code = message.split(" ")[0];
         ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
@@ -93,8 +92,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ForbiddenException.class)
     public ResponseEntity<ResponseDto> handleForbiddenException(ForbiddenException e) {
         HttpStatus status = HttpStatus.FORBIDDEN;
+        String code = e.getCode();
         String message = e.getMessage();
-        String code = message.split(" ")[0];
         ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
@@ -104,9 +103,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<ResponseDto> handleNotFoundException(NotFoundException e) {
         HttpStatus status = HttpStatus.NOT_FOUND;
-        String message = e.getMessage();
-        String code = message.split(" ")[0];
+        String code = e.getCode();
+        String message = e.getMessage();;
         ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
+        return ResponseEntity.status(status).body(responseDto);
+    }
+
+    // 잘못된 요청 주소
+    // NRF
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ResponseDto> handleNoResourceFoundException(NoResourceFoundException e) {
+        HttpStatus status = HttpStatus.NOT_FOUND;
+        ResponseDto responseDto = ResponseDto.builder().code("NRF").message("요청 주소를 다시 확인해주세요. " + e.getMessage()).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
@@ -115,8 +123,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ConflictException.class)
     public ResponseEntity<ResponseDto> handleConflictException(ConflictException e) {
         HttpStatus status = HttpStatus.CONFLICT;
+        String code = e.getCode();
         String message = e.getMessage();
-        String code = message.split(" ")[0];
         ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
@@ -127,7 +135,9 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InternalServerErrorException.class)
     public ResponseEntity<ResponseDto> handleInternalServerErrorException(InternalServerErrorException e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ResponseDto responseDto = ResponseDto.builder().code("ISE").message(e.getMessage()).build();
+        String code = e.getCode();
+        String message = e.getMessage();
+        ResponseDto responseDto = ResponseDto.builder().code(code).message(message).build();
         return ResponseEntity.status(status).body(responseDto);
     }
 

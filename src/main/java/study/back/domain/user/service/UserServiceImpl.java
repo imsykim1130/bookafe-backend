@@ -13,7 +13,7 @@ import study.back.domain.file.FileService;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserRepository;
-import study.back.exception.NotFound.NotFoundUserException;
+import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.utils.item.UserManagementInfo;
 
 @Service
@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserByAdmin(Long userId) {
         // 유저 여부 확인
-        UserEntity user = repository.findUserById(userId).orElseThrow(NotFoundUserException::new);
+        UserEntity user = repository.findUserById(userId).orElseThrow(UserNotFoundException::new);
         repository.deleteUser(user);
     }
 

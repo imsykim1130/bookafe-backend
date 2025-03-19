@@ -1,12 +1,12 @@
 package study.back.exception.errors;
 
-// 401: 인증되지 않은 요청이 들어왔을 때
-public class UnauthorizedException extends RuntimeException {
-    public UnauthorizedException(String message) {
-        super(message);
-    }
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public UnauthorizedException() {
-        this("로그인이 필요합니다.");
-    }
+// 401: 인증되지 않은 요청이 들어왔을 때
+@Getter
+@AllArgsConstructor
+public class UnauthorizedException extends RuntimeException {
+    private final String code;
+    private final String message;
 }
