@@ -58,7 +58,7 @@ public class BookController {
      * @return 책 상세정보 리스트 {@link BookDetail}
      */
     @GetMapping("/book")
-    public ResponseEntity<BookDetail> getBookDetail(@RequestParam("isbn") String isbn) {
+    public ResponseEntity<BookDetail> getBookDetail(@NotEmpty(message = "잘못된 isbn 입니다") @RequestParam("isbn") String isbn) {
        BookDetail data = bookService.getBookDetail(isbn);
        return ResponseEntity.ok(data);
     }
@@ -83,7 +83,7 @@ public class BookController {
      */
     @GetMapping("/book/like-info")
     public ResponseEntity<GetBookFavoriteInfoResponseDto> getBookFavoriteInfo(@AuthenticationPrincipal UserEntity user,
-                                                                              @RequestParam(name = "isbn") String isbn) {
+                                                                              @NotEmpty(message = "잘못된 isbn 입니다") @RequestParam(name = "isbn") String isbn) {
         GetBookFavoriteInfoResponseDto responseDto = bookFavoriteService.getBookFavoriteInfo(user, isbn);
         return ResponseEntity.ok(responseDto);
     }
@@ -97,8 +97,8 @@ public class BookController {
      */
     @GetMapping("/books/like")
     public ResponseEntity<GetFavoriteBookListResponseDto> favoriteList(@AuthenticationPrincipal UserEntity user,
-                                                                       @RequestParam(name = "page") @Min(value = 0, message = "페이지는 음수가 될 수 없습니다") Integer page,
-                                                                       @RequestParam(name = "size", defaultValue = "10", required = false) @Positive(message = "한 번에 가져올 데이터의 수는 1 이상이어야 합니다") Integer size) {
+                                                                       @Min(value = 0, message = "페이지는 음수가 될 수 없습니다") @RequestParam(name = "page") Integer page,
+                                                                       @Positive(message = "한 번에 가져올 데이터의 수는 1 이상이어야 합니다") @RequestParam(name = "size", defaultValue = "10", required = false) Integer size) {
         GetFavoriteBookListResponseDto result = bookFavoriteService.getFavoriteBookList(user, page, size);
         return ResponseEntity.ok(result);
     }
@@ -120,7 +120,7 @@ public class BookController {
      */
     @PostMapping("/book/like")
     public ResponseEntity<ResponseDto> add(@AuthenticationPrincipal UserEntity user,
-                                           @RequestParam(name = "isbn") String isbn) {
+                                           @NotEmpty(message = "잘못된 isbn 입니다") @RequestParam(name = "isbn") String isbn) {
         bookFavoriteService.putBookToFavorite(user, isbn);
         ResponseDto responseDto = new ResponseDto("SU", "좋아요 성공");
         return ResponseEntity.ok(responseDto);
@@ -129,7 +129,7 @@ public class BookController {
     // 좋아요 취소
     @DeleteMapping("/book/like")
     public ResponseEntity<ResponseDto> delete(@AuthenticationPrincipal UserEntity user,
-                                              @RequestParam(name = "isbn") String isbn) {
+                                              @NotEmpty(message = "잘못된 isbn 입니다") @RequestParam(name = "isbn") String isbn) {
         bookFavoriteService.deleteBookFromFavorite(user, isbn);
         return ResponseEntity.ok().build();
     }
@@ -152,14 +152,14 @@ public class BookController {
 
     // 책 추천 취소
     @DeleteMapping("/admin/book/recommend")
-    public ResponseEntity<Boolean> deleteRecommendBook(@RequestParam("isbn") String isbn) {
+    public ResponseEntity<Boolean> deleteRecommendBook(@NotEmpty(message = "잘못된 isbn 입니다") @RequestParam("isbn") String isbn) {
         Boolean result = recommendBookService.deleteRecommendBook(isbn);
         return ResponseEntity.ok(result);
     }
 
     // 책 추천 여부
     @GetMapping("/admin/book/is-recommended")
-    public ResponseEntity<Boolean> confirmRecommendBook(@RequestParam("isbn") String isbn) {
+    public ResponseEntity<Boolean> confirmRecommendBook(@NotEmpty(message = "잘못된 isbn 입니다") @RequestParam("isbn") String isbn) {
         Boolean result = recommendBookService.confirmRecommendBook(isbn);
         return ResponseEntity.ok(result);
     }

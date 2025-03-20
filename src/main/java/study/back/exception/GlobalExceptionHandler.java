@@ -147,7 +147,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ResponseDto> handleRuntimeException(RuntimeException e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ResponseDto responseDto = ResponseDto.builder().code("RT").message(e.getMessage()).build();
+        System.out.println(e.getMessage());
+        ResponseDto responseDto = ResponseDto.builder().code("RT").message("알 수 없는 서버 오류").build();
         return ResponseEntity.status(status).body(responseDto);
     }
 
@@ -156,7 +157,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(DataAccessException.class)
     public ResponseEntity<ResponseDto> handleDataAccessException(DataAccessException e) {
         HttpStatus status = HttpStatus.INTERNAL_SERVER_ERROR;
-        ResponseDto responseDto = ResponseDto.builder().code("DBE").message(e.getMessage()).build();
+        System.out.println(e.getMessage());
+        ResponseDto responseDto = ResponseDto.builder().code("DBE").message("데이터베이스 오류").build();
         return ResponseEntity.status(status).body(responseDto);
     }
 }
