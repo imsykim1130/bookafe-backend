@@ -2,13 +2,16 @@ package study.back.domain.comment.conroller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,100 +30,159 @@ import study.back.utils.item.CommentItem;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/v1/comment")
+@RequestMapping("/api/v1")
 public class CommentController {
 
     private final CommentService commentService;
 
-    // 댓글 작성
-    @PostMapping("")
-    public ResponseEntity<ResponseDto> postComment(@RequestBody PostCommentRequestDto requestDto,
-                                            @AuthenticationPrincipal UserEntity user) {
+    /**
+     * 리뷰/리플 작성
+     * @param requestDto 요청 DTO
+     * @param user jwt 에서 얻은 유저 정보
+     */
+    @PostMapping("/comment")
+    public ResponseEntity<ResponseDto> postComment(
+            @Valid @RequestBody PostCommentRequestDto requestDto,
+            @AuthenticationPrincipal UserEntity user) {
         commentService.postComment(requestDto, user);
         ResponseDto result = ResponseDto.builder().code("SU").message("댓글 작성 성공").build();
         return ResponseEntity.status(HttpStatus.OK).body(result);
     }
 
-    // 댓글 가져오기
-    @GetMapping("/list/{isbn}")
-    public ResponseEntity<List<CommentItem>> getCommentList(@PathVariable(name = "isbn") String isbn) {
+    /**
+     * 리뷰 리스트 가져오기
+     * @param isbn 책 isbn
+     * @return 책에 달린 댓글 리스트
+     */
+    @GetMapping("/comments/review")
+    public ResponseEntity<List<CommentItem>> getCommentList(
+            @NotEmpty(message = "올바르지 않은 isbn 입니다") @RequestParam(name = "isbn") String isbn) {
         List<CommentItem> result = commentService.getCommentList(isbn);
         return ResponseEntity.ok(result);
     }
 
-    // 리플 가져오기
-    @GetMapping("/reply/list/{parentCommentId}")
-    public ResponseEntity<List<CommentItem>> getReplyList(@PathVariable(name = "parentCommentId") Long parentCommentId) {
-        List<CommentItem> result = commentService.getReplyList(parentCommentId);
+    /**
+     * 리플 리스트 가져오기
+     * @param parentCommentId 리플이 달린 리뷰 id
+     * @return 리뷰에 달린 리플 리스트
+     */
+    @GetMapping("/comments/reply")
+    public ResponseEntity<List<CommentItem>> getReplyList(
+            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "reviewId") Long reviewId) {
+        List<CommentItem> result = commentService.getReplyList(reviewId);
         return ResponseEntity.ok(result);
     }
 
-    // 댓글 수정하기
+    /**
+     * 리뷰 수정하기
+     * @param requestDto  수정할 내용, 수정할 리뷰 id
+     * @param user
+     */
     @PatchMapping("")
-    public ResponseEntity<String> modifyComment(@RequestBody ModifyCommentRequestDto requestDto,
-                                        @AuthenticationPrincipal UserEntity user) {
+    public ResponseEntity<String> modifyComment(
+            @Valid @RequestBody ModifyCommentRequestDto requestDto,
+            @AuthenticationPrincipal UserEntity user) {
         String modifiedContent = commentService.modifyComment(requestDto, user);
         return ResponseEntity.ok(modifiedContent);
     }
 
-    // 댓글 삭제하기
-    @DeleteMapping("/{commentId}")
-    public ResponseEntity<Boolean> deleteComment(@PathVariable(name = "commentId") Long commentId,
-                                        @AuthenticationPrincipal UserEntity user) {
+    /**
+     * 리뷰/리플 삭제하기
+     * @param commentId 삭제할 리뷰/리플 id
+     * @param user jwt 에서 추출한 유저
+     */
+    @DeleteMapping("")
+    public ResponseEntity<Boolean> deleteComment(
+            @NotEmpty(message = "올바르지 않은 리뷰/리플 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @AuthenticationPrincipal UserEntity user) {
         Boolean result = commentService.deleteComment(commentId, user);
         return ResponseEntity.ok(result);
     }
 
-    // 댓글 좋아요
-    @PostMapping("/favorite/{commentId}")
+    /**
+     * 리뷰 좋아요
+     * @param commentId 좋아요 할 리뷰 id
+     * @param user jwt 에서 추출한 유저
+     */
+    @PostMapping("/comment/like")
     public ResponseEntity<ResponseDto> putCommentFavorite(
-            @PathVariable(name="commentId") Long commentId,
+            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name="commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         commentService.putCommentFavorite(commentId, user);
         ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 성공");
         return ResponseEntity.ok(responseDto);
     }
 
-    // 댓글 좋아요 취소
-    @DeleteMapping("/favorite/{commentId}")
-    public ResponseEntity<ResponseDto> cancelCommentFavorite(@AuthenticationPrincipal UserEntity user,
-                                                @PathVariable(name = "commentId") Long commentId) {
+    /**
+     * 리뷰 좋아요 취소
+     * @param commentId 좋아요 취소할 리뷰 id
+     * @param user jwt 에서 추출한 유저
+     */
+    @DeleteMapping("/comment/like")
+    public ResponseEntity<ResponseDto> cancelCommentFavorite(
+            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @AuthenticationPrincipal UserEntity user) {
         commentService.cancelCommentFavorite(commentId, user);
         ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 취소 성공");
         return ResponseEntity.ok(responseDto);
     }
 
-    // 댓글 좋아요 여부
-    @GetMapping("/is-favorite/{commentId}")
-    public ResponseEntity<Boolean> isCommentFavorite(@AuthenticationPrincipal UserEntity user,
-                                                        @PathVariable(name = "commentId") Long commentId) {
+    /**
+     * 리뷰 좋아요 여부
+     * @param commentId 리뷰 id
+     * @param user jwt 에서 추출한 유저
+     * @return 유저의 특정 리뷰 좋아요 여부
+     * @apiNote 인증정보 없어도 에러 발생하지 않음. user 값 null 로 보고 로직 실행됨
+     */
+    @GetMapping("/comment/is-like")
+    public ResponseEntity<Boolean> isCommentFavorite(
+            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @AuthenticationPrincipal UserEntity user) {
         Boolean result = commentService.isFavoriteComment(commentId, user);
         return ResponseEntity.ok(result);
     }
 
-    // 댓글 좋아요 개수
-    @GetMapping("/favorite/count/{commentId}")
-    public ResponseEntity<Long> countCommentFavorite(@PathVariable(name = "commentId") Long commentId) {
+    /**
+     * 리뷰 좋아요 개수
+     * @param commentId 리뷰 id
+     * @return 리뷰 좋아요 개수
+     */
+    @GetMapping("/comment/like/count")
+    public ResponseEntity<Long> countCommentFavorite(
+            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId) {
         Long result = commentService.countCommentFavorite(commentId);
         return ResponseEntity.ok(result);
     }
 
-    // 내 리뷰의 좋아요 유저 리스트 가져오기
-    @GetMapping("/favorite/user-list")
-    public ResponseEntity<ReviewFavoriteUserListResponseDto> getReviewFavoriteUserList(@RequestParam(name = "userId") Long userId,
-    @RequestParam(name = "page") Integer page, @RequestParam(name = "size") Integer size) {
+    /**
+     * 내 리뷰의 좋아요 유저 리스트 가져오기
+     * @param userId
+     * @param page
+     * @param size
+     * @return 좋아요 누른 유저 관련 정보 리스트
+     */
+    @GetMapping("/comment/like/users")
+    public ResponseEntity<ReviewFavoriteUserListResponseDto> getReviewFavoriteUserList(
+            @NotEmpty(message = "올바르지 않은 유저 id 입니다") @RequestParam(name = "userId") Long userId,
+            @Min(value = 0, message = "page 는 0보다 큰 값이어야 합니다") @RequestParam(name = "page") Integer page,
+            @Positive(message = "size 는 1보다 큰 값이어야 합니다") @RequestParam(name = "size", defaultValue = "10") Integer size) {
         ReviewFavoriteUserListResponseDto result = commentService.getReviewFavoriteUserList(userId, page, size);
         
         return ResponseEntity.ok(result);
     }
 
-    // 내 리뷰 가져오기
-    @GetMapping("/my/list")
+    /**
+     * 유저 리뷰 리스트 가져오기
+     * @param userId 유저 id
+     * @param page 가져올 페이지, 0 부터 시작
+     * @param size 페이지 당 가져올 데이터 수
+     * @return 리뷰 리스트
+     */
+    @GetMapping("/comments")
     public ResponseEntity<MyReviewListResponseDto> getMyReviewList(
-        @RequestParam(name = "userId") Long userId,
-        @RequestParam(name = "page")Integer page,
-        @RequestParam(name = "size") Integer size)
-    {
+            @NotEmpty(message = "올바르지 않은 유저 id 입니다") @RequestParam(name = "userId") Long userId,
+            @Min(value = 0, message = "page 는 0보다 큰 값이어야 합니다") @RequestParam(name = "page") Integer page,
+            @Positive(message = "size 는 1보다 큰 값이어야 합니다") @RequestParam(name = "size", defaultValue = "10") Integer size) {
         MyReviewListResponseDto result = commentService.getMyReviewList(userId, page, size);
         return ResponseEntity.ok(result);
     }

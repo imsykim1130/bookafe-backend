@@ -139,4 +139,16 @@ public class CommentRepoImpl implements CommentRepository {
     public Page<MyReview> findAllMyReviewByUserId(Long userId, Pageable pageable) {
         return commentJpaRepository.findAllMyReviewByUserId(userId, pageable);
     }
+
+    /**
+     * 리뷰 존재 여부
+     * @param reviewId
+     * @return 리뷰 존재 여부
+     */
+    @Override
+    public boolean existsReviewById(Long reviewId) {
+        return em.createQuery("select case when count(c) > 0 then true else false end from CommentEntity c where c.id = :reviewId and c.parent is null", Boolean.class)
+                .setParameter("reviewId", reviewId)
+                .getSingleResult();
+    }
 }

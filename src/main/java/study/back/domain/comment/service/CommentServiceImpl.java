@@ -103,11 +103,17 @@ public class CommentServiceImpl implements CommentService {
         return commentList;
     }
 
-    // 대댓글 가져오기
+    // 리플 가져오기
     @Override
     public List<CommentItem> getReplyList(Long parentCommentId) {
         System.out.println("리플 가져오기");
         List<CommentItem> replyList;
+
+        // 리뷰 여부 검증
+        boolean isReviewExist = repository.existsReviewById(parentCommentId);
+        if(!isReviewExist) {
+            throw new NotExistCommentException();
+        }
 
         replyList = repository.findAllReplyByParentCommentId(parentCommentId);
 
