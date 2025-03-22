@@ -3,6 +3,7 @@ package study.back.domain.comment.repository;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.persistence.NoResultException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -56,10 +57,14 @@ public class CommentRepoImpl implements CommentRepository {
 
     @Override
     public Optional<UserEntity> findUserByCommentId(Long commentId) {
-        UserEntity user = em.createQuery("select u from CommentEntity c join UserEntity u on u.id = c.userId where c.id = :commentId", UserEntity.class)
-                .setParameter("commentId", commentId)
-                .getSingleResult();
-        return Optional.ofNullable(user);
+        try {
+            UserEntity user = em.createQuery("select u from CommentEntity c join UserEntity u on u.id = c.userId where c.id = :commentId", UserEntity.class)
+                    .setParameter("commentId", commentId)
+                    .getSingleResult();
+            return Optional.of(user);
+        } catch (NoResultException e) {
+            return Optional.empty();
+        }
     }
 
     @Override
