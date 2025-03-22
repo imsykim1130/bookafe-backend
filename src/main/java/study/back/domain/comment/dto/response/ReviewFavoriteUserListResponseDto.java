@@ -12,5 +12,5 @@ import lombok.Getter;
 public class ReviewFavoriteUserListResponseDto {
     private List<ReviewFavoriteUser> userList;
     private Boolean isEnd;
-    private Integer totalCount;
+    private Long totalCount;
 }
