@@ -128,7 +128,7 @@ public class CommentServiceImpl implements CommentService {
 
         // 리뷰 여부 검증
         boolean isReviewExist = repository.existsReviewById(requestDto.getCommentId());
-        
+
         if(!isReviewExist) {
             throw new NotExistCommentException();
         }
@@ -148,6 +148,13 @@ public class CommentServiceImpl implements CommentService {
     // 댓글 삭제하기
     @Override
     public Boolean deleteComment(Long commentId, UserEntity user) {
+        // 리뷰 여부 검증
+        boolean isReviewExist = repository.existsReviewById(commentId);
+
+        if(!isReviewExist) {
+            throw new NotExistCommentException();
+        }
+
         // 로그인 유저와 댓글 작성자 동일 여부 검증
         UserEntity commentUser = repository.findUserByCommentId(commentId).orElseThrow(() -> new UserNotFoundException());
 
@@ -155,12 +162,10 @@ public class CommentServiceImpl implements CommentService {
             throw new CommentAuthorMismatchException();
         }
 
-        Boolean result = repository.updateCommentToDeleted(commentId);
-
-        return result;
+        return repository.updateCommentToDeleted(commentId);
     }
 
-    // 댓글에 좋아요 누르기
+    // 리뷰 좋아요
     @Override
     public Boolean putCommentFavorite(Long commentId, UserEntity user)  {
         System.out.println("---- 댓글 좋아요 누르기");
@@ -183,29 +188,34 @@ public class CommentServiceImpl implements CommentService {
         return true;
     }
 
-    // 댓글 좋아요 취소
+    // 리뷰 좋아요 취소
     @Override
     public Boolean cancelCommentFavorite(Long commentId, UserEntity user) {
         int deleteCount = repository.deleteCommentFavorite(commentId, user);
         return deleteCount > 0;
     }
 
-    // 댓글 좋아요 여부
+    // 유저의 리뷰 좋아요 여부
     @Override
     public Boolean isFavoriteComment(Long commentId, UserEntity user) {
+        // 댓글 유무 확인
+        repository.findCommentById(commentId).orElseThrow(NotExistCommentException::new);
+
         return repository.existsCommentFavorite(commentId, user);
     }
 
-    // 댓글 좋아요 개수
+    // 리뷰 좋아요 개수
     @Override
     public Long countCommentFavorite(Long commentId) {
-        Long result = repository.countCommentFavorite(commentId);
-        return result;
+        // 댓글 유무 확인
+        repository.findCommentById(commentId).orElseThrow(NotExistCommentException::new);
+
+        return repository.countCommentFavorite(commentId);
     }
 
     private BookEntity findBook(String isbn) {
         return repository.findBookById(isbn)
-                .orElseThrow(() -> new NotFoundBookException());
+                .orElseThrow(NotFoundBookException::new);
     }
 
     // 내 리뷰의 좋아요 유저 리스트 가져오기
@@ -220,7 +230,7 @@ public class CommentServiceImpl implements CommentService {
         return ReviewFavoriteUserListResponseDto.builder()
                 .userList(userList.getContent())
                 .isEnd(userList.isLast())
-                .totalCount(userList.getSize())
+                .totalCount(userList.getTotalElements())
                 .build();
     }
 
