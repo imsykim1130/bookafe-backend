@@ -63,7 +63,7 @@ public class CommentController {
 
     /**
      * 리플 리스트 가져오기
-     * @param parentCommentId 리플이 달린 리뷰 id
+     * @param reviewId 리플이 달린 리뷰 id
      * @return 리뷰에 달린 리플 리스트
      */
     @GetMapping("/comments/reply")
@@ -78,7 +78,7 @@ public class CommentController {
      * @param requestDto  수정할 내용, 수정할 리뷰 id
      * @param user
      */
-    @PatchMapping("")
+    @PatchMapping("/comment")
     public ResponseEntity<String> modifyComment(
             @Valid @RequestBody ModifyCommentRequestDto requestDto,
             @AuthenticationPrincipal UserEntity user) {
@@ -91,9 +91,9 @@ public class CommentController {
      * @param commentId 삭제할 리뷰/리플 id
      * @param user jwt 에서 추출한 유저
      */
-    @DeleteMapping("")
+    @DeleteMapping("/comment")
     public ResponseEntity<Boolean> deleteComment(
-            @NotEmpty(message = "올바르지 않은 리뷰/리플 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @Min(value = 0, message = "올바르지 않은 리뷰/리플 id 입니다") @RequestParam(name = "commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         Boolean result = commentService.deleteComment(commentId, user);
         return ResponseEntity.ok(result);
@@ -106,7 +106,7 @@ public class CommentController {
      */
     @PostMapping("/comment/like")
     public ResponseEntity<ResponseDto> putCommentFavorite(
-            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name="commentId") Long commentId,
+            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name="commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         commentService.putCommentFavorite(commentId, user);
         ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 성공");
@@ -120,7 +120,7 @@ public class CommentController {
      */
     @DeleteMapping("/comment/like")
     public ResponseEntity<ResponseDto> cancelCommentFavorite(
-            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         commentService.cancelCommentFavorite(commentId, user);
         ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 취소 성공");
@@ -136,7 +136,7 @@ public class CommentController {
      */
     @GetMapping("/comment/is-like")
     public ResponseEntity<Boolean> isCommentFavorite(
-            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
             @AuthenticationPrincipal UserEntity user) {
         Boolean result = commentService.isFavoriteComment(commentId, user);
         return ResponseEntity.ok(result);
@@ -149,7 +149,7 @@ public class CommentController {
      */
     @GetMapping("/comment/like/count")
     public ResponseEntity<Long> countCommentFavorite(
-            @NotEmpty(message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId) {
+            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId) {
         Long result = commentService.countCommentFavorite(commentId);
         return ResponseEntity.ok(result);
     }
@@ -163,7 +163,7 @@ public class CommentController {
      */
     @GetMapping("/comment/like/users")
     public ResponseEntity<ReviewFavoriteUserListResponseDto> getReviewFavoriteUserList(
-            @NotEmpty(message = "올바르지 않은 유저 id 입니다") @RequestParam(name = "userId") Long userId,
+            @Min(value = 0, message = "올바르지 않은 유저 id 입니다") @RequestParam(name = "userId") Long userId,
             @Min(value = 0, message = "page 는 0보다 큰 값이어야 합니다") @RequestParam(name = "page") Integer page,
             @Positive(message = "size 는 1보다 큰 값이어야 합니다") @RequestParam(name = "size", defaultValue = "10") Integer size) {
         ReviewFavoriteUserListResponseDto result = commentService.getReviewFavoriteUserList(userId, page, size);
@@ -180,7 +180,7 @@ public class CommentController {
      */
     @GetMapping("/comments")
     public ResponseEntity<MyReviewListResponseDto> getMyReviewList(
-            @NotEmpty(message = "올바르지 않은 유저 id 입니다") @RequestParam(name = "userId") Long userId,
+            @Min(value = 0, message = "올바르지 않은 유저 id 입니다") @RequestParam(name = "userId") Long userId,
             @Min(value = 0, message = "page 는 0보다 큰 값이어야 합니다") @RequestParam(name = "page") Integer page,
             @Positive(message = "size 는 1보다 큰 값이어야 합니다") @RequestParam(name = "size", defaultValue = "10") Integer size) {
         MyReviewListResponseDto result = commentService.getMyReviewList(userId, page, size);
