@@ -115,14 +115,14 @@ public class CommentController {
 
     /**
      * 리뷰 좋아요 취소
-     * @param commentId 좋아요 취소할 리뷰 id
+     * @param reviewId 좋아요 취소할 리뷰 id
      * @param user jwt 에서 추출한 유저
      */
     @DeleteMapping("/comment/like")
     public ResponseEntity<ResponseDto> cancelCommentFavorite(
-            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "commentId") Long commentId,
+            @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "reviewId") Long reviewId,
             @AuthenticationPrincipal UserEntity user) {
-        commentService.cancelCommentFavorite(commentId, user);
+        commentService.cancelCommentFavorite(reviewId, user);
         ResponseDto responseDto = new ResponseDto("SU", "댓글 좋아요 취소 성공");
         return ResponseEntity.ok(responseDto);
     }
