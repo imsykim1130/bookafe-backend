@@ -126,10 +126,18 @@ public class CommentServiceImpl implements CommentService {
         Long commentId = requestDto.getCommentId();
         String content = requestDto.getContent();
 
-        // 로그인 유저와 댓글 작성자 동일 여부 검증
-        Optional<UserEntity> commentUser = repository.findUserByCommentId(commentId);
+        // 리뷰 여부 검증
+        boolean isReviewExist = repository.existsReviewById(requestDto.getCommentId());
+        
+        if(!isReviewExist) {
+            throw new NotExistCommentException();
+        }
 
-        if(!user.getEmail().equals(commentUser.get().getEmail())) {
+        // 로그인 유저와 댓글 작성자 동일 여부 검증
+        // 댓글 작성자 가져오기
+        UserEntity commentUser = repository.findUserByCommentId(commentId).orElseThrow(UserNotFoundException::new);
+
+        if(!user.getEmail().equals(commentUser.getEmail())) {
             throw new CommentAuthorMismatchException();
         }
 
