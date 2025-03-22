@@ -1,5 +1,6 @@
 package study.back.domain.user.controller;
 
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -27,8 +28,15 @@ public class UserController {
      * @return id, email, nickname, profileImg, createDate, role, totalPoint
      */
     @GetMapping("")
-    public ResponseEntity<GetUserResponseDto> getUser(@AuthenticationPrincipal UserEntity user) {
-        GetUserResponseDto data = userService.getUser(user);
+    public ResponseEntity<GetUserResponseDto> getUser(
+            @AuthenticationPrincipal UserEntity user,
+            @RequestParam(name = "userId", required = false) Long userId) {
+        GetUserResponseDto data;
+        if(userId != null) {
+            data = userService.getUser(userId);
+        } else {
+            data = userService.getUser(user);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(data);
     }
 

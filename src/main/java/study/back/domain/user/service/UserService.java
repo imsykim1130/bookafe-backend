@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface UserService {
     GetUserResponseDto getUser(UserEntity user);
+    GetUserResponseDto getUser(Long userId);
     String changeProfileImage(UserEntity user, MultipartFile file);
     List<UserManagementInfo> getSearchUserList(String searchWord);
     void deleteUser(UserEntity user);

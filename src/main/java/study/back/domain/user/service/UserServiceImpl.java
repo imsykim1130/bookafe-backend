@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import study.back.domain.file.FileService;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.repository.UserJpaRepository;
 import study.back.domain.user.repository.UserRepository;
 import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.utils.item.UserManagementInfo;
@@ -22,6 +23,7 @@ import study.back.utils.item.UserManagementInfo;
 public class UserServiceImpl implements UserService {
     private final UserRepository repository;
     private final FileService fileService;
+    private final UserJpaRepository userJpaRepository;
 
     /**
      * 유저 정보 가져오기
@@ -38,6 +40,25 @@ public class UserServiceImpl implements UserService {
                  .email(user.getEmail())
                  .id(user.getId())
                  .build();
+    }
+
+    /**
+     * 유저 정보 가져오기
+     * @param userId 가져올 유저 id
+     * @return 유저 정보 {@link GetUserResponseDto}
+     */
+    @Override
+    public GetUserResponseDto getUser(Long userId) {
+        UserEntity user = userJpaRepository.findById(userId).orElseThrow(UserNotFoundException::new);
+
+        return GetUserResponseDto.builder()
+                .createDate(user.getCreateDate())
+                .role(user.getRole())
+                .nickname(user.getNickname())
+                .profileImg(user.getProfileImg())
+                .email(user.getEmail())
+                .id(user.getId())
+                .build();
     }
 
     /**
