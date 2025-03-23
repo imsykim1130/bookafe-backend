@@ -33,6 +33,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public GetUserResponseDto getUser(UserEntity user) {
+        // 헤더에 jwt 정보가 없이 요청이 들어와서 user 가 null 이면 status code 401 반환
+        if(user == null) {
+            throw new UserNotFoundException();
+        }
          return GetUserResponseDto.builder()
                  .createDate(user.getCreateDate())
                  .role(user.getRole())
