@@ -9,7 +9,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import study.back.domain.user.dto.request.AuthWithGoogleRequestDto;
@@ -116,23 +115,11 @@ public class AuthServiceImpl implements AuthService {
         return new SignUpResponseDto("SU", "회원가입 성공");
     }
 
-    // 쿠키 생성
-    @Override
-    public ResponseCookie getCookie(String email) {
-        // 유저 정보를 통해 Jwt 생성에 필요한 auth token 생성
-        UserEntity user = userJpaRepository.findByEmail(email);
-
-        // cookie 생성
-        ResponseCookie cookie = createCookie(user, "/", true, "None", 60 * 60);
-        return cookie;
-    }
-
-
-    // firebase 를 이용한 google 인증 후 google 인증 정보로 jwt 생성
+    // firebase 를 이용한 google 인증 후 google 인증 정보로 jwt 생성하여 헤더에 넣음
     @Override
     public ResponseEntity<GetUserResponseDto> authWithGoogle(AuthWithGoogleRequestDto requestDto) {
         String idToken = requestDto.getIdToken();
-        Boolean isSignup = requestDto.isSignUp();
+        boolean isSignup = requestDto.isSignUp();
 
         try {
             // firebase id 토큰 검증
@@ -182,10 +169,11 @@ public class AuthServiceImpl implements AuthService {
                     .createDate(savedUser.getCreateDate())
                     .build();
 
+            // 쿠키를 헤더에 담고, 유저 정보를 바디에 담아 반환
             return ResponseEntity.status(HttpStatus.OK).header(HttpHeaders.SET_COOKIE, cookie.toString()).body(responseBody);
 
         } catch (FirebaseAuthException e) { // 토큰 검증 실패
-            throw new UnauthorizedException("AU", "인증 실패");
+            throw new UnauthorizedException("AU", "firebase 인증 실패");
         }
     }
 
