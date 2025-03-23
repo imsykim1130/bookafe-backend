@@ -1,6 +1,6 @@
 package study.back.domain.user.controller;
 
-import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -23,14 +23,14 @@ public class AuthController {
 
     // 회원가입
     @PostMapping("/sign-up")
-    public ResponseEntity<Void> signUp(@RequestBody SignUpRequestDto requestDto) {
+    public ResponseEntity<Void> signUp(@Valid @RequestBody SignUpRequestDto requestDto) {
         authService.signUp(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     // 로그인
     @PostMapping("/sign-in")
-    public ResponseEntity<GetUserResponseDto> signIn(@RequestBody SignInRequestDto requestDto) {
+    public ResponseEntity<GetUserResponseDto> signIn(@Valid @RequestBody SignInRequestDto requestDto) {
         return authService.signIn(requestDto);
     }
 
@@ -41,22 +41,13 @@ public class AuthController {
      * @return {@link GetUserResponseDto}
      */
     @PostMapping("/google")
-    public ResponseEntity<GetUserResponseDto> authWithGoogle(@RequestBody AuthWithGoogleRequestDto requestDto) {
+    public ResponseEntity<GetUserResponseDto> authWithGoogle(@Valid @RequestBody AuthWithGoogleRequestDto requestDto) {
         return authService.authWithGoogle(requestDto);
     }
 
-    // 토큰 쿠키에 발급
-    @PostMapping("/set-cookie/{email}")
-    public ResponseEntity<Void> setCookie(@PathVariable(name = "email") String email) {
-        ResponseCookie cookie = authService.getCookie(email);
-        return ResponseEntity
-                .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, cookie.toString()).build();
-    }
-
     // 로그아웃
-    @PostMapping("/logout")
-    public ResponseEntity<Void> logout(HttpServletResponse response) {
+    @PostMapping("/sign-out")
+    public ResponseEntity<Void> logout() {
         ResponseCookie cookie = ResponseCookie.from("jwt", null)
                 .path("/")
                 .secure(true)
