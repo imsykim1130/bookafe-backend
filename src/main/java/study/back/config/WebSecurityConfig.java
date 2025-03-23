@@ -139,6 +139,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                         .requestMatchers("/api/v1/auth/sign-in", "/api/v1/auth/sign-up", "/api/v1/auth/google").permitAll() // auth
                         .requestMatchers(HttpMethod.GET,  "/api/v1/book/**", "/api/v1/books/**").permitAll() // book 에 대한 get 요청
                         .requestMatchers(HttpMethod.GET,"/api/v1/comment/**", "/api/v1/comments/**").permitAll() // comment 에 대한 get 요청
+                        .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll() // user
                         .requestMatchers( "/api/v1/test/**", "/test").permitAll()
                         .anyRequest().authenticated()
 
