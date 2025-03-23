@@ -14,6 +14,7 @@ import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserJpaRepository;
 import study.back.domain.user.repository.UserRepository;
+import study.back.exception.InternalServerError.CloudinaryErrorException;
 import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.utils.item.UserManagementInfo;
 
@@ -43,7 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 유저 정보 가져오기
+     * 유저 정보 가져오기 (로그인된 유저의 정보말고 다른 유저의 정보를 가져올 때)
      * @param userId 가져올 유저 id
      * @return 유저 정보 {@link GetUserResponseDto}
      */
@@ -79,7 +80,7 @@ public class UserServiceImpl implements UserService {
         try {
             url = fileService.upload(file, folderName, fileName);
         } catch (IOException e) {
-            throw new RuntimeException("이미지 업로드 실패");
+            throw new CloudinaryErrorException("이미지 업로드 실패");
         }
 
         // DB 업데이트
@@ -99,7 +100,7 @@ public class UserServiceImpl implements UserService {
             String url = user.getProfileImg();
             fileService.delete(url, folderName);
         } catch (Exception e) {
-            System.err.println("이미지 삭제 실패");
+            System.out.println("이미지 삭제 실패");
         }
 
         user.changeProfileImg(null);
@@ -147,7 +148,8 @@ public class UserServiceImpl implements UserService {
         
         // 유저 삭제
         int result = repository.deleteUser(user);
-        
+
+        // 삭제된 데이터가 없으면 삭제 실패이므로 예외 발생
         if(result == 0) {
             throw new RuntimeException("유저 삭제 실패");
         }
