@@ -136,7 +136,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
                 auth
                         .requestMatchers("/api/v1/admin/**", "/api/v1/user/admin").hasRole("ADMIN") // 인가
                         .requestMatchers("/swagger", "/swagger-ui.html", "/swagger-ui/**", "/api-docs", "/api-docs/**", "/v3/api-docs/**").permitAll() // swagger
-                        .requestMatchers("/api/v1/auth/sign-in", "/api/v1/auth/sign-up", "/api/v1/auth/google").permitAll() // auth
+                        .requestMatchers("/api/v1/auth/**").permitAll() // auth
                         .requestMatchers(HttpMethod.GET,  "/api/v1/book/**", "/api/v1/books/**").permitAll() // book 에 대한 get 요청
                         .requestMatchers(HttpMethod.GET,"/api/v1/comment/**", "/api/v1/comments/**").permitAll() // comment 에 대한 get 요청
                         .requestMatchers(HttpMethod.GET, "/api/v1/user").permitAll() // user
