@@ -20,13 +20,11 @@ import java.util.*;
 @NoArgsConstructor
 @Table(name = "users")
 public class UserEntity implements UserDetails {
-    @Setter
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
     private String email;
     private String password;
-    @Setter
     private String nickname;
     private String profileImg;
     private boolean googleAuth;
@@ -84,6 +82,11 @@ public class UserEntity implements UserDetails {
     public String changeProfileImg(String profileImg) {
         this.profileImg = profileImg;
         return this.profileImg;
+    }
+
+    public String changeNickname(String newNickname) {
+        this.nickname = newNickname;
+        return this.nickname;
     }
 
     @Override

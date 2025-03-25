@@ -1,5 +1,6 @@
 package study.back.domain.user.controller;
 
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
@@ -92,4 +93,18 @@ public class UserController {
         userService.deleteUserByAdmin(userId);
         return ResponseEntity.ok().build();
     }
+
+    public record PatchUserNicknameRequest(
+            @NotEmpty(message = "올바르지 않은 닉네임입니다") @RequestBody String nickname
+    ) {}
+
+    // 닉네임 변경하기
+    @PatchMapping("/user")
+    public ResponseEntity<String> patchUserNickname(
+            @AuthenticationPrincipal UserEntity user,
+            @Valid @RequestBody PatchUserNicknameRequest request) {
+        System.out.println(request.nickname());
+        String newNickname = userService.changeNickname(user, request.nickname());
+        return ResponseEntity.status(HttpStatus.OK).body(newNickname);
+   }
 }

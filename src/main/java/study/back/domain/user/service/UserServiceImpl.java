@@ -14,6 +14,7 @@ import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserJpaRepository;
 import study.back.domain.user.repository.UserRepository;
+import study.back.exception.Conflict.AlreadyUsedNicknameException;
 import study.back.exception.InternalServerError.CloudinaryErrorException;
 import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.utils.item.UserManagementInfo;
@@ -117,6 +118,24 @@ public class UserServiceImpl implements UserService {
         // 유저 여부 확인
         UserEntity user = repository.findUserById(userId).orElseThrow(UserNotFoundException::new);
         repository.deleteUser(user);
+    }
+
+    /**
+     * 닉네임 변경하기
+     * @param nickname 변경할 닉네임
+     */
+    @Override
+    public String changeNickname(UserEntity user, String nickname) {
+        // 닉네임 여부 검증
+        UserEntity sameNicknameUser = userJpaRepository.findByNickname(nickname);
+        if(sameNicknameUser != null) {
+            throw new AlreadyUsedNicknameException();
+        }
+
+        // 닉네임 변경하기
+        user.changeNickname(nickname);
+        UserEntity changedUser = repository.saveUser(user);
+        return changedUser.getNickname();
     }
 
     @Override

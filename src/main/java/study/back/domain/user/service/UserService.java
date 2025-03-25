@@ -15,4 +15,5 @@ public interface UserService {
     void deleteUser(UserEntity user);
     void initProfileImage(UserEntity user);
     void deleteUserByAdmin(Long userId);
+    String changeNickname(UserEntity user, String nickname);
 }
