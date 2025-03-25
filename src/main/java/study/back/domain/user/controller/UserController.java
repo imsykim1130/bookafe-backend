@@ -99,11 +99,10 @@ public class UserController {
     ) {}
 
     // 닉네임 변경하기
-    @PatchMapping("/user")
+    @PatchMapping("/user/nickname")
     public ResponseEntity<String> patchUserNickname(
             @AuthenticationPrincipal UserEntity user,
             @Valid @RequestBody PatchUserNicknameRequest request) {
-        System.out.println(request.nickname());
         String newNickname = userService.changeNickname(user, request.nickname());
         return ResponseEntity.status(HttpStatus.OK).body(newNickname);
    }
