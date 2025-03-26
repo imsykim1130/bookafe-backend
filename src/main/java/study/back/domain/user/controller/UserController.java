@@ -12,6 +12,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.user.service.UserService;
+import study.back.utils.item.FavoriteUser;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.utils.ResponseDto;
@@ -133,5 +134,11 @@ public class UserController {
             @Min(value = 0, message = "올바르지 않은 user id 입니다") @RequestParam(name = "favoriteUserId") Long favoriteUserId) {
        userService.unlikeUser(user, favoriteUserId);
        return ResponseEntity.status(HttpStatus.OK).build();
+   }
+
+   @GetMapping("/users/like")
+    public ResponseEntity<List<FavoriteUser>> getLikeUserList(@AuthenticationPrincipal UserEntity user) {
+       List<FavoriteUser> requestBody = userService.getLikeUserList(user);
+       return ResponseEntity.ok(requestBody);
    }
 }

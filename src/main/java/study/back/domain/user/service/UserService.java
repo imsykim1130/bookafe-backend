@@ -2,6 +2,7 @@ package study.back.domain.user.service;
 
 import jakarta.validation.constraints.Min;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.utils.item.FavoriteUser;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
@@ -19,4 +20,5 @@ public interface UserService {
     String changeNickname(UserEntity user, String nickname);
     void likeUser(UserEntity user, Long favoriteUserId);
     void unlikeUser(UserEntity user, Long favoriteUserId);
+    List<FavoriteUser> getLikeUserList(UserEntity user);
 }

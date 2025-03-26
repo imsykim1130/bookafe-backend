@@ -5,6 +5,7 @@ import lombok.Builder;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.entity.UserFavorite;
+import study.back.utils.item.FavoriteUser;
 
 import java.util.List;
 import java.util.Optional;
@@ -107,5 +108,17 @@ public class UserRepositoryImpl implements UserRepository {
                 .setParameter("userId", id)
                 .setParameter("favoriteUserId", favoriteUserId)
                 .executeUpdate();
+    }
+
+    // 즐겨찾기 유저의 id 리스트 가져오기
+    @Override
+    public List<FavoriteUser> findAllFavoriteUserId(Long userId) {
+        return em.createQuery("select uf.favoriteUserId as userId, " +
+                        "u.createDate as createdAt, " +
+                        "(select count(*) from CommentFavoriteEntity cf where cf.comment.id in (select c.id from CommentEntity c where c.userId = uf.favoriteUserId)) as favoriteCount, " +
+                        "(select count(*) from CommentEntity c where c.userId = uf.favoriteUserId) as commentCount " +
+                        "from UserFavorite uf join UserEntity u on u.id = uf.favoriteUserId where uf.userId = :userId", FavoriteUser.class)
+                .setParameter("userId", userId)
+                .getResultList();
     }
 }

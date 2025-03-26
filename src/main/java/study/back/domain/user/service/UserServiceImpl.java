@@ -20,6 +20,7 @@ import study.back.exception.Conflict.AlreadyUsedNicknameException;
 import study.back.exception.InternalServerError.CloudinaryErrorException;
 import study.back.exception.NotFound.AlreadyUnfavoriteUserException;
 import study.back.exception.Unauthorized.UserNotFoundException;
+import study.back.utils.item.FavoriteUser;
 import study.back.utils.item.UserManagementInfo;
 
 @Service
@@ -174,6 +175,16 @@ public class UserServiceImpl implements UserService {
             throw new AlreadyUnfavoriteUserException();
         }
         repository.deleteUserFavorite(user.getId(), favoriteUserId);
+    }
+
+    /**
+     * 즐겨찾기 유저 id 리스트
+     * @param user
+     * @return 즐겨찾기 한 유저 id 리스트
+     */
+    @Override
+    public List<FavoriteUser> getLikeUserList(UserEntity user) {
+        return repository.findAllFavoriteUserId(user.getId());
     }
 
     @Override
