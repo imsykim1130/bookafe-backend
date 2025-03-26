@@ -1,5 +1,6 @@
 package study.back.domain.user.service;
 
+import jakarta.validation.constraints.Min;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
@@ -16,4 +17,6 @@ public interface UserService {
     void initProfileImage(UserEntity user);
     void deleteUserByAdmin(Long userId);
     String changeNickname(UserEntity user, String nickname);
+    void likeUser(UserEntity user, Long favoriteUserId);
+    void unlikeUser(UserEntity user, Long favoriteUserId);
 }

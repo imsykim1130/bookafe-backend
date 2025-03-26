@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.Builder;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.entity.UserFavorite;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,5 +81,31 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public Optional<UserEntity> findUserById(Long userId) {
        return userJpaRepository.findById(userId);
+    }
+
+    // 유저 좋아요 여부
+    @Override
+    public boolean existsFavoriteUser(Long id, Long favoriteUserId) {
+        Long result = em.createQuery("select count(*) from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId", Long.class)
+                .setParameter("userId", id)
+                .setParameter("favoriteUserId", favoriteUserId)
+                .getSingleResult();
+        return result == 1;
+    }
+
+    // 즐겨찾기 유저 저장
+    @Override
+    public UserFavorite saveUserFavorite(UserFavorite userFavorite) {
+        em.persist(userFavorite);
+        return userFavorite;
+    }
+
+    // 즐겨찾기 유저 삭제
+    @Override
+    public void deleteUserFavorite(Long id, Long favoriteUserId) {
+        em.createQuery("delete from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId")
+                .setParameter("userId", id)
+                .setParameter("favoriteUserId", favoriteUserId)
+                .executeUpdate();
     }
 }

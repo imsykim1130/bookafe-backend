@@ -12,10 +12,13 @@ import lombok.RequiredArgsConstructor;
 import study.back.domain.file.FileService;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.entity.UserFavorite;
 import study.back.domain.user.repository.UserJpaRepository;
 import study.back.domain.user.repository.UserRepository;
+import study.back.exception.Conflict.AlreadyFavoriteUserException;
 import study.back.exception.Conflict.AlreadyUsedNicknameException;
 import study.back.exception.InternalServerError.CloudinaryErrorException;
+import study.back.exception.NotFound.AlreadyUnfavoriteUserException;
 import study.back.exception.Unauthorized.UserNotFoundException;
 import study.back.utils.item.UserManagementInfo;
 
@@ -136,6 +139,41 @@ public class UserServiceImpl implements UserService {
         user.changeNickname(nickname);
         UserEntity changedUser = repository.saveUser(user);
         return changedUser.getNickname();
+    }
+
+    /**
+     * 유저 즐겨찾기
+     * @param user
+     * @param favoriteUserId
+     */
+    @Override
+    public void likeUser(UserEntity user, Long favoriteUserId) {
+       // 즐겨찾기 상태 검증
+       boolean isAlreadyLikedUser = repository.existsFavoriteUser(user.getId(), favoriteUserId);
+       if(isAlreadyLikedUser) {
+           throw new AlreadyFavoriteUserException();
+       }
+
+       UserFavorite userFavorite = UserFavorite.builder()
+               .userId(user.getId())
+               .favoriteUserId(favoriteUserId)
+               .build();
+
+       repository.saveUserFavorite(userFavorite);
+    }
+
+    /**
+     * 유저 즐겨찾기 취소
+     * @param user
+     * @param favoriteUserId
+     */
+    @Override
+    public void unlikeUser(UserEntity user, Long favoriteUserId) {
+        boolean isLikedUser = repository.existsFavoriteUser(user.getId(), favoriteUserId);
+        if(!isLikedUser) {
+            throw new AlreadyUnfavoriteUserException();
+        }
+        repository.deleteUserFavorite(user.getId(), favoriteUserId);
     }
 
     @Override

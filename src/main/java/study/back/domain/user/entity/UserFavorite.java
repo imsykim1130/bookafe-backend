@@ -2,6 +2,7 @@ package study.back.domain.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -15,11 +16,13 @@ public class UserFavorite {
     @Column(name = "user_favorite_id")
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private UserEntity user;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "favorite_user_id")
-    private UserEntity favoriteUser;
+    private Long userId;
+    private Long favoriteUserId;
+
+    @Builder
+    public UserFavorite(Long userId, Long favoriteUserId) {
+        this.userId = userId;
+        this.favoriteUserId = favoriteUserId;
+    }
 }

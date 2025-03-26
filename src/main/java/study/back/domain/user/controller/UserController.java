@@ -106,4 +106,32 @@ public class UserController {
         String newNickname = userService.changeNickname(user, request.nickname());
         return ResponseEntity.status(HttpStatus.OK).body(newNickname);
    }
+
+    /**
+     * 유저 즐겨찾기
+     * @param user
+     * @param favoriteUserId
+     * @return
+     */
+   @PostMapping("/user/like")
+    public ResponseEntity<Void> likeUser(
+            @AuthenticationPrincipal UserEntity user,
+            @Min(value = 0, message = "올바르지 않은 user id 입니다") @RequestParam(name = "favoriteUserId") Long favoriteUserId) {
+        userService.likeUser(user, favoriteUserId);
+        return ResponseEntity.status(HttpStatus.OK).build();
+   }
+
+    /**
+     * 유저 즐겨찾기 취소
+     * @param user
+     * @param favoriteUserId
+     * @return
+     */
+   @DeleteMapping("/user/like")
+    public ResponseEntity<Void> unlikeUser(
+            @AuthenticationPrincipal UserEntity user,
+            @Min(value = 0, message = "올바르지 않은 user id 입니다") @RequestParam(name = "favoriteUserId") Long favoriteUserId) {
+       userService.unlikeUser(user, favoriteUserId);
+       return ResponseEntity.status(HttpStatus.OK).build();
+   }
 }
