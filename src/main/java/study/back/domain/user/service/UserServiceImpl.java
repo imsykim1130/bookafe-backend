@@ -207,6 +207,16 @@ public class UserServiceImpl implements UserService {
         repository.deleteUserFavorite(user.getId(), userIdList);
     }
 
+    /**
+     * 즐겨찾기 유저 id 리스트 가져오기
+     * @param user
+     * @return
+     */
+    @Override
+    public List<Long> getLikeUserIdList(UserEntity user) {
+        return repository.findAllFavoriteUserId(user.getId());
+    }
+
     @Override
     // 유저 검색 결과 가져오기
     // 입력 : 검색어

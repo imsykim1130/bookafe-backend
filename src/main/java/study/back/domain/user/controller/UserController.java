@@ -168,4 +168,15 @@ public class UserController {
        FavoriteUserListResponseDto requestBody = userService.getLikeUserList(user, page, size);
        return ResponseEntity.status(HttpStatus.OK).body(requestBody);
    }
+
+    /**
+     * 즐겨찾기 유저 id 리스트 가져오기
+     * @param user
+     * @return
+     */
+    @GetMapping("/users/like/id")
+    public ResponseEntity<List<Long>> getLikeUserIdList(@AuthenticationPrincipal UserEntity user) {
+       List<Long> userIdList = userService.getLikeUserIdList(user);
+       return ResponseEntity.status(HttpStatus.OK).body(userIdList);
+    }
 }

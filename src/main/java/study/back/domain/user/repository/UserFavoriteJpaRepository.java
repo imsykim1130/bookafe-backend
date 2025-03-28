@@ -9,11 +9,12 @@ import study.back.domain.user.entity.UserFavorite;
 import study.back.utils.item.FavoriteUser;
 
 public interface UserFavoriteJpaRepository extends JpaRepository<UserFavorite, Long> {
-    @Query("select uf.favoriteUserId as userId, " +
+    @Query("select new study.back.utils.item.FavoriteUser(" +
+            "uf.favoriteUserId as userId, " +
             "u.nickname as nickname, " +
             "u.createDate as createdAt, " +
             "(select count(*) from CommentFavoriteEntity cf where cf.comment.id in (select c.id from CommentEntity c where c.userId = uf.favoriteUserId)) as favoriteCount, " +
-            "(select count(*) from CommentEntity c where c.userId = uf.favoriteUserId and c.parent is not null) as commentCount " +
+            "(select count(*) from CommentEntity c where c.userId = uf.favoriteUserId and c.parent is not null) as reviewCount) " +
             "from UserFavorite uf join UserEntity u on u.id = uf.favoriteUserId where uf.userId = :userId")
     Page<FavoriteUser> findAllFavoriteUser(@Param("userId") Long userId, Pageable pageable);
 }

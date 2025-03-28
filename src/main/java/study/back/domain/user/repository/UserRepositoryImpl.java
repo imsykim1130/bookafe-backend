@@ -121,4 +121,12 @@ public class UserRepositoryImpl implements UserRepository {
     public Page<FavoriteUser> findAllFavoriteUser(Long userId, Pageable pageable) {
         return userFavoriteJpaRepository.findAllFavoriteUser(userId, pageable);
     }
+
+    // 즐겨찾기 유저 id 리스트 가져오기
+    @Override
+    public List<Long> findAllFavoriteUserId(Long userId) {
+        return em.createQuery("select uf.favoriteUserId from UserFavorite uf where uf.userId = :userId", Long.class)
+                .setParameter("userId", userId)
+                .getResultList();
+    }
 }
