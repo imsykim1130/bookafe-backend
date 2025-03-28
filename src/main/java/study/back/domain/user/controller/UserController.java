@@ -119,7 +119,7 @@ public class UserController {
    @PostMapping("/user/like")
     public ResponseEntity<Void> likeUser(
             @AuthenticationPrincipal UserEntity user,
-            @Min(value = 0, message = "올바르지 않은 user id 입니다") @RequestParam(name = "favoriteUserId") Long favoriteUserId) {
+            @Min(value = 0, message = "올바르지 않은 id 입니다") @RequestParam(name = "favoriteUserId") Long favoriteUserId) {
         userService.likeUser(user, favoriteUserId);
         return ResponseEntity.status(HttpStatus.OK).build();
    }

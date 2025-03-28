@@ -152,6 +152,9 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void likeUser(UserEntity user, Long favoriteUserId) {
+        // 유저 여부 검증
+        repository.findUserById(favoriteUserId).orElseThrow(UserNotFoundException::new);
+
        // 즐겨찾기 상태 검증
        boolean isAlreadyLikedUser = repository.existsFavoriteUser(user.getId(), favoriteUserId);
        if(isAlreadyLikedUser) {
@@ -173,10 +176,15 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public void unlikeUser(UserEntity user, Long favoriteUserId) {
+        // 유저 여부 검증
+        repository.findUserById(favoriteUserId).orElseThrow(UserNotFoundException::new);
+
+        // 즐겨찾기 상태 검증
         boolean isLikedUser = repository.existsFavoriteUser(user.getId(), favoriteUserId);
         if(!isLikedUser) {
             throw new AlreadyUnfavoriteUserException();
         }
+
         repository.deleteUserFavorite(user.getId(), favoriteUserId);
     }
 
