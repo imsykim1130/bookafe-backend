@@ -136,6 +136,11 @@ public class UserController {
        return ResponseEntity.status(HttpStatus.OK).build();
    }
 
+    /**
+     * 즐겨찾기 유저 리스트 가져오기
+     * @param user
+     * @return 즐겨찾기 유저 리스트
+     */
    @GetMapping("/users/like")
     public ResponseEntity<List<FavoriteUser>> getLikeUserList(@AuthenticationPrincipal UserEntity user) {
        List<FavoriteUser> requestBody = userService.getLikeUserList(user);

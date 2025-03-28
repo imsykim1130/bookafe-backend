@@ -114,9 +114,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public List<FavoriteUser> findAllFavoriteUserId(Long userId) {
         return em.createQuery("select uf.favoriteUserId as userId, " +
+                        "u.nickname as nickname, " +
                         "u.createDate as createdAt, " +
                         "(select count(*) from CommentFavoriteEntity cf where cf.comment.id in (select c.id from CommentEntity c where c.userId = uf.favoriteUserId)) as favoriteCount, " +
-                        "(select count(*) from CommentEntity c where c.userId = uf.favoriteUserId) as commentCount " +
+                        "(select count(*) from CommentEntity c where c.userId = uf.favoriteUserId and c.parent is not null) as commentCount " +
                         "from UserFavorite uf join UserEntity u on u.id = uf.favoriteUserId where uf.userId = :userId", FavoriteUser.class)
                 .setParameter("userId", userId)
                 .getResultList();

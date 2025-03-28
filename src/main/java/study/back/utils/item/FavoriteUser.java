@@ -13,7 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class FavoriteUser {
     private Long userId;
+    private String nickname;
     private LocalDateTime createdAt;
     private Long favoriteCount;
-    private Long commentCount;
+    private Long reviewCount;
 }
