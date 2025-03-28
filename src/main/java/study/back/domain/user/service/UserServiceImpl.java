@@ -4,12 +4,15 @@ import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import study.back.domain.file.FileService;
+import study.back.domain.user.dto.response.FavoriteUserListResponseDto;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.entity.UserFavorite;
@@ -178,13 +181,21 @@ public class UserServiceImpl implements UserService {
     }
 
     /**
-     * 즐겨찾기 유저 id 리스트
+     * 즐겨찾기 유저 리스트
      * @param user
-     * @return 즐겨찾기 한 유저 id 리스트
+     * @param page
+     * @param size
+     * @return 즐겨찾기 유저 리스트, 마지막 페이지 여부, 전체 데이터 개수
      */
     @Override
-    public List<FavoriteUser> getLikeUserList(UserEntity user) {
-        return repository.findAllFavoriteUserId(user.getId());
+    public FavoriteUserListResponseDto getLikeUserList(UserEntity user, Integer page, Integer size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
+        Page<FavoriteUser> allFavoriteUser = repository.findAllFavoriteUser(user.getId(), pageRequest);
+        return FavoriteUserListResponseDto.builder()
+                .favoriteUserList(allFavoriteUser.getContent())
+                .isEnd(allFavoriteUser.isLast())
+                .totalPage(allFavoriteUser.getTotalPages())
+                .build();
     }
 
     /**

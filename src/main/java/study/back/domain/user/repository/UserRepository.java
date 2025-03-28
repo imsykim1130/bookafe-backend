@@ -1,5 +1,7 @@
 package study.back.domain.user.repository;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.entity.UserFavorite;
 import study.back.utils.item.FavoriteUser;
@@ -18,5 +20,5 @@ public interface UserRepository {
     UserFavorite saveUserFavorite(UserFavorite userFavorite);
     void deleteUserFavorite(Long userId, Long favoriteUserId);
     void deleteUserFavorite(Long userId, List<Long> userIdList);
-    List<FavoriteUser> findAllFavoriteUserId(Long userId);
+    Page<FavoriteUser> findAllFavoriteUser(Long userId, Pageable pageable);
 }

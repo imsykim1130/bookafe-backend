@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import study.back.domain.user.dto.response.FavoriteUserListResponseDto;
 import study.back.domain.user.service.UserService;
 import study.back.utils.item.FavoriteUser;
 import study.back.utils.item.UserManagementInfo;
@@ -159,8 +161,11 @@ public class UserController {
      * @return 즐겨찾기 유저 리스트
      */
    @GetMapping("/users/like")
-    public ResponseEntity<List<FavoriteUser>> getLikeUserList(@AuthenticationPrincipal UserEntity user) {
-       List<FavoriteUser> requestBody = userService.getLikeUserList(user);
-       return ResponseEntity.ok(requestBody);
+    public ResponseEntity<FavoriteUserListResponseDto> getLikeUserList(
+            @AuthenticationPrincipal UserEntity user,
+            @RequestParam(name = "page") @Min(value = 0, message = "올바르지 않은 page 입니다") Integer page,
+            @RequestParam(name = "size", defaultValue = "10") @Positive(message = "올바르지 않은 size 입니다") Integer size) {
+       FavoriteUserListResponseDto requestBody = userService.getLikeUserList(user, page, size);
+       return ResponseEntity.status(HttpStatus.OK).body(requestBody);
    }
 }

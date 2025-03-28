@@ -1,7 +1,9 @@
 package study.back.domain.user.repository;
 
 import jakarta.persistence.EntityManager;
-import lombok.Builder;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.entity.UserFavorite;
@@ -11,16 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+@RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
     private final UserJpaRepository userJpaRepository;
+    private final UserFavoriteJpaRepository userFavoriteJpaRepository;
     private final EntityManager em;
-
-    // 생성자
-    @Builder
-    public UserRepositoryImpl(UserJpaRepository userJpaRepository, EntityManager em) {
-        this.userJpaRepository = userJpaRepository;
-        this.em = em;
-    }
 
     // 유저 저장
     @Override
@@ -119,16 +116,9 @@ public class UserRepositoryImpl implements UserRepository {
                 .executeUpdate();
     }
 
-    // 즐겨찾기 유저의 id 리스트 가져오기
+    // 즐겨찾기 유저 리스트 가져오기
     @Override
-    public List<FavoriteUser> findAllFavoriteUserId(Long userId) {
-        return em.createQuery("select uf.favoriteUserId as userId, " +
-                        "u.nickname as nickname, " +
-                        "u.createDate as createdAt, " +
-                        "(select count(*) from CommentFavoriteEntity cf where cf.comment.id in (select c.id from CommentEntity c where c.userId = uf.favoriteUserId)) as favoriteCount, " +
-                        "(select count(*) from CommentEntity c where c.userId = uf.favoriteUserId and c.parent is not null) as commentCount " +
-                        "from UserFavorite uf join UserEntity u on u.id = uf.favoriteUserId where uf.userId = :userId", FavoriteUser.class)
-                .setParameter("userId", userId)
-                .getResultList();
+    public Page<FavoriteUser> findAllFavoriteUser(Long userId, Pageable pageable) {
+        return userFavoriteJpaRepository.findAllFavoriteUser(userId, pageable);
     }
 }
