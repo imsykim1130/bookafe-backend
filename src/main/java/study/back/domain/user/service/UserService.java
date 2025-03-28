@@ -21,4 +21,5 @@ public interface UserService {
     void likeUser(UserEntity user, Long favoriteUserId);
     void unlikeUser(UserEntity user, Long favoriteUserId);
     List<FavoriteUser> getLikeUserList(UserEntity user);
+    void unlikeUsers(UserEntity user, List<Long> userIdList);
 }

@@ -16,6 +16,7 @@ public interface UserRepository {
     Optional<UserEntity> findUserById(Long userId);
     boolean existsFavoriteUser(Long id, Long favoriteUserId);
     UserFavorite saveUserFavorite(UserFavorite userFavorite);
-    void deleteUserFavorite(Long id, Long favoriteUserId);
+    void deleteUserFavorite(Long userId, Long favoriteUserId);
+    void deleteUserFavorite(Long userId, List<Long> userIdList);
     List<FavoriteUser> findAllFavoriteUserId(Long userId);
 }

@@ -103,10 +103,19 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 즐겨찾기 유저 삭제
     @Override
-    public void deleteUserFavorite(Long id, Long favoriteUserId) {
+    public void deleteUserFavorite(Long userId, Long favoriteUserId) {
         em.createQuery("delete from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId")
-                .setParameter("userId", id)
+                .setParameter("userId", userId)
                 .setParameter("favoriteUserId", favoriteUserId)
+                .executeUpdate();
+    }
+
+    // 즐겨찾기 유저 리스트 삭제
+    @Override
+    public void deleteUserFavorite(Long userId, List<Long> userIdList) {
+        em.createQuery("delete from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId in :userIdList")
+                .setParameter("userId", userId)
+                .setParameter("userIdList", userIdList)
                 .executeUpdate();
     }
 

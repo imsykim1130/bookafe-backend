@@ -136,6 +136,23 @@ public class UserController {
        return ResponseEntity.status(HttpStatus.OK).build();
    }
 
+   public record UnlikeUsersRequest(@NotEmpty(message = "즐겨찾기 취소할 유저가 없습니다") List<Long> userIdList) {}
+
+    /**
+     * 유저 즐겨찾기 리스트 취소
+     * @param user
+     * @param request 즐겨찾기 취소할 유저의 id 리스트
+     * @return
+     */
+   @DeleteMapping("/users/like")
+   public ResponseEntity<Void> unlikeUsers(
+           @AuthenticationPrincipal UserEntity user,
+           @Valid @RequestBody UnlikeUsersRequest request) {
+       userService.unlikeUsers(user, request.userIdList());
+       return ResponseEntity.status(HttpStatus.OK).build();
+   }
+
+
     /**
      * 즐겨찾기 유저 리스트 가져오기
      * @param user
