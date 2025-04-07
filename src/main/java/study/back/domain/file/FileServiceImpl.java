@@ -10,7 +10,6 @@ import com.cloudinary.utils.ObjectUtils;
 
 import jakarta.annotation.Resource;
 import jakarta.transaction.Transactional;
-import study.back.exception.InternalServerError.UploadFailException;
 
 @Service
 @Transactional

@@ -7,12 +7,12 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import study.back.dto.response.GetBookListResponseDto;
+import study.back.global.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.BookRepository;
 import study.back.domain.book.service.BookService;
 import study.back.domain.book.service.KakaoService;
-import study.back.exception.NotFound.NotFoundBookException;
+import study.back.global.exception.NotFound.NotFoundBookException;
 import study.back.utils.item.BookDetail;
 import study.back.utils.item.BookItem;
 import study.back.utils.item.BookSearchItem;

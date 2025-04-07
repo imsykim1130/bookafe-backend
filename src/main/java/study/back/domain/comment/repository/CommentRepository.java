@@ -7,8 +7,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import study.back.domain.book.entity.BookEntity;
-import study.back.dto.response.MyReview;
-import study.back.dto.response.ReviewFavoriteUser;
+import study.back.global.dto.response.MyReview;
+import study.back.global.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;

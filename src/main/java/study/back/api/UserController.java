@@ -12,11 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import study.back.dto.response.FavoriteUserListResponseDto;
+import study.back.global.dto.response.FavoriteUserListResponseDto;
 import study.back.domain.user.service.UserService;
 import study.back.utils.item.UserManagementInfo;
-import study.back.dto.response.GetUserResponseDto;
-import study.back.utils.ResponseDto;
+import study.back.global.dto.response.GetUserResponseDto;
+import study.back.global.dto.ResponseDto;
 import study.back.domain.user.entity.UserEntity;
 
 import java.util.List;

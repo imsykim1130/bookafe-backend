@@ -11,20 +11,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
-import study.back.dto.request.AuthWithGoogleRequestDto;
-import study.back.dto.request.SignInRequestDto;
-import study.back.dto.request.SignUpRequestDto;
-import study.back.dto.response.GetUserResponseDto;
-import study.back.dto.response.SignUpResponseDto;
-import study.back.exception.Conflict.ConflictEmailException;
-import study.back.exception.Conflict.ConflictNicknameException;
-import study.back.exception.Conflict.ConflictUserException;
-import study.back.exception.Unauthorized.UserNotFoundException;
-import study.back.exception.errors.UnauthorizedException;
+import study.back.global.dto.request.AuthWithGoogleRequestDto;
+import study.back.global.dto.request.SignInRequestDto;
+import study.back.global.dto.request.SignUpRequestDto;
+import study.back.global.dto.response.GetUserResponseDto;
+import study.back.global.dto.response.SignUpResponseDto;
+import study.back.global.exception.Conflict.ConflictEmailException;
+import study.back.global.exception.Conflict.ConflictNicknameException;
+import study.back.global.exception.Conflict.ConflictUserException;
+import study.back.global.exception.Unauthorized.UserNotFoundException;
+import study.back.global.exception.errors.UnauthorizedException;
 import study.back.domain.user.entity.RoleName;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.UserJpaRepository;
-import study.back.security.JwtUtils;
+import study.back.global.security.JwtUtils;
 
 @RequiredArgsConstructor
 @Service

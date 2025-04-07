@@ -1,6 +1,6 @@
 package study.back.domain.book.service;
 
-import study.back.dto.response.GetBookListResponseDto;
+import study.back.global.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.utils.item.*;
 

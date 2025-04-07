@@ -4,7 +4,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClient;
-import study.back.exception.InternalServerError.KakaoAuthorizationException;
+import study.back.global.exception.InternalServerError.KakaoAuthorizationException;
 import study.back.utils.item.OriginBookItem;
 
 
