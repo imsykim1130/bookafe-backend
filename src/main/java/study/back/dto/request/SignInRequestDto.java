@@ -1,4 +1,4 @@
-package study.back.domain.user.dto.request;
+package study.back.dto.request;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;

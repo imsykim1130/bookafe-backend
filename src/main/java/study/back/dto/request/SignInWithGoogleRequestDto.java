@@ -1,4 +1,4 @@
-package study.back.domain.user.dto.request;
+package study.back.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

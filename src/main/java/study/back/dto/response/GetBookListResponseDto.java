@@ -1,4 +1,4 @@
-package study.back.domain.book.dto.response;
+package study.back.dto.response;
 
 import lombok.AccessLevel;
 import lombok.Getter;

@@ -1,8 +1,6 @@
 package study.back.domain.book.service;
 
-import org.springframework.http.ResponseEntity;
-import study.back.domain.book.dto.response.GetBookDetailResponseDto;
-import study.back.domain.book.dto.response.GetBookListResponseDto;
+import study.back.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.utils.item.*;
 

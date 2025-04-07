@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import study.back.domain.book.dto.response.GetBookListResponseDto;
+import study.back.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.BookRepository;
 import study.back.domain.book.service.BookService;

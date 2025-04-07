@@ -1,4 +1,4 @@
-package study.back.domain.comment.dto.response;
+package study.back.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

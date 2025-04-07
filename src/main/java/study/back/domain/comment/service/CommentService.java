@@ -2,10 +2,10 @@ package study.back.domain.comment.service;
 
 import java.util.List;
 
-import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
-import study.back.domain.comment.dto.request.PostCommentRequestDto;
-import study.back.domain.comment.dto.response.MyReviewListResponseDto;
-import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
+import study.back.dto.request.ModifyCommentRequestDto;
+import study.back.dto.request.PostCommentRequestDto;
+import study.back.dto.response.MyReviewListResponseDto;
+import study.back.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.CommentItem;

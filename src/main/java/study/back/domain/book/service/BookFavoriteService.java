@@ -1,7 +1,7 @@
 package study.back.domain.book.service;
 
-import study.back.domain.book.dto.response.GetBookFavoriteInfoResponseDto;
-import study.back.domain.book.dto.response.GetFavoriteBookListResponseDto;
+import study.back.dto.response.GetBookFavoriteInfoResponseDto;
+import study.back.dto.response.GetFavoriteBookListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.utils.item.Top10View;
 

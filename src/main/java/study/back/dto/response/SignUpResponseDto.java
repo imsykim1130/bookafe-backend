@@ -1,4 +1,4 @@
-package study.back.domain.user.dto.response;
+package study.back.dto.response;
 
 import lombok.Getter;
 import study.back.utils.ResponseDto;

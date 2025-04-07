@@ -19,10 +19,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.RequiredArgsConstructor;
-import study.back.domain.comment.dto.request.ModifyCommentRequestDto;
-import study.back.domain.comment.dto.request.PostCommentRequestDto;
-import study.back.domain.comment.dto.response.MyReviewListResponseDto;
-import study.back.domain.comment.dto.response.ReviewFavoriteUserListResponseDto;
+import study.back.dto.request.ModifyCommentRequestDto;
+import study.back.dto.request.PostCommentRequestDto;
+import study.back.dto.response.MyReviewListResponseDto;
+import study.back.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.comment.service.CommentService;
 import study.back.utils.ResponseDto;

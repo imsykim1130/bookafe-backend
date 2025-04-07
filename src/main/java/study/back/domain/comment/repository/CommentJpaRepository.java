@@ -8,8 +8,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import study.back.domain.comment.dto.response.MyReview;
-import study.back.domain.comment.dto.response.ReviewFavoriteUser;
+import study.back.dto.response.MyReview;
+import study.back.dto.response.ReviewFavoriteUser;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.utils.item.CommentResultSet;
 

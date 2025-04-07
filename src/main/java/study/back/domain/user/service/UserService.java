@@ -1,9 +1,9 @@
 package study.back.domain.user.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import study.back.domain.user.dto.response.FavoriteUserListResponseDto;
+import study.back.dto.response.FavoriteUserListResponseDto;
 import study.back.utils.item.UserManagementInfo;
-import study.back.domain.user.dto.response.GetUserResponseDto;
+import study.back.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
 
 import java.util.List;

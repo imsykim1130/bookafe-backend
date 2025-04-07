@@ -1,4 +1,4 @@
-package study.back.domain.comment.dto.request;
+package study.back.dto.request;
 
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotEmpty;

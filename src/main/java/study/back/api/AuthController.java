@@ -7,10 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import study.back.domain.user.dto.request.AuthWithGoogleRequestDto;
-import study.back.domain.user.dto.request.SignInRequestDto;
-import study.back.domain.user.dto.request.SignUpRequestDto;
-import study.back.domain.user.dto.response.GetUserResponseDto;
+import study.back.dto.request.AuthWithGoogleRequestDto;
+import study.back.dto.request.SignInRequestDto;
+import study.back.dto.request.SignUpRequestDto;
+import study.back.dto.response.GetUserResponseDto;
 import study.back.domain.user.service.AuthService;
 import study.back.domain.user.service.UserService;
 
