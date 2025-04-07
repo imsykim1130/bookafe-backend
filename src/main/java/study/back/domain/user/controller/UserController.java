@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import study.back.domain.user.dto.response.FavoriteUserListResponseDto;
 import study.back.domain.user.service.UserService;
-import study.back.utils.item.FavoriteUser;
 import study.back.utils.item.UserManagementInfo;
 import study.back.domain.user.dto.response.GetUserResponseDto;
 import study.back.utils.ResponseDto;
@@ -154,7 +153,6 @@ public class UserController {
        return ResponseEntity.status(HttpStatus.OK).build();
    }
 
-
     /**
      * 즐겨찾기 유저 리스트 가져오기
      * @param user
@@ -172,7 +170,7 @@ public class UserController {
     /**
      * 즐겨찾기 유저 id 리스트 가져오기
      * @param user
-     * @return
+     * @return 즐겨찾기 유저 id 리스트
      */
     @GetMapping("/users/like/id")
     public ResponseEntity<List<Long>> getLikeUserIdList(@AuthenticationPrincipal UserEntity user) {
