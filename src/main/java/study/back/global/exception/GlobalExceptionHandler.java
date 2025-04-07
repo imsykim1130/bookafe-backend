@@ -12,10 +12,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-import study.back.global.config.exception.errors.*;
 import study.back.global.exception.errors.*;
 import study.back.global.dto.ResponseDto;
-import study.back.exception.errors.*;
 
 import java.util.stream.Collectors;
 
