@@ -1,4 +1,4 @@
-package study.back.domain.comment.conroller;
+package study.back.api;
 
 import java.util.List;
 

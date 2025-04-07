@@ -1,4 +1,4 @@
-package study.back.domain.book.conroller;
+package study.back.api;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;

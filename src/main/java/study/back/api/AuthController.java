@@ -1,4 +1,4 @@
-package study.back.domain.user.controller;
+package study.back.api;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
