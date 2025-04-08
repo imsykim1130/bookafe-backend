@@ -13,14 +13,14 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.global.dto.request.ModifyCommentRequestDto;
 import study.back.global.dto.request.PostCommentRequestDto;
-import study.back.global.dto.response.MyReview;
+import study.back.domain.comment.query.MyReviewQueryDto;
 import study.back.global.dto.response.MyReviewListResponseDto;
-import study.back.global.dto.response.ReviewFavoriteUser;
+import study.back.domain.comment.query.ReviewFavoriteUserQueryDto;
 import study.back.global.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
-import study.back.domain.comment.repository.CommentJpaRepository;
-import study.back.domain.comment.repository.CommentRepoImpl;
+import study.back.domain.comment.repository.jpa.CommentJpaRepository;
+import study.back.domain.comment.repository.impl.CommentRepoImpl;
 import study.back.domain.comment.repository.CommentRepository;
 import study.back.domain.user.entity.UserEntity;
 import study.back.global.exception.BadRequest.AlreadyFavoriteCommentException;
@@ -29,7 +29,7 @@ import study.back.global.exception.Forbidden.CommentAuthorMismatchException;
 import study.back.global.exception.NotFound.NotExistCommentException;
 import study.back.global.exception.NotFound.NotFoundBookException;
 import study.back.global.exception.Unauthorized.UserNotFoundException;
-import study.back.utils.item.CommentItem;
+import study.back.domain.comment.query.CommentQueryDto;
 
 @Service
 @Transactional
@@ -86,9 +86,9 @@ public class CommentServiceImpl implements CommentService {
 
     // 책의 댓글 가져오기
     @Override
-    public List<CommentItem> getCommentList(String isbn) {
+    public List<CommentQueryDto> getCommentList(String isbn) {
         System.out.println("댓글 가져오기");
-        List<CommentItem> commentList;
+        List<CommentQueryDto> commentList;
 
        // 책 여부 확인
         BookEntity book = findBook(isbn);
@@ -104,9 +104,9 @@ public class CommentServiceImpl implements CommentService {
 
     // 리플 가져오기
     @Override
-    public List<CommentItem> getReplyList(Long parentCommentId) {
+    public List<CommentQueryDto> getReplyList(Long parentCommentId) {
         System.out.println("리플 가져오기");
-        List<CommentItem> replyList;
+        List<CommentQueryDto> replyList;
 
         // 리뷰 여부 검증
         boolean isReviewExist = repository.existsReviewById(parentCommentId);
@@ -224,7 +224,7 @@ public class CommentServiceImpl implements CommentService {
         // 페이지네이션 정보
         PageRequest pageRequest = PageRequest.of(page, size);
 
-        Page<ReviewFavoriteUser> userList = repository.findAllCommentFavoriteNicknameByUser(userId, pageRequest);
+        Page<ReviewFavoriteUserQueryDto> userList = repository.findAllCommentFavoriteNicknameByUser(userId, pageRequest);
 
         return ReviewFavoriteUserListResponseDto.builder()
                 .userList(userList.getContent())
@@ -237,7 +237,7 @@ public class CommentServiceImpl implements CommentService {
     @Override
     public MyReviewListResponseDto getMyReviewList(Long userId, Integer page, Integer size) {
         PageRequest pageable = PageRequest.of(page, size);
-        Page<MyReview> reviewList = repository.findAllMyReviewByUserId(userId, pageable);
+        Page<MyReviewQueryDto> reviewList = repository.findAllMyReviewByUserId(userId, pageable);
         
         return MyReviewListResponseDto.builder()
         .reviewList(reviewList.getContent())

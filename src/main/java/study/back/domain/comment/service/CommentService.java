@@ -8,12 +8,12 @@ import study.back.global.dto.response.MyReviewListResponseDto;
 import study.back.global.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.CommentItem;
+import study.back.domain.comment.query.CommentQueryDto;
 
 public interface CommentService {
     CommentEntity postComment(PostCommentRequestDto requestDto, UserEntity user);
-    List<CommentItem> getCommentList(String isbn);
-    List<CommentItem> getReplyList(Long commentId);
+    List<CommentQueryDto> getCommentList(String isbn);
+    List<CommentQueryDto> getReplyList(Long commentId);
     Boolean putCommentFavorite(Long commentId, UserEntity user);
     String modifyComment(ModifyCommentRequestDto requestDto, UserEntity user);
     Boolean deleteComment(Long commentId, UserEntity user);

@@ -11,8 +11,8 @@ import study.back.domain.book.repository.BookFavoriteRepository;
 import study.back.domain.book.repository.jpa.BookFavoriteJpaRepository;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.FavoriteBookView;
-import study.back.utils.item.Top10View;
+import study.back.domain.book.query.FavoriteBookQueryDto;
+import study.back.domain.book.query.Top10BookQueryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -77,14 +77,14 @@ public class BookFavoriteRepoImpl implements BookFavoriteRepository {
 
     // 유저의 좋아요 책 리스트 페이지네이션과 함께
     @Override
-    public Page<FavoriteBookView> findAllFavoriteBookView(UserEntity user, Pageable pageable) {
+    public Page<FavoriteBookQueryDto> findAllFavoriteBookView(UserEntity user, Pageable pageable) {
         return bookFavoriteJpaRepository.findAllFavoriteBookViewWithPagination(user, pageable);
     }
 
     // isbn, bookImg, title, author, favoriteCount
     @Override
-    public List<Top10View> findAllTop10View() {
-        return em.createQuery("select bf.book.isbn as ibsn, bf.book.bookImg as bookImg, bf.book.title as title, bf.book.author as author, count(bf.book) as favoriteCount from BookFavoriteEntity bf group by bf.book order by count(bf.book) desc limit 10", Top10View.class)
+    public List<Top10BookQueryDto> findAllTop10View() {
+        return em.createQuery("select bf.book.isbn as ibsn, bf.book.bookImg as bookImg, bf.book.title as title, bf.book.author as author, count(bf.book) as favoriteCount from BookFavoriteEntity bf group by bf.book order by count(bf.book) desc limit 10", Top10BookQueryDto.class)
                 .getResultList();
     }
 }

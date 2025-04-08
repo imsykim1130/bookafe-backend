@@ -1,4 +1,4 @@
-package study.back.domain.user.repository;
+package study.back.domain.user.repository.jpa;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import study.back.domain.user.entity.UserEntity;

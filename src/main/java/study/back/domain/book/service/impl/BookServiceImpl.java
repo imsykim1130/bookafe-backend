@@ -17,7 +17,7 @@ import study.back.utils.item.BookDetail;
 import study.back.utils.item.BookItem;
 import study.back.utils.item.BookSearchItem;
 import study.back.utils.item.OriginBookItem;
-import study.back.utils.item.TodayBookView;
+import study.back.domain.book.query.TodayBookQueryDto;
 
 @Service
 @Transactional
@@ -98,7 +98,7 @@ public class BookServiceImpl implements BookService {
 
     // 추천 책 가져오기
     @Override
-    public TodayBookView getRecommendBook() {
+    public TodayBookQueryDto getRecommendBook() {
         // todo
         return repository.findRecommendBook();
     }

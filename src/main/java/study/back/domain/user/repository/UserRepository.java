@@ -3,8 +3,8 @@ package study.back.domain.user.repository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.entity.UserFavorite;
-import study.back.utils.item.FavoriteUser;
+import study.back.domain.user.entity.UserFavoriteEntity;
+import study.back.domain.user.query.FavoriteUserQueryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -17,9 +17,9 @@ public interface UserRepository {
     void deleteUserDependencyData(UserEntity user);
     Optional<UserEntity> findUserById(Long userId);
     boolean existsFavoriteUser(Long id, Long favoriteUserId);
-    UserFavorite saveUserFavorite(UserFavorite userFavorite);
+    UserFavoriteEntity saveUserFavorite(UserFavoriteEntity userFavoriteEntity);
     void deleteUserFavorite(Long userId, Long favoriteUserId);
     void deleteUserFavorite(Long userId, List<Long> userIdList);
-    Page<FavoriteUser> findAllFavoriteUser(Long userId, Pageable pageable);
+    Page<FavoriteUserQueryDto> findAllFavoriteUser(Long userId, Pageable pageable);
     List<Long> findAllFavoriteUserId(Long userId);
 }

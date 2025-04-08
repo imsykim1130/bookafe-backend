@@ -26,7 +26,7 @@ import study.back.global.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.comment.service.CommentService;
 import study.back.global.dto.ResponseDto;
-import study.back.utils.item.CommentItem;
+import study.back.domain.comment.query.CommentQueryDto;
 
 @RestController
 @RequiredArgsConstructor
@@ -55,9 +55,9 @@ public class CommentController {
      * @return 책에 달린 댓글 리스트
      */
     @GetMapping("/comments/review")
-    public ResponseEntity<List<CommentItem>> getCommentList(
+    public ResponseEntity<List<CommentQueryDto>> getCommentList(
             @NotEmpty(message = "올바르지 않은 isbn 입니다") @RequestParam(name = "isbn") String isbn) {
-        List<CommentItem> result = commentService.getCommentList(isbn);
+        List<CommentQueryDto> result = commentService.getCommentList(isbn);
         return ResponseEntity.ok(result);
     }
 
@@ -67,9 +67,9 @@ public class CommentController {
      * @return 리뷰에 달린 리플 리스트
      */
     @GetMapping("/comments/reply")
-    public ResponseEntity<List<CommentItem>> getReplyList(
+    public ResponseEntity<List<CommentQueryDto>> getReplyList(
             @Min(value = 0, message = "올바르지 않은 리뷰 id 입니다") @RequestParam(name = "reviewId") Long reviewId) {
-        List<CommentItem> result = commentService.getReplyList(reviewId);
+        List<CommentQueryDto> result = commentService.getReplyList(reviewId);
         return ResponseEntity.ok(result);
     }
 

@@ -1,6 +1,6 @@
-package study.back.utils.item;
+package study.back.domain.book.query;
 
-public interface RecommendBookView {
+public interface RecommendBookQueryDto {
     Long getId();
     String getTitle();
     String getAuthor();

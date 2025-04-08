@@ -5,8 +5,8 @@ import org.springframework.data.domain.Pageable;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.BookFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.FavoriteBookView;
-import study.back.utils.item.Top10View;
+import study.back.domain.book.query.FavoriteBookQueryDto;
+import study.back.domain.book.query.Top10BookQueryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,9 +22,9 @@ public interface BookFavoriteRepository {
 
     void deleteBookFavorite(BookFavoriteEntity bookFavorite);
 
-    Page<FavoriteBookView> findAllFavoriteBookView(UserEntity user, Pageable pageable);
+    Page<FavoriteBookQueryDto> findAllFavoriteBookView(UserEntity user, Pageable pageable);
 
-    List<Top10View> findAllTop10View();
+    List<Top10BookQueryDto> findAllTop10View();
 
     int deleteAllFavoriteBook(UserEntity user, List<String> isbnList);
 

@@ -23,7 +23,7 @@ import study.back.global.exception.Unauthorized.UserNotFoundException;
 import study.back.global.exception.errors.UnauthorizedException;
 import study.back.domain.user.entity.RoleName;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.repository.UserJpaRepository;
+import study.back.domain.user.repository.jpa.UserJpaRepository;
 import study.back.global.security.JwtUtils;
 
 @RequiredArgsConstructor

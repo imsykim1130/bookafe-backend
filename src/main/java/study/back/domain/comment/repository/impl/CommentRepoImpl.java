@@ -1,4 +1,4 @@
-package study.back.domain.comment.repository;
+package study.back.domain.comment.repository.impl;
 
 import java.util.List;
 import java.util.Optional;
@@ -11,12 +11,14 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
-import study.back.global.dto.response.MyReview;
-import study.back.global.dto.response.ReviewFavoriteUser;
+import study.back.domain.comment.repository.CommentRepository;
+import study.back.domain.comment.repository.jpa.CommentJpaRepository;
+import study.back.domain.comment.query.MyReviewQueryDto;
+import study.back.domain.comment.query.ReviewFavoriteUserQueryDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.CommentItem;
+import study.back.domain.comment.query.CommentQueryDto;
 
 @RequiredArgsConstructor
 public class CommentRepoImpl implements CommentRepository {
@@ -41,16 +43,16 @@ public class CommentRepoImpl implements CommentRepository {
     }
 
     @Override
-    public List<CommentItem> findAllCommentItemByIsbn(String isbn) {
-        List<CommentItem> result = em.createQuery("select c.id as id, u.id as userId, u.profileImg as profileImg, u.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c join UserEntity u on c.userId = u.id where c.book.isbn = :isbn and c.parent is null order by c.writeDate", CommentItem.class)
+    public List<CommentQueryDto> findAllCommentItemByIsbn(String isbn) {
+        List<CommentQueryDto> result = em.createQuery("select c.id as id, u.id as userId, u.profileImg as profileImg, u.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c join UserEntity u on c.userId = u.id where c.book.isbn = :isbn and c.parent is null order by c.writeDate", CommentQueryDto.class)
                 .setParameter("isbn", isbn)
                 .getResultList();
         return result;
     }
 
     @Override
-    public List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId) {
-        return em.createQuery("select c.id as id, u.id as userId, u.profileImg as profileImg, u.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c join UserEntity u on u.id = c.userId where c.parent.id = :parentCommentId order by c.writeDate", CommentItem.class)
+    public List<CommentQueryDto> findAllReplyByParentCommentId(Long parentCommentId) {
+        return em.createQuery("select c.id as id, u.id as userId, u.profileImg as profileImg, u.nickname as nickname, c.writeDate as writeDate, c.emoji as emoji, c.content as content, (select count(c2) from CommentEntity c2 where c2.parent = c) as replyCount, c.isDeleted as isDeleted from CommentEntity c join UserEntity u on u.id = c.userId where c.parent.id = :parentCommentId order by c.writeDate", CommentQueryDto.class)
                 .setParameter("parentCommentId", parentCommentId)
                 .getResultList();
     }
@@ -131,7 +133,7 @@ public class CommentRepoImpl implements CommentRepository {
 
     // 유저가 작성한 리뷰에 좋아요를 누른 유저의 닉네임 리스트 가져오기
     @Override
-    public Page<ReviewFavoriteUser> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable) {
+    public Page<ReviewFavoriteUserQueryDto> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable) {
         return commentJpaRepository.findAllReviewFavoriteUserByUserId(userId, pageable);
     }
 
@@ -141,7 +143,7 @@ public class CommentRepoImpl implements CommentRepository {
      * @return content, createdAt, title, author 가 담긴 리스트
      */
     @Override
-    public Page<MyReview> findAllMyReviewByUserId(Long userId, Pageable pageable) {
+    public Page<MyReviewQueryDto> findAllMyReviewByUserId(Long userId, Pageable pageable) {
         return commentJpaRepository.findAllMyReviewByUserId(userId, pageable);
     }
 

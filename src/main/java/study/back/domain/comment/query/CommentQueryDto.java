@@ -1,4 +1,4 @@
-package study.back.utils.item;
+package study.back.domain.comment.query;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @AllArgsConstructor
-public class CommentItem {
+public class CommentQueryDto {
     @Getter
     private Long id;
     @Getter

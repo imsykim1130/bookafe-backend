@@ -12,7 +12,7 @@ import study.back.global.exception.BadRequest.NoMoreRecommendBookException;
 import study.back.global.exception.NotFound.NotFoundBookException;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.book.repository.jpa.RecommendBookJpaRepository;
-import study.back.utils.item.RecommendBookView;
+import study.back.domain.book.query.RecommendBookQueryDto;
 
 import java.util.List;
 
@@ -65,7 +65,7 @@ public class RecommendServiceImpl implements RecommendBookService {
 
     // 추천 책 가져오기
     @Override
-    public List<RecommendBookView> getAllRecommendBook() {
+    public List<RecommendBookQueryDto> getAllRecommendBook() {
         return recommendBookJpaRepository.getAllRecommendBook();
     }
 

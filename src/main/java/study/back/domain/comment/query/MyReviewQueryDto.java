@@ -1,4 +1,4 @@
-package study.back.global.dto.response;
+package study.back.domain.comment.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class MyReview {
+public class MyReviewQueryDto {
     private String content;
     private LocalDateTime createdAt;
     private String title;

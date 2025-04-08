@@ -8,7 +8,7 @@ import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.entity.RecommendBookEntity;
 import study.back.domain.book.repository.BookRepository;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
-import study.back.utils.item.TodayBookView;
+import study.back.domain.book.query.TodayBookQueryDto;
 
 import java.util.Optional;
 
@@ -30,15 +30,15 @@ public class BookRepositoryImpl implements BookRepository {
 
     // title, author, isbn, bookImg, favoriteComment
     @Override
-    public TodayBookView findRecommendBook() {
-        TodayBookView result;
+    public TodayBookQueryDto findRecommendBook() {
+        TodayBookQueryDto result;
         try {
             result = em.createQuery("select " +
                             "rb.book.title as title, " +
                             "rb.book.author as author, " +
                             "rb.book.isbn as isbn, " +
                             "rb.book.bookImg as bookImg " +
-                            "from RecommendBookEntity rb order by function('RAND') limit 1", TodayBookView.class)
+                            "from RecommendBookEntity rb order by function('RAND') limit 1", TodayBookQueryDto.class)
                     .getSingleResult();
         } catch (NoResultException e) {
             result = null;

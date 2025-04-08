@@ -3,7 +3,7 @@ package study.back.global.dto.response;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import study.back.utils.item.FavoriteUser;
+import study.back.domain.user.query.FavoriteUserQueryDto;
 
 import java.util.List;
 
@@ -11,7 +11,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 public class FavoriteUserListResponseDto {
-    private List<FavoriteUser> favoriteUserList;
+    private List<FavoriteUserQueryDto> favoriteUserList;
     private Boolean isEnd;
     private int totalPage;
 }

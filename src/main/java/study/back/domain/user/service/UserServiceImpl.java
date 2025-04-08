@@ -15,15 +15,15 @@ import study.back.domain.file.FileService;
 import study.back.global.dto.response.FavoriteUserListResponseDto;
 import study.back.global.dto.response.GetUserResponseDto;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.entity.UserFavorite;
-import study.back.domain.user.repository.UserJpaRepository;
+import study.back.domain.user.entity.UserFavoriteEntity;
+import study.back.domain.user.repository.jpa.UserJpaRepository;
 import study.back.domain.user.repository.UserRepository;
 import study.back.global.exception.Conflict.AlreadyFavoriteUserException;
 import study.back.global.exception.Conflict.AlreadyUsedNicknameException;
 import study.back.global.exception.InternalServerError.CloudinaryErrorException;
 import study.back.global.exception.NotFound.AlreadyUnfavoriteUserException;
 import study.back.global.exception.Unauthorized.UserNotFoundException;
-import study.back.utils.item.FavoriteUser;
+import study.back.domain.user.query.FavoriteUserQueryDto;
 import study.back.utils.item.UserManagementInfo;
 
 @Service
@@ -161,12 +161,12 @@ public class UserServiceImpl implements UserService {
            throw new AlreadyFavoriteUserException();
        }
 
-       UserFavorite userFavorite = UserFavorite.builder()
+       UserFavoriteEntity userFavoriteEntity = UserFavoriteEntity.builder()
                .userId(user.getId())
                .favoriteUserId(favoriteUserId)
                .build();
 
-       repository.saveUserFavorite(userFavorite);
+       repository.saveUserFavorite(userFavoriteEntity);
     }
 
     /**
@@ -198,7 +198,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public FavoriteUserListResponseDto getLikeUserList(UserEntity user, Integer page, Integer size) {
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<FavoriteUser> allFavoriteUser = repository.findAllFavoriteUser(user.getId(), pageRequest);
+        Page<FavoriteUserQueryDto> allFavoriteUser = repository.findAllFavoriteUser(user.getId(), pageRequest);
         return FavoriteUserListResponseDto.builder()
                 .favoriteUserList(allFavoriteUser.getContent())
                 .isEnd(allFavoriteUser.isLast())

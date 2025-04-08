@@ -1,4 +1,4 @@
-package study.back.domain.user.repository;
+package study.back.domain.user.repository.impl;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -6,8 +6,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.entity.UserFavorite;
-import study.back.utils.item.FavoriteUser;
+import study.back.domain.user.entity.UserFavoriteEntity;
+import study.back.domain.user.repository.UserRepository;
+import study.back.domain.user.repository.jpa.UserFavoriteJpaRepository;
+import study.back.domain.user.repository.jpa.UserJpaRepository;
+import study.back.domain.user.query.FavoriteUserQueryDto;
 
 import java.util.List;
 import java.util.Optional;
@@ -84,7 +87,7 @@ public class UserRepositoryImpl implements UserRepository {
     // 유저 좋아요 여부
     @Override
     public boolean existsFavoriteUser(Long id, Long favoriteUserId) {
-        Long result = em.createQuery("select count(*) from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId", Long.class)
+        Long result = em.createQuery("select count(*) from UserFavoriteEntity uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId", Long.class)
                 .setParameter("userId", id)
                 .setParameter("favoriteUserId", favoriteUserId)
                 .getSingleResult();
@@ -93,15 +96,15 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 즐겨찾기 유저 저장
     @Override
-    public UserFavorite saveUserFavorite(UserFavorite userFavorite) {
-        em.persist(userFavorite);
-        return userFavorite;
+    public UserFavoriteEntity saveUserFavorite(UserFavoriteEntity userFavoriteEntity) {
+        em.persist(userFavoriteEntity);
+        return userFavoriteEntity;
     }
 
     // 즐겨찾기 유저 삭제
     @Override
     public void deleteUserFavorite(Long userId, Long favoriteUserId) {
-        em.createQuery("delete from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId")
+        em.createQuery("delete from UserFavoriteEntity uf where uf.userId = :userId and uf.favoriteUserId = :favoriteUserId")
                 .setParameter("userId", userId)
                 .setParameter("favoriteUserId", favoriteUserId)
                 .executeUpdate();
@@ -110,7 +113,7 @@ public class UserRepositoryImpl implements UserRepository {
     // 즐겨찾기 유저 리스트 삭제
     @Override
     public void deleteUserFavorite(Long userId, List<Long> userIdList) {
-        em.createQuery("delete from UserFavorite uf where uf.userId = :userId and uf.favoriteUserId in :userIdList")
+        em.createQuery("delete from UserFavoriteEntity uf where uf.userId = :userId and uf.favoriteUserId in :userIdList")
                 .setParameter("userId", userId)
                 .setParameter("userIdList", userIdList)
                 .executeUpdate();
@@ -118,14 +121,14 @@ public class UserRepositoryImpl implements UserRepository {
 
     // 즐겨찾기 유저 리스트 가져오기
     @Override
-    public Page<FavoriteUser> findAllFavoriteUser(Long userId, Pageable pageable) {
+    public Page<FavoriteUserQueryDto> findAllFavoriteUser(Long userId, Pageable pageable) {
         return userFavoriteJpaRepository.findAllFavoriteUser(userId, pageable);
     }
 
     // 즐겨찾기 유저 id 리스트 가져오기
     @Override
     public List<Long> findAllFavoriteUserId(Long userId) {
-        return em.createQuery("select uf.favoriteUserId from UserFavorite uf where uf.userId = :userId", Long.class)
+        return em.createQuery("select uf.favoriteUserId from UserFavoriteEntity uf where uf.userId = :userId", Long.class)
                 .setParameter("userId", userId)
                 .getResultList();
     }

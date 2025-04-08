@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "user_favorite")
-public class UserFavorite {
+public class UserFavoriteEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_favorite_id")
@@ -21,7 +21,7 @@ public class UserFavorite {
     private Long favoriteUserId;
 
     @Builder
-    public UserFavorite(Long userId, Long favoriteUserId) {
+    public UserFavoriteEntity(Long userId, Long favoriteUserId) {
         this.userId = userId;
         this.favoriteUserId = favoriteUserId;
     }

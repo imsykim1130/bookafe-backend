@@ -7,20 +7,20 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import study.back.domain.book.entity.BookEntity;
-import study.back.global.dto.response.MyReview;
-import study.back.global.dto.response.ReviewFavoriteUser;
+import study.back.domain.comment.query.MyReviewQueryDto;
+import study.back.domain.comment.query.ReviewFavoriteUserQueryDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
 import study.back.domain.user.entity.UserEntity;
-import study.back.utils.item.CommentItem;
+import study.back.domain.comment.query.CommentQueryDto;
 
 public interface CommentRepository {
 
     CommentEntity saveComment(CommentEntity comment);
     Optional<CommentEntity> findCommentById(Long parentId);
     Optional<BookEntity> findBookById(String isbn);
-    List<CommentItem> findAllCommentItemByIsbn(String isbn);
-    List<CommentItem> findAllReplyByParentCommentId(Long parentCommentId);
+    List<CommentQueryDto> findAllCommentItemByIsbn(String isbn);
+    List<CommentQueryDto> findAllReplyByParentCommentId(Long parentCommentId);
     Optional<UserEntity> findUserByCommentId(Long commentId);
     void updateCommentContent(Long commentId, String content);
     Boolean updateCommentToDeleted(Long commentId);
@@ -29,7 +29,7 @@ public interface CommentRepository {
     int deleteCommentFavorite(Long commentId, UserEntity user);
     Boolean existsCommentFavorite(Long commentId, UserEntity user);
     Long countCommentFavorite(Long commentId);
-    Page<ReviewFavoriteUser> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable);
-    Page<MyReview> findAllMyReviewByUserId(Long userId, Pageable pageable);
+    Page<ReviewFavoriteUserQueryDto> findAllCommentFavoriteNicknameByUser(Long userId, Pageable pageable);
+    Page<MyReviewQueryDto> findAllMyReviewByUserId(Long userId, Pageable pageable);
     boolean existsReviewById(Long parentCommentId);
 }

@@ -16,8 +16,8 @@ import study.back.domain.book.repository.BookFavoriteRepository;
 import study.back.domain.book.repository.impl.BookFavoriteRepoImpl;
 import study.back.domain.book.repository.jpa.BookFavoriteJpaRepository;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
-import study.back.utils.item.FavoriteBookView;
-import study.back.utils.item.Top10View;
+import study.back.domain.book.query.FavoriteBookQueryDto;
+import study.back.domain.book.query.Top10BookQueryDto;
 import study.back.domain.book.service.BookFavoriteService;
 
 import java.util.List;
@@ -93,13 +93,13 @@ public class BookFavoriteServiceImpl implements BookFavoriteService {
         // page 는 필수 입력값
         // size 는 기본 10
         PageRequest pageRequest = PageRequest.of(page, size);
-        Page<FavoriteBookView> result = repository.findAllFavoriteBookView(user, pageRequest);
+        Page<FavoriteBookQueryDto> result = repository.findAllFavoriteBookView(user, pageRequest);
         return new GetFavoriteBookListResponseDto("SU", "좋아요 책 리스트 가져오기 성공", result.getContent(), result.isLast(), result.getTotalPages());
     }
 
     // top10 가져오기
     @Override
-    public List<Top10View> getTop10BookList() {
+    public List<Top10BookQueryDto> getTop10BookList() {
         return repository.findAllTop10View();
     }
 }

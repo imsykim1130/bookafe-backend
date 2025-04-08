@@ -1,4 +1,4 @@
-package study.back.utils.item;
+package study.back.domain.user.query;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
-public class FavoriteUser {
+public class FavoriteUserQueryDto {
     private Long userId;
     private String nickname;
     private LocalDateTime createdAt;

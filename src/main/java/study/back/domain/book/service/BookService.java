@@ -1,5 +1,6 @@
 package study.back.domain.book.service;
 
+import study.back.domain.book.query.TodayBookQueryDto;
 import study.back.global.dto.response.GetBookListResponseDto;
 import study.back.domain.book.entity.BookEntity;
 import study.back.utils.item.*;
@@ -16,6 +17,6 @@ public interface BookService {
                                                                String target);
 
     BookDetail getBookDetail (String isbn);
-    TodayBookView getRecommendBook();
+    TodayBookQueryDto getRecommendBook();
     BookEntity getBookIfExistOrElseNull(String isbn);
 }

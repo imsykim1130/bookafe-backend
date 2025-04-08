@@ -9,6 +9,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import study.back.domain.book.query.FavoriteBookQueryDto;
+import study.back.domain.book.query.RecommendBookQueryDto;
+import study.back.domain.book.query.TodayBookQueryDto;
+import study.back.domain.book.query.Top10BookQueryDto;
 import study.back.global.dto.request.DeleteFavoriteBookListRequestDto;
 import study.back.global.dto.response.GetBookFavoriteInfoResponseDto;
 import study.back.global.dto.response.GetBookListResponseDto;
@@ -66,11 +70,11 @@ public class BookController {
     /**
      * 오늘의 책 가져오기 <br/>
      * 관리자가 추천한 책 중 하나를 랜덤하게 가져옴
-     * @return 오늘의 책 {@link TodayBookView}
+     * @return 오늘의 책 {@link TodayBookQueryDto}
      */
     @GetMapping("/book/today")
-    public ResponseEntity<TodayBookView> getRecommendBook() {
-        TodayBookView responseDto = bookService.getRecommendBook();
+    public ResponseEntity<TodayBookQueryDto> getRecommendBook() {
+        TodayBookQueryDto responseDto = bookService.getRecommendBook();
         return ResponseEntity.ok(responseDto);
     }
 
@@ -93,7 +97,7 @@ public class BookController {
      * @param user jwt 에서 추출
      * @param page 가져올 페이지
      * @param size 페이지 당 가져올 데이터 개수
-     * @return 좋아요 책 리스트 {@link FavoriteBookView}, 마지막 페이지 여부, 총 페이지 수
+     * @return 좋아요 책 리스트 {@link FavoriteBookQueryDto}, 마지막 페이지 여부, 총 페이지 수
      */
     @GetMapping("/books/like")
     public ResponseEntity<GetFavoriteBookListResponseDto> favoriteList(@AuthenticationPrincipal UserEntity user,
@@ -105,11 +109,11 @@ public class BookController {
 
     /**
      * top10 가져오기
-     * @return 좋아요 개수가 높은 순대로 10 개의 책 리스트 {@link Top10View}
+     * @return 좋아요 개수가 높은 순대로 10 개의 책 리스트 {@link Top10BookQueryDto}
      */
     @GetMapping("/books/top10")
-    public ResponseEntity<List<Top10View>> favoriteTop10() {
-        List<Top10View> result = bookFavoriteService.getTop10BookList();
+    public ResponseEntity<List<Top10BookQueryDto>> favoriteTop10() {
+        List<Top10BookQueryDto> result = bookFavoriteService.getTop10BookList();
         return ResponseEntity.ok(result);
     }
 
@@ -166,8 +170,8 @@ public class BookController {
 
     // 추천 책 전체 가져오기
     @GetMapping("/admin/books/recommend")
-    public ResponseEntity<List<RecommendBookView>> getAllRecommendBook() {
-        List<RecommendBookView> result = recommendBookService.getAllRecommendBook();
+    public ResponseEntity<List<RecommendBookQueryDto>> getAllRecommendBook() {
+        List<RecommendBookQueryDto> result = recommendBookService.getAllRecommendBook();
         return ResponseEntity.ok(result);
     }
 }
