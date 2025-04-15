@@ -32,4 +32,4 @@ jobs:
 
       # 허브에 push
       - name: push image
-        run: docker push ${{ secrets.DOCKER_USERNAME }}/docker-springboot:latest
+        run: docker push ${{ secrets.DOCKER_USERNAME }}/bookafe-back:latest
