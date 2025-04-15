@@ -21,7 +21,7 @@ jobs:
 
       # 이미지 빌드
       - name: Build image
-        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/docker-springboot .
+        run: docker build -t ${{ secrets.DOCKER_USERNAME }}/bookafe-back .
 
       # 도커 로그인
       - name: Docker login
