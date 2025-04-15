@@ -19,6 +19,10 @@ jobs:
       - name: Make .env file
         run: echo "${{ secrets.ENV }}" | base64 --decode > .env
 
+      # firebase key 가져오기
+      - name: Make firebase-key.json file
+      - run : echo "${{ secrets.FIREBASE_KEY }}" | base64 --decode > ./src/main/resources/firebase-key.json
+
       # 이미지 빌드
       - name: Build image
         run: docker build -t ${{ secrets.DOCKER_USERNAME }}/bookafe-back .
