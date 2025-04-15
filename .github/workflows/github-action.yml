@@ -21,7 +21,7 @@ jobs:
 
       # firebase key 가져오기
       - name: Make firebase-key.json file
-        run : echo "${{ secrets.FIREBASE_KEY }}" | base64 --decode > ./src/main/resources/firebase-key.json
+        run : echo "${{ secrets.FIREBASE_KEY }}" | base64 --decode > firebase-key.json
 
       # 이미지 빌드
       - name: Build image

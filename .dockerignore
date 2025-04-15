@@ -35,4 +35,4 @@ target/
 .github
 
 # firebase
-src/main/resources/firebase-key.json
+firebase-key.json

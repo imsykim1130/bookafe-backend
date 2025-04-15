@@ -16,7 +16,7 @@ public class FirebaseConfig {
     @Bean
     public FirebaseAuth firebaseAuth() throws IOException {
         // 서비스 계정 키 파일 가져오기
-        FileInputStream serviceAccount = new FileInputStream("src/main/resources/firebase-key.json");
+        FileInputStream serviceAccount = new FileInputStream("firebase-key.json");
         FirebaseOptions options = FirebaseOptions.builder()
                 .setCredentials(GoogleCredentials.fromStream(serviceAccount))
                 .build();
