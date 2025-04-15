@@ -1,9 +1,5 @@
 package study.back.domain.user.service;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseAuthException;
-import com.google.firebase.auth.FirebaseToken;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -11,6 +7,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseToken;
+
+import lombok.RequiredArgsConstructor;
+import study.back.domain.user.entity.RoleName;
+import study.back.domain.user.entity.UserEntity;
+import study.back.domain.user.repository.jpa.UserJpaRepository;
 import study.back.global.dto.request.AuthWithGoogleRequestDto;
 import study.back.global.dto.request.SignInRequestDto;
 import study.back.global.dto.request.SignUpRequestDto;
@@ -21,9 +26,6 @@ import study.back.global.exception.Conflict.ConflictNicknameException;
 import study.back.global.exception.Conflict.ConflictUserException;
 import study.back.global.exception.Unauthorized.UserNotFoundException;
 import study.back.global.exception.errors.UnauthorizedException;
-import study.back.domain.user.entity.RoleName;
-import study.back.domain.user.entity.UserEntity;
-import study.back.domain.user.repository.jpa.UserJpaRepository;
 import study.back.global.security.JwtUtils;
 
 @RequiredArgsConstructor

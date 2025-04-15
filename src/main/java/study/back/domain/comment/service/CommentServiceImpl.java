@@ -3,14 +3,14 @@ package study.back.domain.comment.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import jakarta.persistence.EntityManager;
 import jakarta.transaction.Transactional;
 import study.back.domain.book.entity.BookEntity;
-import study.back.domain.book.repository.jpa.BookJpaRepository;
+import study.back.domain.book.service.BookService;
 import study.back.global.dto.request.ModifyCommentRequestDto;
 import study.back.global.dto.request.PostCommentRequestDto;
 import study.back.domain.comment.query.MyReviewQueryDto;
@@ -19,8 +19,6 @@ import study.back.domain.comment.query.ReviewFavoriteUserQueryDto;
 import study.back.global.dto.response.ReviewFavoriteUserListResponseDto;
 import study.back.domain.comment.entity.CommentEntity;
 import study.back.domain.comment.entity.CommentFavoriteEntity;
-import study.back.domain.comment.repository.jpa.CommentJpaRepository;
-import study.back.domain.comment.repository.impl.CommentRepoImpl;
 import study.back.domain.comment.repository.CommentRepository;
 import study.back.domain.user.entity.UserEntity;
 import study.back.global.exception.BadRequest.AlreadyFavoriteCommentException;
@@ -33,12 +31,10 @@ import study.back.domain.comment.query.CommentQueryDto;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class CommentServiceImpl implements CommentService {
     private final CommentRepository repository;
-
-    public CommentServiceImpl(CommentJpaRepository commentJpaRepository, BookJpaRepository bookJpaRepository, EntityManager em) {
-        this.repository = new CommentRepoImpl(commentJpaRepository, bookJpaRepository, em);
-    }
+    private final BookService bookService;
 
     // 댓글 달기
     // 입력 : parentId, isbn, content, emoji / user
@@ -91,7 +87,7 @@ public class CommentServiceImpl implements CommentService {
         List<CommentQueryDto> commentList;
 
        // 책 여부 확인
-        BookEntity book = findBook(isbn);
+        BookEntity book = bookService.getBookIfExistOrElseNull(isbn);
 
         if(book == null) {
             throw new NotFoundBookException();

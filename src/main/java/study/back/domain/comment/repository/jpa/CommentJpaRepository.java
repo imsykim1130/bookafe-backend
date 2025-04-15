@@ -17,6 +17,6 @@ public interface CommentJpaRepository extends JpaRepository<CommentEntity, Long>
     Page<ReviewFavoriteUserQueryDto> findAllReviewFavoriteUserByUserId(@Param("userId") Long userId, Pageable pageable);
 
     
-    @Query("select new study.back.domain.comment.dto.response.MyReview(c.content, c.writeDate, c.book.title, c.book.author) from CommentEntity c where c.userId = :userId and c.parent is null")
+    @Query("select new study.back.domain.comment.query.MyReviewQueryDto(c.content, c.writeDate, c.book.title, c.book.author) from CommentEntity c where c.userId = :userId and c.parent is null")
     Page<MyReviewQueryDto> findAllMyReviewByUserId(@Param("userId") Long userId, Pageable pageable);
 }

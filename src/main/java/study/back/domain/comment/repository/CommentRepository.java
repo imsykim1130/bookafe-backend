@@ -15,7 +15,6 @@ import study.back.domain.user.entity.UserEntity;
 import study.back.domain.comment.query.CommentQueryDto;
 
 public interface CommentRepository {
-
     CommentEntity saveComment(CommentEntity comment);
     Optional<CommentEntity> findCommentById(Long parentId);
     Optional<BookEntity> findBookById(String isbn);

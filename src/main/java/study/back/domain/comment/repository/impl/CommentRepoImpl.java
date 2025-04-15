@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Repository;
 import study.back.domain.book.entity.BookEntity;
 import study.back.domain.book.repository.jpa.BookJpaRepository;
 import study.back.domain.comment.repository.CommentRepository;
@@ -21,6 +22,7 @@ import study.back.domain.user.entity.UserEntity;
 import study.back.domain.comment.query.CommentQueryDto;
 
 @RequiredArgsConstructor
+@Repository
 public class CommentRepoImpl implements CommentRepository {
     private final CommentJpaRepository commentJpaRepository;
     private final BookJpaRepository bookJpaRepository;

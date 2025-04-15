@@ -68,6 +68,7 @@ public class WebSecurityConfig implements WebMvcConfigurer {
     }
 
     // cors 설정
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration configuration = new CorsConfiguration();
