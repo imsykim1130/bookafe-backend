@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class FavoriteBookQueryDto {
-   String isbn;
-   String bookImg;
-   String title;
-   String author;
+   private String isbn;
+   private String bookImg;
+   private String title;
+   private String author;
 }

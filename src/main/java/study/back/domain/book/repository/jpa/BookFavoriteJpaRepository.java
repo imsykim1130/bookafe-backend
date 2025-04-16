@@ -22,7 +22,7 @@ public interface BookFavoriteJpaRepository extends JpaRepository<BookFavoriteEnt
     Optional<BookFavoriteEntity> findByUserAndIsbn(@Param("user") UserEntity user, @Param("isbn") String isbn);
 
     // 좋아요 책 가져오기
-    @Query("select new study.back.domain.user.query.FavoriteBookQueryDto(bf.book.isbn, bf.book.bookImg, bf.book.title, bf.book.author) " +
+    @Query("select new study.back.domain.book.query.FavoriteBookQueryDto(bf.book.isbn, bf.book.bookImg, bf.book.title, bf.book.author) " +
             "from BookFavoriteEntity bf where bf.user = :user")
     Page<FavoriteBookQueryDto> findAllFavoriteBookViewWithPagination(@Param("user") UserEntity user, Pageable pageable);
 }
