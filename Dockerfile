@@ -1,21 +1,10 @@
-#FROM openjdk:21-jdk-bullseye
-#WORKDIR /app
-#
-## RUN apt-get update && apt-get install -y findutils
-#
-#COPY gradle gradle
-#COPY build.gradle settings.gradle gradlew ./
-#RUN chmod +x gradlew
-#RUN ./gradlew dependencies
-#
-## COPY . .
-#RUN ./gradlew clean build -x test
-#
-#EXPOSE 8080
-#CMD ["./gradlew", "bootRun", "--continuous"]
-
 FROM openjdk:21-jdk-slim as build
 WORKDIR /app
+
+COPY gradle gradle
+COPY build.gradle settings.gradle gradlew ./
+RUN chmod +x gradlew
+RUN ./gradlew dependencies
 
 # 전체 프로젝트 복사 및 빌드
 COPY . .

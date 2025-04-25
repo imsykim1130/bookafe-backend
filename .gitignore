@@ -46,3 +46,6 @@ out/
 
 ### firebase
 firebase-key.json
+
+### dev
+Dockerfile.dev
