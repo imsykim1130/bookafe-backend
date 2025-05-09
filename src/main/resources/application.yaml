@@ -22,6 +22,7 @@ spring:
               batch_size: 100
             ddl-auth: validate
             dialect: org.hibernate.dialect.MySQLDialect
+    open-in-view: false
   servlet:
     multipart:
       enabled: true

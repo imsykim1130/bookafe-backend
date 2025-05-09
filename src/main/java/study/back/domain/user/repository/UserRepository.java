@@ -22,4 +22,5 @@ public interface UserRepository {
     void deleteUserFavorite(Long userId, List<Long> userIdList);
     Page<FavoriteUserQueryDto> findAllFavoriteUser(Long userId, Pageable pageable);
     List<Long> findAllFavoriteUserId(Long userId);
+    Long findUserIdByReviewId(Long reviewId);
 }

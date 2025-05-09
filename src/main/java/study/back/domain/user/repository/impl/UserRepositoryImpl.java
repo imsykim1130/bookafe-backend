@@ -1,10 +1,12 @@
 package study.back.domain.user.repository.impl;
 
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.entity.UserFavoriteEntity;
 import study.back.domain.user.repository.UserRepository;
@@ -131,5 +133,18 @@ public class UserRepositoryImpl implements UserRepository {
         return em.createQuery("select uf.favoriteUserId from UserFavoriteEntity uf where uf.userId = :userId", Long.class)
                 .setParameter("userId", userId)
                 .getResultList();
+    }
+
+    // 리뷰 작성 유저의 id 가져오기
+    @Override
+    @Transactional(readOnly = true)
+    public Long findUserIdByReviewId(Long reviewId) {
+        try {
+            return em.createQuery("select c.userId from CommentEntity c where c.id = :reviewId", Long.class)
+                    .setParameter("reviewId", reviewId)
+                    .getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }
