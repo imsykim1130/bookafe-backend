@@ -45,17 +45,6 @@ public class AuthController {
     }
 
     /**
-     * <pre>구글 계정으로 유저 인증</pre>
-     * <pre>인증 성공 시 헤더에 jwt 쿠키와 유저 정보 반환</pre>
-     * @param requestDto 회원가입 여부, tokenId
-     * @return {@link GetUserResponseDto}
-     */
-    @PostMapping("/google")
-    public ResponseEntity<GetUserResponseDto> authWithGoogle(@Valid @RequestBody AuthWithGoogleRequestDto requestDto) {
-        return authService.authWithGoogle(requestDto);
-    }
-
-    /**
      * 로그아웃
      * @return
      */
