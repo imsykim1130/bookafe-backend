@@ -7,6 +7,8 @@ import io.jsonwebtoken.security.SignatureException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseCookie;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -90,6 +92,19 @@ public class JwtUtils {
             }
         }
         return null;
+    }
+
+    // 쿠키 생성
+    public ResponseCookie createCookie(UserEntity user, String path, boolean secure, String sameSite, int maxAge) {
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
+        String jwt = generateToken(authenticationToken);
+
+        return ResponseCookie.from("jwt", jwt)
+                .path(path) // 쿠키 사용 가능 path
+                .secure(secure) // https 에서만 사용 가능
+                .sameSite(sameSite) // 크로스 도메인 허용(실제 사용시에는 strict 나 lax 로 변경 필요)
+                .maxAge(maxAge) // 유효기간
+                .build();
     }
 
 }
