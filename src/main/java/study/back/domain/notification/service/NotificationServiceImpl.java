@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -45,7 +48,6 @@ public class NotificationServiceImpl implements NotificationService {
         
         emitter.onCompletion(() -> {
             System.out.println("emitter completed");
-            emitter.complete();
             emitters.remove(userId);
         });
 
@@ -70,7 +72,21 @@ public class NotificationServiceImpl implements NotificationService {
             emitters.remove(userId);
         }
 
+//        sendHeartBeat(emitter, userId);
+
         return emitter;
+    }
+
+    private void sendHeartBeat(SseEmitter emitter, Long userId) {
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
+        executor.scheduleAtFixedRate(() -> {
+            try {
+                emitter.send(SseEmitter.event().name("heartbeat").data("ping"));
+            } catch (IOException e) {
+                emitter.completeWithError(e);
+                emitters.remove(userId);
+            }
+        }, 0, 30, TimeUnit.SECONDS);
     }
 
     /**
@@ -85,7 +101,6 @@ public class NotificationServiceImpl implements NotificationService {
             throw new NotFoundException("AUS", "이미 연결이 종료되었습니다");
         }
 
-        System.out.println("unsubscribe");
         emitter.complete();
         emitters.remove(userId);
     }
