@@ -13,7 +13,7 @@ import study.back.utils.item.OriginBookItem;
 public class KakaoService {
     private final String kakaoAuthorization;
 
-    public KakaoService(@Value("${kakao-authorization}") String kakaoAuthorization) {
+    public KakaoService(@Value("${KAKAO_AUTHORIZATION}") String kakaoAuthorization) {
         this.kakaoAuthorization = kakaoAuthorization;
     }
 
