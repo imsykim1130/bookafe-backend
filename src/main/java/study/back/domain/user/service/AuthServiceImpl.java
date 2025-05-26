@@ -8,15 +8,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
-import study.back.domain.user.entity.RoleName;
+import study.back.domain.user.entity.OauthName;
 import study.back.domain.user.entity.UserEntity;
 import study.back.domain.user.repository.AuthRepository;
-import study.back.global.dto.request.AuthWithGoogleRequestDto;
 import study.back.global.dto.request.SignInRequestDto;
 import study.back.global.dto.request.SignUpRequestDto;
 import study.back.global.dto.response.GetUserResponseDto;
 import study.back.global.dto.response.SignUpResponseDto;
-import study.back.global.exception.Conflict.ConflictEmailException;
 import study.back.global.exception.Conflict.ConflictNicknameException;
 import study.back.global.exception.Conflict.ConflictUserException;
 import study.back.global.exception.Unauthorized.UserNotFoundException;
@@ -64,15 +62,15 @@ public class AuthServiceImpl implements AuthService {
     public SignUpResponseDto signUp(SignUpRequestDto signUpRequestDto) {
         // 유저 확인
         UserEntity user = authRepository.findUserByEmail(signUpRequestDto.getEmail());
+        // 이미 같은 이메일로 가입된 유저가 존재할 때
         if(user != null) {
-            if(passwordEncoder.matches(signUpRequestDto.getPassword(), user.getPassword())) {
-                throw new ConflictUserException();
+            String message;
+            if(user.getOauthName().equals(OauthName.NONE)) { // 이미 일반 계정으로 가입된 정보가 있을 때
+                message = "이미 가입된 계정입니다.";
+            } else { // OAuth 로 가입된 이메일일 때
+                message = "이미 다른 서비스로 가입된 이메일입니다";
             }
-        }
-
-        // 이메일 중복 확인
-        if (authRepository.userExistsByEmail(signUpRequestDto.getEmail())) {
-            throw new ConflictEmailException();
+            throw new ConflictUserException("ARU", message);
         }
 
         // 닉네임 중복 확인
@@ -81,21 +79,7 @@ public class AuthServiceImpl implements AuthService {
         }
 
         // dto -> entity
-        RoleName role = null;
-
-        if(signUpRequestDto.getRole().equals("admin")) {
-            role = RoleName.ROLE_ADMIN;
-        }
-        if(signUpRequestDto.getRole().equals("user")) {
-            role = RoleName.ROLE_USER;
-        }
-
-        UserEntity newUser = UserEntity.builder()
-                .email(signUpRequestDto.getEmail())
-                .password(signUpRequestDto.getPassword())
-                .nickname(signUpRequestDto.getNickname())
-                .role(role)
-                .build();
+        UserEntity newUser = new UserEntity(signUpRequestDto);
 
         // db 저장
         authRepository.saveUser(newUser);

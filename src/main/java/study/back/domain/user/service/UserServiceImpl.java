@@ -45,14 +45,7 @@ public class UserServiceImpl implements UserService {
         if(user == null) {
             throw new UserNotFoundException();
         }
-         return GetUserResponseDto.builder()
-                 .createDate(user.getCreateDate())
-                 .role(user.getRole())
-                 .nickname(user.getNickname())
-                 .profileImg(user.getProfileImg())
-                 .email(user.getEmail())
-                 .id(user.getId())
-                 .build();
+         return new GetUserResponseDto(user);
     }
 
     /**
@@ -64,14 +57,7 @@ public class UserServiceImpl implements UserService {
     public GetUserResponseDto getUser(Long userId) {
         UserEntity user = userJpaRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
-        return GetUserResponseDto.builder()
-                .createDate(user.getCreateDate())
-                .role(user.getRole())
-                .nickname(user.getNickname())
-                .profileImg(user.getProfileImg())
-                .email(user.getEmail())
-                .id(user.getId())
-                .build();
+        return new GetUserResponseDto(user);
     }
 
     /**
@@ -229,7 +215,7 @@ public class UserServiceImpl implements UserService {
     // 유저 검색 결과 가져오기
     // 입력 : 검색어
     // 출력 : UserManagementInfo 형태의 리스트
-    public List<UserManagementInfo> getSearchUserList(String searchWord) {
+    public List<UserManagementInfo> getSearchUserList(String searchWord, String filter) {
         // 이메일에 검색어가 포함된 유저 리스트 가져오기
         List<UserEntity> searchedUserList = repository.findAllUserBySearchWord(searchWord);
 

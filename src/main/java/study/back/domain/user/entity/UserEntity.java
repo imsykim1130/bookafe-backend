@@ -6,17 +6,17 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import study.back.utils.item.UserItem;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import study.back.global.dto.request.SignUpRequestDto;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "users")
-public class UserEntity implements UserDetails {
+public class UserEntity implements UserDetails, OAuth2User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
@@ -24,43 +24,46 @@ public class UserEntity implements UserDetails {
     private String password;
     private String nickname;
     private String profileImg;
-    private boolean googleAuth;
     private LocalDateTime createDate;
     @Enumerated(EnumType.STRING)
     private RoleName role;
+    @Enumerated(EnumType.STRING)
+    private OauthName oauthName;
 
+    // OAuth2User 구현에 필요한 데이터(DB 에는 저장하지 않아도 되기 때문에 Transient 어노테이션 사용)
+    @Transient
+    private Map<String, Object> oauthAttributes;
+
+    // 일반 인증 시 유저 생성자
     @Builder
-    public static UserEntity toEntity(String email,
-                                      String password,
-                                      String nickname,
-                                      RoleName role,
-                                      Long id){
+    public UserEntity(SignUpRequestDto signUpRequestDto) {
         LocalDateTime now = LocalDateTime.now();
 
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-        String encodedPassword = encoder.encode(password);
+        String encodedPassword = encoder.encode(signUpRequestDto.getPassword());
 
-        UserEntity userEntity = new UserEntity();
-        userEntity.id = id;
-        userEntity.email = email;
-        userEntity.password = encodedPassword;
-        userEntity.nickname = nickname;
-        userEntity.googleAuth = false;
-        userEntity.createDate = now;
-        userEntity.role = role;
-        return userEntity;
+        this.email = signUpRequestDto.getEmail();
+        this.password = encodedPassword;
+        this.nickname = signUpRequestDto.getNickname();
+        this.createDate = now;
+        this.role = RoleName.ROLE_USER;
+        this.oauthName = OauthName.NONE;
     }
 
-    public UserItem toItem() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-        String createDate = this.createDate.format(formatter);
-        return new UserItem(this.id, this.email, this.nickname, this.profileImg, createDate, this.role.toString());
+    // oauth 인증 시 유저 생성자
+    @Builder
+    public UserEntity(String email, String nickname, OauthName oauthName, Map<String, Object> oauthAttributes) {
+        LocalDateTime now = LocalDateTime.now();
+
+        this.email = email;
+        this.nickname = nickname;
+        this.createDate = now;
+        this.role = RoleName.ROLE_USER;
+        this.oauthName = oauthName;
+        this.oauthAttributes = oauthAttributes;
     }
 
-    public void googleAuth() {
-        this.googleAuth = true;
-    }
-
+    // UserDetails 구현
     @Override
     public Collection<GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -74,16 +77,6 @@ public class UserEntity implements UserDetails {
         }
 
         return authorities;
-    }
-
-    public String changeProfileImg(String profileImg) {
-        this.profileImg = profileImg;
-        return this.profileImg;
-    }
-
-    public String changeNickname(String newNickname) {
-        this.nickname = newNickname;
-        return this.nickname;
     }
 
     @Override
@@ -111,4 +104,23 @@ public class UserEntity implements UserDetails {
         return UserDetails.super.isEnabled();
     }
 
+    // OAuth2User 구현
+    @Override
+    public String getName() {
+        return nickname;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return oauthAttributes;
+    }
+
+    // 비즈니스 로직
+    public void changeProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
+
+    public void changeNickname(String newNickname) {
+        this.nickname = newNickname;
+    }
 }
